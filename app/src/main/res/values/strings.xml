@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">DataSearch</string>
+    <string name="item_machine">机床</string>
+    <string name="item_tool">刀具</string>
+    <string name="item_material">材料</string>
+    <string name="item_parameter">参数</string>
+    <string name="item_advanced">高级</string>
+    <string name="info_machine">机床信息</string>
+    <string name="info_tool">刀具信息</string>
+    <string name="info_material">材料信息</string>
+    <string name="info_parameter">参数信息</string>
+    <string name="info_advanced">高级信息</string>
+    <string name="machine_name">XH7132A五轴联动加工中心</string>
+</resources>
