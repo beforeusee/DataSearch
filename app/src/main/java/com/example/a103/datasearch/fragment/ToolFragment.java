@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.a103.datasearch.Constant;
@@ -17,9 +19,10 @@ import com.example.a103.datasearch.R;
  * 刀具页面的fragment
  */
 
-
-
 public class ToolFragment extends Fragment {
+
+    private ListView mListView;
+
     public static ToolFragment newInstance(String s){
         ToolFragment toolFragment=new ToolFragment();
         Bundle bundle=new Bundle();
@@ -35,8 +38,10 @@ public class ToolFragment extends Fragment {
 //        String s = bundle.getString(Constant.ARGS);
 //        TextView textView = (TextView) view.findViewById(R.id.title_tool);
 //        textView.setText(s);
-        FaceMillingCutter faceMillingCutter;
-
+        mListView= (ListView) view.findViewById(R.id.lv_tools);
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(view.getContext(),R.layout.tools_row,R.id.tool_row_text,
+                new String[]{"面铣刀","方肩铣刀","球头铣刀"});
+        mListView.setAdapter(arrayAdapter);
         return view;
     }
 }
