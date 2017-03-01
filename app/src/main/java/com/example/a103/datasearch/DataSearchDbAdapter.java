@@ -277,7 +277,7 @@ public class DataSearchDbAdapter {
     }
 
     //fetch all tools
-    public Cursor fetchAllReminders() {
+    public Cursor fetchAllTools() {
         Cursor mCursor = mDb.query(TABLE_NAME_TOOL, new String[]{COL_ID, COL_NAME, COL_TYPE, COL_SERIAL,
                 COL_BRAND, COL_CUTTINGDIAMETER, COL_DEPTHOFCUTMAXIMUM, COL_MAXRAMPINGANGLE,
                 COL_USABLELENGTH, COL_TEETHNUM, COL_TOOLADAPTER, COL_CONNECTIONDIAMETERTOLERANCE,
