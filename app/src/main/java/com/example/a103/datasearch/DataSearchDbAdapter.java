@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.security.cert.CollectionCertStoreParameters;
-
 /**
  * Created by zhengxiaohu on 2017/2/24.
  * 创建数据库的代理DataSearchDbAdapter，把简单的应用调用转换为底层的SQLite API调用
@@ -53,6 +51,7 @@ public class DataSearchDbAdapter {
     public static final String COL_LIFECYCLESTATE="lifeCycleState";
     public static final String COL_SUITABLEFORMATERIAL="suitableForMaterial";
     public static final String COL_APPLICATION="application";
+    public static final String COL_USED="used";
 
     //对应的列索引
     private static final int INDEX_ID=0;
@@ -83,6 +82,7 @@ public class DataSearchDbAdapter {
     private static final int INDEX_LIFECYCLESTATE=INDEX_ID+25;
     private static final int INDEX_SUITABLEFORMATERIAL=INDEX_ID+26;
     private static final int INDEX_APPLICATION=INDEX_ID+27;
+    private static final int INDEX_USED=INDEX_ID+28;
 
     //用于日志
     private static final String TAG="DataSearchDbAdapter";
@@ -116,7 +116,8 @@ public class DataSearchDbAdapter {
             COL_WEIGHT+" TEXT, "+
             COL_LIFECYCLESTATE+" TEXT, "+
             COL_SUITABLEFORMATERIAL+" TEXT, "+
-            COL_APPLICATION+" TEXT );";
+            COL_APPLICATION+" TEXT, "+
+            COL_USED+" INTEGER );";
 
     /**
      * DatabaseHelper—是一个用于打开和关闭数据库的SQLite API的类，被定义为内部类，它使用Context，
@@ -144,6 +145,7 @@ public class DataSearchDbAdapter {
         }
     }
 
+
     public DataSearchDbAdapter(Context context){
         this.mContext=context;
     }
@@ -151,7 +153,9 @@ public class DataSearchDbAdapter {
     //数据库的open方法
     public void open() throws SQLException{
         mDbHelper=new DatabaseHelper(mContext);
+        Log.w("mDbHelper是否为空", String.valueOf((mDbHelper!=null)));
         mDb=mDbHelper.getWritableDatabase();
+        Log.w("mDb不为空",String.valueOf(mDb!=null));
     }
 
     //数据库的close方法
@@ -173,7 +177,7 @@ public class DataSearchDbAdapter {
                            String basicStandardGroup, String coolantEntryStyleCode, String connectionDiameter,
                            String functionalLength, String fluteHelixAngle, String radialRakeAngle,
                            String axialRakeAngle, String maximumRegrinds, String maxRotationalSpeed, String weight,
-                           String lifeCycleState, String suitableForMaterial, String application){
+                           String lifeCycleState, String suitableForMaterial, String application,boolean used){
         ContentValues values=new ContentValues();
         values.put(COL_NAME,name);
         values.put(COL_TYPE,type);
@@ -202,40 +206,16 @@ public class DataSearchDbAdapter {
         values.put(COL_LIFECYCLESTATE,lifeCycleState);
         values.put(COL_SUITABLEFORMATERIAL,suitableForMaterial);
         values.put(COL_APPLICATION,application);
+        values.put(COL_USED,used ?1:0);
 
+        Log.w("刀具名称:",name);
         mDb.insert(TABLE_NAME_TOOL,null,values);
     }
 
     //overload to take a tool
     public long createTool(Tool tool){
         ContentValues values=new ContentValues();
-        values.put(COL_NAME,tool.getName());
-        values.put(COL_TYPE,tool.getType());
-        values.put(COL_SERIAL,tool.getSerial());
-        values.put(COL_BRAND,tool.getBrand());
-        values.put(COL_CUTTINGDIAMETER,tool.getCuttingDiameter());
-        values.put(COL_DEPTHOFCUTMAXIMUM,tool.getDepthOfCutMaximum());
-        values.put(COL_MAXRAMPINGANGLE,tool.getMaxRampingAngle());
-        values.put(COL_USABLELENGTH,tool.getUsableLength());
-        values.put(COL_TEETHNUM,tool.getPeripheralEffectiveCuttingEdgeCount());
-        values.put(COL_TOOLADAPTER,tool.getAdaptiveInterfaceMachineDirection());
-        values.put(COL_CONNECTIONDIAMETERTOLERANCE,tool.getConnectionDiameterTolerance());
-        values.put(COL_GRADE,tool.getGrade());
-        values.put(COL_SUBSTRATE,tool.getSubstrate());
-        values.put(COL_COATING,tool.getCoating());
-        values.put(COL_BASICSTANDARDGROUP,tool.getBasicStandardGroup());
-        values.put(COL_COOLANTENTRYSTYLECODE,tool.getCoolantEntryStyleCode());
-        values.put(COL_CONNECTIONDIAMETER,tool.getConnectionDiameter());
-        values.put(COL_FUNCTIONALLENGTH,tool.getFunctionalLength());
-        values.put(COL_FLUTEHELIXANGLE,tool.getFluteHelixAngle());
-        values.put(COL_RADIALRAKEANGLE,tool.getRadialRakeAngle());
-        values.put(COL_AXIALRAKEANGLE,tool.getAxialRakeAngle());
-        values.put(COL_MAXIMUMREGRINDS,tool.getMaximumRegrinds());
-        values.put(COL_MAXROTATIONSPEED,tool.getMaxRotationalSpeed());
-        values.put(COL_WEIGHT,tool.getWeight());
-        values.put(COL_LIFECYCLESTATE,tool.getLifeCycleState());
-        values.put(COL_SUITABLEFORMATERIAL,tool.getSuitableForMaterial());
-        values.put(COL_APPLICATION,tool.getApplication());
+        putToolToContentValues(values, tool);
 
         //Inserting Row
         return mDb.insert(TABLE_NAME_TOOL,null,values);
@@ -254,7 +234,7 @@ public class DataSearchDbAdapter {
         COL_BASICSTANDARDGROUP,COL_COOLANTENTRYSTYLECODE,COL_CONNECTIONDIAMETER,COL_FUNCTIONALLENGTH,
         COL_FLUTEHELIXANGLE,COL_RADIALRAKEANGLE,COL_AXIALRAKEANGLE,COL_MAXIMUMREGRINDS,
                 COL_MAXROTATIONSPEED,COL_WEIGHT, COL_LIFECYCLESTATE,COL_SUITABLEFORMATERIAL,
-                COL_APPLICATION},COL_ID+"=?",new String[]{String.valueOf(id)},null,null,null,null);
+                COL_APPLICATION,COL_USED},COL_ID+"=?",new String[]{String.valueOf(id)},null,null,null,null);
 
         if (cursor!=null){
             cursor.moveToFirst();
@@ -272,7 +252,7 @@ public class DataSearchDbAdapter {
                 cursor.getString(INDEX_AXIALRAKEANGLE),cursor.getString(INDEX_MAXIMUMREGRINDS),
                 cursor.getString(INDEX_MAXROTATIONSPEED),cursor.getString(INDEX_WEIGHT),
                 cursor.getString(INDEX_LIFECYCLESTATE),cursor.getString(INDEX_SUITABLEFORMATERIAL),
-                cursor.getString(INDEX_APPLICATION)
+                cursor.getString(INDEX_APPLICATION),cursor.getInt(INDEX_USED)
                 );
     }
 
@@ -285,7 +265,7 @@ public class DataSearchDbAdapter {
                 COL_CONNECTIONDIAMETER, COL_FUNCTIONALLENGTH, COL_FLUTEHELIXANGLE, COL_RADIALRAKEANGLE,
                 COL_AXIALRAKEANGLE, COL_MAXIMUMREGRINDS, COL_MAXROTATIONSPEED, COL_WEIGHT,
                 COL_LIFECYCLESTATE, COL_SUITABLEFORMATERIAL,
-                COL_APPLICATION}, null, null, null, null, null);
+                COL_APPLICATION,COL_USED}, null, null, null, null, null);
 
         if (mCursor!=null){
             mCursor.moveToFirst();
@@ -296,6 +276,31 @@ public class DataSearchDbAdapter {
     //UPDATE
     public void updateTool(Tool tool){
         ContentValues values=new ContentValues();
+        putToolToContentValues(values, tool);
+
+        mDb.update(TABLE_NAME_TOOL,values,COL_ID+"=?",new String[]{String.valueOf(tool.getId())});
+    }
+
+    /**
+     * DELETE 方法，有两种，一种是根据nId来删除刀具，另一种是删除所有的刀具数据
+     * @param nId
+     */
+    //delete tools by id
+    public void deleteToolsById(int nId){
+        mDb.delete(TABLE_NAME_TOOL,COL_ID+"=?",new String[]{String.valueOf(nId)});
+    }
+
+    //delete all tools
+    public void deleteAllTools(){
+        mDb.delete(TABLE_NAME_TOOL,null,null);
+    }
+
+    /**
+     * 功能：把刀具信息放入ContentValues的对象values中，values以键值对的形式储存Tools的信息
+     * @param values
+     * @param tool
+     */
+    private void putToolToContentValues(ContentValues values, Tool tool) {
         values.put(COL_NAME,tool.getName());
         values.put(COL_TYPE,tool.getType());
         values.put(COL_SERIAL,tool.getSerial());
@@ -323,21 +328,6 @@ public class DataSearchDbAdapter {
         values.put(COL_LIFECYCLESTATE,tool.getLifeCycleState());
         values.put(COL_SUITABLEFORMATERIAL,tool.getSuitableForMaterial());
         values.put(COL_APPLICATION,tool.getApplication());
-
-        mDb.update(TABLE_NAME_TOOL,values,COL_ID+"=?",new String[]{String.valueOf(tool.getId())});
-    }
-
-    /**
-     * DELETE 方法，有两种，一种是根据nId来删除刀具，另一种是删除所有的刀具数据
-     * @param nId
-     */
-    //delete tools by id
-    public void deleteToolsById(int nId){
-        mDb.delete(TABLE_NAME_TOOL,COL_ID+"=?",new String[]{String.valueOf(nId)});
-    }
-
-    //delete all tools
-    public void deleteAllTools(){
-        mDb.delete(TABLE_NAME_TOOL,null,null);
+        values.put(COL_USED,tool.getUsed());
     }
 }

@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:id="@+id/rl_tool_listView"
                 android:layout_height="match_parent">
 
-    <ListView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_tool_listView_title"
+        android:layout_centerHorizontal="true"
+        android:text="刀库刀具"
+        android:textSize="30sp"/>
+
+    <TableRow
+        android:paddingBottom="15dp"
+        android:paddingTop="10dp"
+        android:gravity="right"
+        android:layout_below="@id/tv_tool_listView_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/tr_tool_used">
 
-        android:id="@+id/lv_tools"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        tools:listitem="@layout/tools_row"/>
+        <View
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@color/green"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/tr_tool_used_icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:text="使用中"
+            android:textSize="20sp"/>
+
+    </TableRow>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_lv_tools"
+        android:layout_below="@+id/tr_tool_used"
+        android:layout_above="@+id/btn_tool_add">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/lv_tools"
+            tools:listitem="@layout/tools_row"
+            android:layout_alignParentTop="true"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_tool_add"
+        android:layout_alignParentBottom="true"
         android:text="新建"
         android:textSize="20sp"/>
 
-</LinearLayout>
+</RelativeLayout>

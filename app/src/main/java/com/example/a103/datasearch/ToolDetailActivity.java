@@ -1,11 +1,15 @@
 package com.example.a103.datasearch;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ToolDetailActivity extends AppCompatActivity {
 
@@ -47,7 +51,8 @@ public class ToolDetailActivity extends AppCompatActivity {
     Button btn_tool_edit;        //编辑按钮
     Button btn_tool_commit;      //提交按钮
 
-
+    private boolean isEditOperation; //是否是编辑状态
+//    public static final String action="tool.listView.refresh";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +60,235 @@ public class ToolDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tool_detail);
 
         initToolDetailView();
+
+        Intent intent=getIntent();
+        isEditOperation=false;
+        isEditOperation=intent.getBooleanExtra("tool_isEditOperation",true);
+        final Tool tool=getIntent().getParcelableExtra("Tool");
+
+        if (isEditOperation){
+            setToolDetailFromTool(tool);  //如果刀具处于查看可编辑状态，根据对象tool，初始化刀具设置页面的值
+        }
+
+        //设置edit键的监听事件
+        btn_tool_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //设置各控件的editText为可编辑模式
+                setToolEditable(true);
+                Toast.makeText(ToolDetailActivity.this,"点击了编辑，可以对刀具进行编辑",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //设置commit键的监听事件
+        btn_tool_commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //根据ToolDetail获取tool的属性值，并设置到tool中
+//                setToolFromToolDetail(tool);
+                //实例化Tool对象tool
+
+                setToolEditable(false);
+                DataSearchDbAdapter mDbAdapter=new DataSearchDbAdapter(ToolDetailActivity.this);
+                mDbAdapter.open();
+
+                if (isEditOperation){
+                    Tool toolEdited=new Tool(tool.getId(),
+                            et_tool_name.getText().toString(),
+                            et_tool_type.getText().toString(),
+                            et_tool_serial.getText().toString(),
+                            et_tool_brand.getText().toString(),
+                            et_tool_cuttingDiameter.getText().toString(),
+                            et_tool_depthOfCutMaximum.getText().toString(),
+                            et_tool_maxRampingAngle.getText().toString(),
+                            et_tool_usableLength.getText().toString(),
+                            et_tool_peripheralEffectiveCuttingEdgeCount.getText().toString(),
+                            et_tool_adaptiveInterfaceMachineDirection.getText().toString(),
+                            et_tool_connectionDiameterTolerance.getText().toString(),
+                            et_tool_grade.getText().toString(),
+                            et_tool_substrate.getText().toString(),
+                            et_tool_coating.getText().toString(),
+                            et_tool_basicStandardGroup.getText().toString(),
+                            et_tool_coolantEntryStyleCode.getText().toString(),
+                            et_tool_connectionDiameter.getText().toString(),
+                            et_tool_functionalLength.getText().toString(),
+                            et_tool_fluteHelixAngle.getText().toString(),
+                            et_tool_radialRakeAngle.getText().toString(),
+                            et_tool_axialRakeAngle.getText().toString(),
+                            et_tool_maximumRegrinds.getText().toString(),
+                            et_tool_maxRotationalSpeed.getText().toString(),
+                            et_tool_weight.getText().toString(),
+                            et_tool_lifeCycleState.getText().toString(),
+                            et_tool_suitableForMaterial.getText().toString(),
+                            et_tool_application.getText().toString(),
+                            cb_tool_used.isChecked()?1:0);
+
+                    mDbAdapter.updateTool(toolEdited);
+                    Log.w("是否刷新了刀具:",toolEdited.getName());
+
+                }else {
+                    Log.w("mDbAdapter成功创建?",String.valueOf(mDbAdapter!=null));  //调试的Log日志
+                    mDbAdapter.createTool(et_tool_name.getText().toString(),
+                            et_tool_type.getText().toString(),
+                            et_tool_serial.getText().toString(),
+                            et_tool_brand.getText().toString(),
+                            et_tool_cuttingDiameter.getText().toString(),
+                            et_tool_depthOfCutMaximum.getText().toString(),
+                            et_tool_maxRampingAngle.getText().toString(),
+                            et_tool_usableLength.getText().toString(),
+                            et_tool_peripheralEffectiveCuttingEdgeCount.getText().toString(),
+                            et_tool_adaptiveInterfaceMachineDirection.getText().toString(),
+                            et_tool_connectionDiameterTolerance.getText().toString(),
+                            et_tool_grade.getText().toString(),
+                            et_tool_substrate.getText().toString(),
+                            et_tool_coating.getText().toString(),
+                            et_tool_basicStandardGroup.getText().toString(),
+                            et_tool_coolantEntryStyleCode.getText().toString(),
+                            et_tool_connectionDiameter.getText().toString(),
+                            et_tool_functionalLength.getText().toString(),
+                            et_tool_fluteHelixAngle.getText().toString(),
+                            et_tool_radialRakeAngle.getText().toString(),
+                            et_tool_axialRakeAngle.getText().toString(),
+                            et_tool_maximumRegrinds.getText().toString(),
+                            et_tool_maxRotationalSpeed.getText().toString(),
+                            et_tool_weight.getText().toString(),
+                            et_tool_lifeCycleState.getText().toString(),
+                            et_tool_suitableForMaterial.getText().toString(),
+                            et_tool_application.getText().toString(),
+                            cb_tool_used.isChecked());
+                    Log.w("创建的刀具名称",et_tool_name.getText().toString());
+                }
+
+                //发送广播，通知ToolFragment进行刀具列表的刷新
+                Intent intent=new Intent();
+                intent.setAction("action.refreshTool");
+                sendBroadcast(intent);
+
+                Toast.makeText(ToolDetailActivity.this,"点击了提交，待完善该功能",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        //设置cancel取消键的监听事件
+        btn_tool_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Toast.makeText(ToolDetailActivity.this,"点击了取消，退出刀具详细信息页面",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setToolFromToolDetail(Tool tool) {
+        tool.setName(et_tool_name.getText().toString());
+        tool.setType(et_tool_type.getText().toString());
+        tool.setSerial(et_tool_serial.getText().toString());
+        tool.setBrand(et_tool_brand.getText().toString());
+        tool.setCuttingDiameter(et_tool_cuttingDiameter.getText().toString());
+        tool.setDepthOfCutMaximum(et_tool_depthOfCutMaximum.getText().toString());
+        tool.setMaxRampingAngle(et_tool_maxRampingAngle.getText().toString());
+        tool.setUsableLength(et_tool_usableLength.getText().toString());
+        tool.setPeripheralEffectiveCuttingEdgeCount(et_tool_peripheralEffectiveCuttingEdgeCount.getText().toString());
+        tool.setAdaptiveInterfaceMachineDirection(et_tool_adaptiveInterfaceMachineDirection.getText().toString());
+        tool.setConnectionDiameterTolerance(et_tool_connectionDiameterTolerance.getText().toString());
+        tool.setGrade(et_tool_grade.getText().toString());
+        tool.setSubstrate(et_tool_substrate.getText().toString());
+        tool.setCoating(et_tool_coating.getText().toString());
+        tool.setBasicStandardGroup(et_tool_basicStandardGroup.getText().toString());
+        tool.setCoolantEntryStyleCode(et_tool_coolantEntryStyleCode.getText().toString());
+        tool.setConnectionDiameter(et_tool_connectionDiameter.getText().toString());
+        tool.setFunctionalLength(et_tool_functionalLength.getText().toString());
+        tool.setFluteHelixAngle(et_tool_fluteHelixAngle.getText().toString());
+        tool.setRadialRakeAngle(et_tool_radialRakeAngle.getText().toString());
+        tool.setAxialRakeAngle(et_tool_axialRakeAngle.getText().toString());
+        tool.setMaximumRegrinds(et_tool_maximumRegrinds.getText().toString());
+        tool.setMaxRotationalSpeed(et_tool_maxRotationalSpeed.getText().toString());
+        tool.setWeight(et_tool_weight.getText().toString());
+        tool.setLifeCycleState(et_tool_lifeCycleState.getText().toString());
+        tool.setSuitableForMaterial(et_tool_suitableForMaterial.getText().toString());
+        tool.setApplication(et_tool_application.getText().toString());
+        tool.setUsed(cb_tool_used.isChecked()?1:0);
+    }
+
+    /**
+     * 功能：获取tool对象的属性值并设置到ToolDetailActivity的页面可编辑框中
+     * @param tool
+     */
+    private void setToolDetailFromTool(Tool tool) {
+        et_tool_name.setText(tool.getName());
+        et_tool_type.setText(tool.getType());
+        et_tool_serial.setText(tool.getSerial());
+        et_tool_brand.setText(tool.getBrand());
+        et_tool_cuttingDiameter.setText(tool.getCuttingDiameter());
+        et_tool_depthOfCutMaximum.setText(tool.getDepthOfCutMaximum());
+        et_tool_maxRampingAngle.setText(tool.getMaxRampingAngle());
+        et_tool_usableLength.setText(tool.getUsableLength());
+        et_tool_peripheralEffectiveCuttingEdgeCount.setText(tool.getPeripheralEffectiveCuttingEdgeCount());
+        et_tool_adaptiveInterfaceMachineDirection.setText(tool.getAdaptiveInterfaceMachineDirection());
+        et_tool_connectionDiameterTolerance.setText(tool.getConnectionDiameterTolerance());
+        et_tool_grade.setText(tool.getGrade());
+        et_tool_substrate.setText(tool.getSubstrate());
+        et_tool_coating.setText(tool.getCoating());
+        et_tool_basicStandardGroup.setText(tool.getBasicStandardGroup());
+        et_tool_coolantEntryStyleCode.setText(tool.getCoolantEntryStyleCode());
+        et_tool_connectionDiameter.setText(tool.getConnectionDiameter());
+        et_tool_functionalLength.setText(tool.getFunctionalLength());
+        et_tool_fluteHelixAngle.setText(tool.getFluteHelixAngle());
+        et_tool_radialRakeAngle.setText(tool.getRadialRakeAngle());
+        et_tool_axialRakeAngle.setText(tool.getAxialRakeAngle());
+        et_tool_maximumRegrinds.setText(tool.getMaximumRegrinds());
+        et_tool_maxRotationalSpeed.setText(tool.getMaxRotationalSpeed());
+        et_tool_weight.setText(tool.getWeight());
+        et_tool_lifeCycleState.setText(tool.getLifeCycleState());
+        et_tool_suitableForMaterial.setText(tool.getSuitableForMaterial());
+        et_tool_application.setText(tool.getApplication());
+        et_tool_todo.setText("待定项");
+        cb_tool_used.setChecked(tool.getUsed()==1);
+    }
+
+    /**
+     * setToolEditable(boolean enabled)设置刀具是否可编辑
+     * @param enabled
+     */
+    private void setToolEditable(boolean enabled) {
+
+        //设置刀具信息各editText是否可编辑,enabled 为true时可编辑，enabled 为false时不可编辑
+        et_tool_name.setEnabled(enabled);
+        et_tool_type.setEnabled(enabled);
+        et_tool_serial.setEnabled(enabled);
+        et_tool_brand.setEnabled(enabled);
+        et_tool_cuttingDiameter.setEnabled(enabled);
+        et_tool_depthOfCutMaximum.setEnabled(enabled);
+        et_tool_maxRampingAngle.setEnabled(enabled);
+        et_tool_usableLength.setEnabled(enabled);
+        et_tool_peripheralEffectiveCuttingEdgeCount.setEnabled(enabled);
+        et_tool_adaptiveInterfaceMachineDirection.setEnabled(enabled);
+        et_tool_connectionDiameterTolerance.setEnabled(enabled);
+        et_tool_grade.setEnabled(enabled);
+        et_tool_substrate.setEnabled(enabled);
+        et_tool_coating.setEnabled(enabled);
+        et_tool_basicStandardGroup.setEnabled(enabled);
+        et_tool_coolantEntryStyleCode.setEnabled(enabled);
+        et_tool_connectionDiameter.setEnabled(enabled);
+        et_tool_functionalLength.setEnabled(enabled);
+        et_tool_fluteHelixAngle.setEnabled(enabled);
+        et_tool_radialRakeAngle.setEnabled(enabled);
+        et_tool_axialRakeAngle.setEnabled(enabled);
+        et_tool_maximumRegrinds.setEnabled(enabled);
+        et_tool_maxRotationalSpeed.setEnabled(enabled);
+        et_tool_weight.setEnabled(enabled);
+        et_tool_lifeCycleState.setEnabled(enabled);
+        et_tool_suitableForMaterial.setEnabled(enabled);
+        et_tool_application.setEnabled(enabled);
+        et_tool_todo.setEnabled(enabled);
     }
 
     /**
      * 初始化刀具的详细页面
      */
     private void initToolDetailView() {
-        iv_tool_picture= (ImageView) findViewById(R.id.iv_tool_picture);
         cb_tool_used= (CheckBox) findViewById(R.id.cb_tool_used);
         et_tool_name= (EditText) findViewById(R.id.et_tool_name);
         et_tool_type= (EditText) findViewById(R.id.et_tool_type);

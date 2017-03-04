@@ -1,11 +1,14 @@
 package com.example.a103.datasearch;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
- * Created by zhengxiaohu on 2017/2/22.
+ * Created by zhengxiaohu on 2017/2/22.实现包裹接口Parcelable，以通过intent在activity之间传递Tool对象
  * 超类:Tool 描述通用整体立铣刀的数据模型
  */
 
-public class Tool {
+public class Tool implements Parcelable{
 
     //刀具基本信息描述
     private int id;                                  //刀具ID号
@@ -37,7 +40,9 @@ public class Tool {
     private String lifeCycleState;             //寿命周期状态
     private String suitableForMaterial;       //适合加工材料
     private String application;                //适用场合
+    private int used;                              //刀具是否在刀库中使用
 
+    //构造函数
     public Tool(int id, String name, String type, String serial, String brand, String cuttingDiameter,
                 String depthOfCutMaximum, String maxRampingAngle, String usableLength,
                 String peripheralEffectiveCuttingEdgeCount, String adaptiveInterfaceMachineDirection,
@@ -45,7 +50,7 @@ public class Tool {
                 String basicStandardGroup, String coolantEntryStyleCode, String connectionDiameter,
                 String functionalLength, String fluteHelixAngle, String radialRakeAngle, String axialRakeAngle,
                 String maximumRegrinds, String maxRotationalSpeed, String weight, String lifeCycleState,
-                String suitableForMaterial, String application) {
+                String suitableForMaterial, String application,int used) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -74,10 +79,12 @@ public class Tool {
         this.lifeCycleState = lifeCycleState;
         this.suitableForMaterial = suitableForMaterial;
         this.application = application;
+        this.used=used;
     }
-//构造函数
+
 
     //设置刀具的基本信息
+
     public void setId(int id){
         this.id=id;
     }
@@ -188,6 +195,10 @@ public class Tool {
 
     public void setApplication(String application){
         this.application=application;
+    }
+
+    public void setUsed(int used) {
+        this.used = used;
     }
 
     //获取刀具的基本信息
@@ -302,5 +313,95 @@ public class Tool {
 
     public String getApplication() {
         return application;
+    }
+
+    public int getUsed() {
+        return used;
+    }
+
+    /**
+     * 用以intent在activity之间传递对象
+     * @param in
+     */
+    protected Tool(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        type = in.readString();
+        serial = in.readString();
+        brand = in.readString();
+        cuttingDiameter = in.readString();
+        depthOfCutMaximum = in.readString();
+        maxRampingAngle = in.readString();
+        usableLength = in.readString();
+        peripheralEffectiveCuttingEdgeCount = in.readString();
+        adaptiveInterfaceMachineDirection = in.readString();
+        connectionDiameterTolerance = in.readString();
+        grade = in.readString();
+        substrate = in.readString();
+        coating = in.readString();
+        basicStandardGroup = in.readString();
+        coolantEntryStyleCode = in.readString();
+        connectionDiameter = in.readString();
+        functionalLength = in.readString();
+        fluteHelixAngle = in.readString();
+        radialRakeAngle = in.readString();
+        axialRakeAngle = in.readString();
+        maximumRegrinds = in.readString();
+        maxRotationalSpeed = in.readString();
+        weight = in.readString();
+        lifeCycleState = in.readString();
+        suitableForMaterial = in.readString();
+        application = in.readString();
+        used=in.readInt();
+    }
+
+    public static final Creator<Tool> CREATOR = new Creator<Tool>() {
+        @Override
+        public Tool createFromParcel(Parcel in) {
+            return new Tool(in);
+        }
+
+        @Override
+        public Tool[] newArray(int size) {
+            return new Tool[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(type);
+        dest.writeString(serial);
+        dest.writeString(brand);
+        dest.writeString(cuttingDiameter);
+        dest.writeString(depthOfCutMaximum);
+        dest.writeString(maxRampingAngle);
+        dest.writeString(usableLength);
+        dest.writeString(peripheralEffectiveCuttingEdgeCount);
+        dest.writeString(adaptiveInterfaceMachineDirection);
+        dest.writeString(connectionDiameterTolerance);
+        dest.writeString(grade);
+        dest.writeString(substrate);
+        dest.writeString(coating);
+        dest.writeString(basicStandardGroup);
+        dest.writeString(coolantEntryStyleCode);
+        dest.writeString(connectionDiameter);
+        dest.writeString(functionalLength);
+        dest.writeString(fluteHelixAngle);
+        dest.writeString(radialRakeAngle);
+        dest.writeString(axialRakeAngle);
+        dest.writeString(maximumRegrinds);
+        dest.writeString(maxRotationalSpeed);
+        dest.writeString(weight);
+        dest.writeString(lifeCycleState);
+        dest.writeString(suitableForMaterial);
+        dest.writeString(application);
+        dest.writeInt(used);
     }
 }

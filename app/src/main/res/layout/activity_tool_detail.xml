@@ -22,24 +22,17 @@
     <TableRow
         android:paddingBottom="15dp"
         android:paddingTop="10dp"
-        android:gravity="center_vertical"
+        android:gravity="right"
         android:layout_below="@id/tv_tool_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tr_tool_img_cb">
 
-        <ImageView
-            android:id="@+id/iv_tool_picture"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-
         <CheckBox
             android:id="@+id/cb_tool_used"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
             android:text="是否使用该刀具"
             android:textSize="20sp"
             />
@@ -180,7 +173,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/et_tool_cuttingDiameter"
-                        android:text="12mm"
+                        android:text="12 mm"
                         android:textSize="20sp"
                         android:gravity="left"
                         android:enabled="false"/>
@@ -190,7 +183,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/et_tool_depthOfCutMaximum"
-                        android:text="12mm"
+                        android:text="12 mm"
                         android:textSize="20sp"
                         android:enabled="false"/>
                 </TableRow>
@@ -577,7 +570,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/et_tool_maxRotationalSpeed"
-                        android:text="6 deg"
+                        android:text="80000 r/min"
                         android:textSize="20sp"
                         android:gravity="left"
                         android:enabled="false"/>
@@ -652,7 +645,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="待定项()"
+                        android:text="备注(REMARK)"
                         android:textSize="23sp"/>
                 </TableRow>
 
@@ -675,7 +668,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/et_tool_todo"
-                        android:text="待定项"
+                        android:text="备注"
                         android:textSize="20sp"
                         android:enabled="false"/>
                 </TableRow>

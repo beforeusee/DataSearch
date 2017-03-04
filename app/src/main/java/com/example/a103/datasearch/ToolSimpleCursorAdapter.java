@@ -2,6 +2,7 @@ package com.example.a103.datasearch;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +28,17 @@ public class ToolSimpleCursorAdapter extends SimpleCursorAdapter {
         ViewHolder holder= (ViewHolder) view.getTag();
         if (holder==null){
             holder=new ViewHolder();
-            holder.colImp=cursor.getColumnIndexOrThrow(DataSearchDbAdapter.COL_ID);
+            holder.colImp=cursor.getColumnIndexOrThrow(DataSearchDbAdapter.COL_USED);
+            holder.listTab=view.findViewById(R.id.tool_row_tab);
             view.setTag(holder);
         }
 
         if (cursor.getInt(holder.colImp)>0){
             //do something
+            holder.listTab.setBackgroundColor(ContextCompat.getColor(context,R.color.green));
         }else{
             //do something
+            holder.listTab.setBackgroundColor(ContextCompat.getColor(context,R.color.orange));
         }
     }
 

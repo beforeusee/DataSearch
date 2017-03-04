@@ -13,8 +13,20 @@ public class ShoulderMillingCutter extends Tool {
     private String cornerChamfer;                    //刀尖倒角
     private String cornerChamferWidth;               //倒角宽度
 
-    public ShoulderMillingCutter(int id, String name, String type, String serial, String brand, String cuttingDiameter, String depthOfCutMaximum, String maxRampingAngle, String usableLength, String peripheralEffectiveCuttingEdgeCount, String adaptiveInterfaceMachineDirection, String connectionDiameterTolerance, String grade, String substrate, String coating, String basicStandardGroup, String coolantEntryStyleCode, String connectionDiameter, String functionalLength, String fluteHelixAngle, String radialRakeAngle, String axialRakeAngle, String maximumRegrinds, String maxRotationalSpeed, String weight, String lifeCycleState, String suitableForMaterial, String application) {
-        super(id, name, type, serial, brand, cuttingDiameter, depthOfCutMaximum, maxRampingAngle, usableLength, peripheralEffectiveCuttingEdgeCount, adaptiveInterfaceMachineDirection, connectionDiameterTolerance, grade, substrate, coating, basicStandardGroup, coolantEntryStyleCode, connectionDiameter, functionalLength, fluteHelixAngle, radialRakeAngle, axialRakeAngle, maximumRegrinds, maxRotationalSpeed, weight, lifeCycleState, suitableForMaterial, application);
+    public ShoulderMillingCutter(int id, String name, String type, String serial, String brand,
+                                 String cuttingDiameter, String depthOfCutMaximum, String maxRampingAngle,
+                                 String usableLength, String peripheralEffectiveCuttingEdgeCount,
+                                 String adaptiveInterfaceMachineDirection, String connectionDiameterTolerance,
+                                 String grade, String substrate, String coating, String basicStandardGroup,
+                                 String coolantEntryStyleCode, String connectionDiameter, String functionalLength,
+                                 String fluteHelixAngle, String radialRakeAngle, String axialRakeAngle,
+                                 String maximumRegrinds, String maxRotationalSpeed, String weight,
+                                 String lifeCycleState, String suitableForMaterial, String application,int used) {
+        super(id, name, type, serial, brand, cuttingDiameter, depthOfCutMaximum, maxRampingAngle, usableLength,
+                peripheralEffectiveCuttingEdgeCount, adaptiveInterfaceMachineDirection, connectionDiameterTolerance,
+                grade, substrate, coating, basicStandardGroup, coolantEntryStyleCode, connectionDiameter,
+                functionalLength, fluteHelixAngle, radialRakeAngle, axialRakeAngle, maximumRegrinds,
+                maxRotationalSpeed, weight, lifeCycleState, suitableForMaterial, application,used);
     }
 
     public String getLowerCuttingDiameterTolerance() {
