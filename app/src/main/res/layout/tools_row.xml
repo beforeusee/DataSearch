@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Tool Text"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:padding="10dp"
             android:ellipsize="end"

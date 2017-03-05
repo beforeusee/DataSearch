@@ -18,6 +18,9 @@ public class Tool implements Parcelable{
     private String brand;                            //刀具制造商
 
     private String cuttingDiameter;                //切削直径
+    private String cuttingDiameterTOLUpper;       //切削直径公差上限
+    private String cuttingDiameterTOLLower;       //切削直径公差下限
+    private String filletRadius;                    //圆角半径
     private String depthOfCutMaximum;              //最大切深
     private String maxRampingAngle;                  //最大坡走铣角度
     private String usableLength;                   //有用长度
@@ -32,8 +35,15 @@ public class Tool implements Parcelable{
     private String connectionDiameter;          //连接直径
     private String functionalLength;            //功能长度
     private String fluteHelixAngle;             //容屑槽螺旋角
-    private String radialRakeAngle;             //径向前角
-    private String axialRakeAngle;              //轴向前角
+    private String axialRakeAngle;              //轴向前角(周刃前角)
+    private String radialRakeAngle;             //径向前角(底刃前角)
+    private String axialRearAngle;              //轴向后角(周刃后角)
+    private String radialRearAngle;             //径向后角(底刃后角)
+    private String cuttingEdgeAngle;            //切削刃角(主偏角)
+    private String faceContactDiameter;         //面接触直径      (方肩铣刀)
+    private String tipChamfer;                    //刀尖倒角      (方肩铣刀)
+    private String chamferWidth;                  //倒角宽度      (方肩铣刀)
+    private String centerCuttingCapability;      //中心切削能力 (方肩铣刀 )
     private String maximumRegrinds;             //最大重新研磨次数
     private String maxRotationalSpeed;         //最大转速
     private String weight;                       //部件重量
@@ -44,11 +54,14 @@ public class Tool implements Parcelable{
 
     //构造函数
     public Tool(int id, String name, String type, String serial, String brand, String cuttingDiameter,
+                String cuttingDiameterTOLUpper,String cuttingDiameterTOLLower,String filletRadius,
                 String depthOfCutMaximum, String maxRampingAngle, String usableLength,
                 String peripheralEffectiveCuttingEdgeCount, String adaptiveInterfaceMachineDirection,
                 String connectionDiameterTolerance, String grade, String substrate, String coating,
                 String basicStandardGroup, String coolantEntryStyleCode, String connectionDiameter,
-                String functionalLength, String fluteHelixAngle, String radialRakeAngle, String axialRakeAngle,
+                String functionalLength, String fluteHelixAngle, String axialRakeAngle,String radialRakeAngle,
+                String axialRearAngle, String radialRearAngle, String cuttingEdgeAngle,
+                String faceContactDiameter,String tipChamfer,String chamferWidth,String centerCuttingCapability,
                 String maximumRegrinds, String maxRotationalSpeed, String weight, String lifeCycleState,
                 String suitableForMaterial, String application,int used) {
         this.id = id;
@@ -57,6 +70,9 @@ public class Tool implements Parcelable{
         this.serial = serial;
         this.brand = brand;
         this.cuttingDiameter = cuttingDiameter;
+        this.cuttingDiameterTOLUpper=cuttingDiameterTOLUpper;
+        this.cuttingDiameterTOLLower=cuttingDiameterTOLLower;
+        this.filletRadius=filletRadius;
         this.depthOfCutMaximum = depthOfCutMaximum;
         this.maxRampingAngle = maxRampingAngle;
         this.usableLength = usableLength;
@@ -71,8 +87,15 @@ public class Tool implements Parcelable{
         this.connectionDiameter = connectionDiameter;
         this.functionalLength = functionalLength;
         this.fluteHelixAngle = fluteHelixAngle;
-        this.radialRakeAngle = radialRakeAngle;
         this.axialRakeAngle = axialRakeAngle;
+        this.radialRakeAngle = radialRakeAngle;
+        this.axialRearAngle=axialRearAngle;
+        this.radialRearAngle=radialRearAngle;
+        this.cuttingEdgeAngle=cuttingEdgeAngle;
+        this.faceContactDiameter=faceContactDiameter;
+        this.tipChamfer=tipChamfer;
+        this.chamferWidth=chamferWidth;
+        this.centerCuttingCapability=centerCuttingCapability;
         this.maximumRegrinds = maximumRegrinds;
         this.maxRotationalSpeed = maxRotationalSpeed;
         this.weight = weight;
@@ -107,6 +130,18 @@ public class Tool implements Parcelable{
 
     public void setCuttingDiameter(String cuttingDiameter){
         this.cuttingDiameter=cuttingDiameter;
+    }
+
+    public void setCuttingDiameterTOLUpper(String cuttingDiameterTOLUpper) {
+        this.cuttingDiameterTOLUpper = cuttingDiameterTOLUpper;
+    }
+
+    public void setCuttingDiameterTOLLower(String cuttingDiameterTOLLower) {
+        this.cuttingDiameterTOLLower = cuttingDiameterTOLLower;
+    }
+
+    public void setFilletRadius(String filletRadius) {
+        this.filletRadius = filletRadius;
     }
 
     public void setDepthOfCutMaximum(String depthOfCutMaximum){
@@ -165,12 +200,40 @@ public class Tool implements Parcelable{
         this.fluteHelixAngle=fluteHelixAngle;
     }
 
+    public void setCuttingEdgeAngle(String cuttingEdgeAngle) {
+        this.cuttingEdgeAngle = cuttingEdgeAngle;
+    }
+
     public void setRadialRakeAngle(String radialRakeAngle){
         this.radialRakeAngle=radialRakeAngle;
     }
 
     public void setAxialRakeAngle(String axialRakeAngle){
         this.axialRakeAngle=axialRakeAngle;
+    }
+
+    public void setRadialRearAngle(String radialRearAngle) {
+        this.radialRearAngle = radialRearAngle;
+    }
+
+    public void setAxialRearAngle(String axialRearAngle) {
+        this.axialRearAngle = axialRearAngle;
+    }
+
+    public void setFaceContactDiameter(String faceContactDiameter) {
+        this.faceContactDiameter = faceContactDiameter;
+    }
+
+    public void setTipChamfer(String tipChamfer) {
+        this.tipChamfer = tipChamfer;
+    }
+
+    public void setChamferWidth(String chamferWidth) {
+        this.chamferWidth = chamferWidth;
+    }
+
+    public void setCenterCuttingCapability(String centerCuttingCapability) {
+        this.centerCuttingCapability = centerCuttingCapability;
     }
 
     public void setMaximumRegrinds(String maximumRegrinds){
@@ -225,6 +288,18 @@ public class Tool implements Parcelable{
 
     public String getCuttingDiameter() {
         return cuttingDiameter;
+    }
+
+    public String getCuttingDiameterTOLUpper() {
+        return cuttingDiameterTOLUpper;
+    }
+
+    public String getCuttingDiameterTOLLower() {
+        return cuttingDiameterTOLLower;
+    }
+
+    public String getFilletRadius() {
+        return filletRadius;
     }
 
     public String getDepthOfCutMaximum() {
@@ -283,12 +358,40 @@ public class Tool implements Parcelable{
         return fluteHelixAngle;
     }
 
+    public String getCuttingEdgeAngle() {
+        return cuttingEdgeAngle;
+    }
+
     public String getRadialRakeAngle() {
         return radialRakeAngle;
     }
 
     public String getAxialRakeAngle() {
         return axialRakeAngle;
+    }
+
+    public String getRadialRearAngle() {
+        return radialRearAngle;
+    }
+
+    public String getAxialRearAngle() {
+        return axialRearAngle;
+    }
+
+    public String getFaceContactDiameter() {
+        return faceContactDiameter;
+    }
+
+    public String getTipChamfer() {
+        return tipChamfer;
+    }
+
+    public String getChamferWidth() {
+        return chamferWidth;
+    }
+
+    public String getCenterCuttingCapability() {
+        return centerCuttingCapability;
     }
 
     public String getMaximumRegrinds() {
@@ -330,6 +433,9 @@ public class Tool implements Parcelable{
         serial = in.readString();
         brand = in.readString();
         cuttingDiameter = in.readString();
+        cuttingDiameterTOLUpper=in.readString();
+        cuttingDiameterTOLLower=in.readString();
+        filletRadius=in.readString();
         depthOfCutMaximum = in.readString();
         maxRampingAngle = in.readString();
         usableLength = in.readString();
@@ -344,8 +450,15 @@ public class Tool implements Parcelable{
         connectionDiameter = in.readString();
         functionalLength = in.readString();
         fluteHelixAngle = in.readString();
-        radialRakeAngle = in.readString();
         axialRakeAngle = in.readString();
+        radialRakeAngle = in.readString();
+        axialRearAngle=in.readString();
+        radialRearAngle=in.readString();
+        cuttingEdgeAngle=in.readString();
+        faceContactDiameter=in.readString();
+        tipChamfer=in.readString();
+        chamferWidth=in.readString();
+        centerCuttingCapability=in.readString();
         maximumRegrinds = in.readString();
         maxRotationalSpeed = in.readString();
         weight = in.readString();
@@ -380,6 +493,9 @@ public class Tool implements Parcelable{
         dest.writeString(serial);
         dest.writeString(brand);
         dest.writeString(cuttingDiameter);
+        dest.writeString(cuttingDiameterTOLUpper);
+        dest.writeString(cuttingDiameterTOLLower);
+        dest.writeString(filletRadius);
         dest.writeString(depthOfCutMaximum);
         dest.writeString(maxRampingAngle);
         dest.writeString(usableLength);
@@ -394,8 +510,15 @@ public class Tool implements Parcelable{
         dest.writeString(connectionDiameter);
         dest.writeString(functionalLength);
         dest.writeString(fluteHelixAngle);
-        dest.writeString(radialRakeAngle);
         dest.writeString(axialRakeAngle);
+        dest.writeString(radialRakeAngle);
+        dest.writeString(axialRearAngle);
+        dest.writeString(radialRearAngle);
+        dest.writeString(cuttingEdgeAngle);
+        dest.writeString(faceContactDiameter);
+        dest.writeString(tipChamfer);
+        dest.writeString(chamferWidth);
+        dest.writeString(centerCuttingCapability);
         dest.writeString(maximumRegrinds);
         dest.writeString(maxRotationalSpeed);
         dest.writeString(weight);

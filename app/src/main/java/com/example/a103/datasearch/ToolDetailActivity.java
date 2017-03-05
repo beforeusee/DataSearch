@@ -22,6 +22,9 @@ public class ToolDetailActivity extends AppCompatActivity {
     EditText et_tool_serial;                 //刀具型号
     EditText et_tool_brand;                  //刀具制造厂商
     EditText et_tool_cuttingDiameter;       //切削直径
+    EditText et_tool_cuttingDiameterTOLUpper; //切削直径公差上限
+    EditText et_tool_cuttingDiameterTOLLower; //切削直径公差下限
+    EditText et_tool_filletRadius;           //R刀圆角半径
     EditText et_tool_depthOfCutMaximum;     //最大切深
     EditText et_tool_maxRampingAngle;       //最大坡走铣角度
     EditText et_tool_usableLength;           //有用长度
@@ -36,8 +39,15 @@ public class ToolDetailActivity extends AppCompatActivity {
     EditText et_tool_connectionDiameter;      //连接直径
     EditText et_tool_functionalLength;        //功能长度
     EditText et_tool_fluteHelixAngle;         //容屑槽螺旋角
-    EditText et_tool_radialRakeAngle;         //径向前角
-    EditText et_tool_axialRakeAngle;          //轴向前角
+    EditText et_tool_axialRakeAngle;          //轴向前角(周刃前角)
+    EditText et_tool_radialRakeAngle;         //径向前角(底刃前角)
+    EditText et_tool_axialRearAngle;          //轴向后角(周刃后角)
+    EditText et_tool_radialRearAngle;          //径向后角(底刃后角)
+    EditText et_tool_cuttingEdgeAngle;        //切削刃角(主偏角)
+    EditText et_tool_faceContactDiameter;     //面接触直径
+    EditText et_tool_tipChamfer;               //刀尖倒角
+    EditText et_tool_chamferWidth;             //倒角宽度
+    EditText et_tool_centerCuttingCapability; //中心切削能力
     EditText et_tool_maximumRegrinds;         //最大重新研磨次数
     EditText et_tool_maxRotationalSpeed;      //最大转速
     EditText et_tool_weight;                    //部件重量
@@ -100,6 +110,9 @@ public class ToolDetailActivity extends AppCompatActivity {
                             et_tool_serial.getText().toString(),
                             et_tool_brand.getText().toString(),
                             et_tool_cuttingDiameter.getText().toString(),
+                            et_tool_cuttingDiameterTOLUpper.getText().toString(),
+                            et_tool_cuttingDiameterTOLLower.getText().toString(),
+                            et_tool_filletRadius.getText().toString(),
                             et_tool_depthOfCutMaximum.getText().toString(),
                             et_tool_maxRampingAngle.getText().toString(),
                             et_tool_usableLength.getText().toString(),
@@ -114,8 +127,15 @@ public class ToolDetailActivity extends AppCompatActivity {
                             et_tool_connectionDiameter.getText().toString(),
                             et_tool_functionalLength.getText().toString(),
                             et_tool_fluteHelixAngle.getText().toString(),
-                            et_tool_radialRakeAngle.getText().toString(),
                             et_tool_axialRakeAngle.getText().toString(),
+                            et_tool_radialRakeAngle.getText().toString(),
+                            et_tool_axialRearAngle.getText().toString(),
+                            et_tool_radialRearAngle.getText().toString(),
+                            et_tool_cuttingEdgeAngle.getText().toString(),
+                            et_tool_faceContactDiameter.getText().toString(),
+                            et_tool_tipChamfer.getText().toString(),
+                            et_tool_chamferWidth.getText().toString(),
+                            et_tool_centerCuttingCapability.getText().toString(),
                             et_tool_maximumRegrinds.getText().toString(),
                             et_tool_maxRotationalSpeed.getText().toString(),
                             et_tool_weight.getText().toString(),
@@ -134,6 +154,9 @@ public class ToolDetailActivity extends AppCompatActivity {
                             et_tool_serial.getText().toString(),
                             et_tool_brand.getText().toString(),
                             et_tool_cuttingDiameter.getText().toString(),
+                            et_tool_cuttingDiameterTOLUpper.getText().toString(),
+                            et_tool_cuttingDiameterTOLLower.getText().toString(),
+                            et_tool_filletRadius.getText().toString(),
                             et_tool_depthOfCutMaximum.getText().toString(),
                             et_tool_maxRampingAngle.getText().toString(),
                             et_tool_usableLength.getText().toString(),
@@ -148,8 +171,15 @@ public class ToolDetailActivity extends AppCompatActivity {
                             et_tool_connectionDiameter.getText().toString(),
                             et_tool_functionalLength.getText().toString(),
                             et_tool_fluteHelixAngle.getText().toString(),
-                            et_tool_radialRakeAngle.getText().toString(),
                             et_tool_axialRakeAngle.getText().toString(),
+                            et_tool_radialRakeAngle.getText().toString(),
+                            et_tool_axialRearAngle.getText().toString(),
+                            et_tool_radialRearAngle.getText().toString(),
+                            et_tool_cuttingEdgeAngle.getText().toString(),
+                            et_tool_faceContactDiameter.getText().toString(),
+                            et_tool_tipChamfer.getText().toString(),
+                            et_tool_chamferWidth.getText().toString(),
+                            et_tool_centerCuttingCapability.getText().toString(),
                             et_tool_maximumRegrinds.getText().toString(),
                             et_tool_maxRotationalSpeed.getText().toString(),
                             et_tool_weight.getText().toString(),
@@ -181,12 +211,19 @@ public class ToolDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 根据页面值设置刀具
+     * @param tool
+     */
     private void setToolFromToolDetail(Tool tool) {
         tool.setName(et_tool_name.getText().toString());
         tool.setType(et_tool_type.getText().toString());
         tool.setSerial(et_tool_serial.getText().toString());
         tool.setBrand(et_tool_brand.getText().toString());
         tool.setCuttingDiameter(et_tool_cuttingDiameter.getText().toString());
+        tool.setCuttingDiameterTOLUpper(et_tool_cuttingDiameterTOLUpper.getText().toString());
+        tool.setCuttingDiameterTOLLower(et_tool_cuttingDiameterTOLLower.getText().toString());
+        tool.setFilletRadius(et_tool_filletRadius.getText().toString());
         tool.setDepthOfCutMaximum(et_tool_depthOfCutMaximum.getText().toString());
         tool.setMaxRampingAngle(et_tool_maxRampingAngle.getText().toString());
         tool.setUsableLength(et_tool_usableLength.getText().toString());
@@ -201,8 +238,15 @@ public class ToolDetailActivity extends AppCompatActivity {
         tool.setConnectionDiameter(et_tool_connectionDiameter.getText().toString());
         tool.setFunctionalLength(et_tool_functionalLength.getText().toString());
         tool.setFluteHelixAngle(et_tool_fluteHelixAngle.getText().toString());
-        tool.setRadialRakeAngle(et_tool_radialRakeAngle.getText().toString());
         tool.setAxialRakeAngle(et_tool_axialRakeAngle.getText().toString());
+        tool.setRadialRakeAngle(et_tool_radialRakeAngle.getText().toString());
+        tool.setAxialRearAngle(et_tool_axialRearAngle.getText().toString());
+        tool.setRadialRearAngle(et_tool_radialRearAngle.getText().toString());
+        tool.setCuttingEdgeAngle(et_tool_cuttingEdgeAngle.getText().toString());
+        tool.setFaceContactDiameter(et_tool_faceContactDiameter.getText().toString());
+        tool.setTipChamfer(et_tool_tipChamfer.getText().toString());
+        tool.setChamferWidth(et_tool_chamferWidth.getText().toString());
+        tool.setCenterCuttingCapability(et_tool_centerCuttingCapability.getText().toString());
         tool.setMaximumRegrinds(et_tool_maximumRegrinds.getText().toString());
         tool.setMaxRotationalSpeed(et_tool_maxRotationalSpeed.getText().toString());
         tool.setWeight(et_tool_weight.getText().toString());
@@ -222,6 +266,9 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_serial.setText(tool.getSerial());
         et_tool_brand.setText(tool.getBrand());
         et_tool_cuttingDiameter.setText(tool.getCuttingDiameter());
+        et_tool_cuttingDiameterTOLUpper.setText(tool.getCuttingDiameterTOLUpper());
+        et_tool_cuttingDiameterTOLLower.setText(tool.getCuttingDiameterTOLLower());
+        et_tool_filletRadius.setText(tool.getFilletRadius());
         et_tool_depthOfCutMaximum.setText(tool.getDepthOfCutMaximum());
         et_tool_maxRampingAngle.setText(tool.getMaxRampingAngle());
         et_tool_usableLength.setText(tool.getUsableLength());
@@ -236,8 +283,15 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_connectionDiameter.setText(tool.getConnectionDiameter());
         et_tool_functionalLength.setText(tool.getFunctionalLength());
         et_tool_fluteHelixAngle.setText(tool.getFluteHelixAngle());
-        et_tool_radialRakeAngle.setText(tool.getRadialRakeAngle());
         et_tool_axialRakeAngle.setText(tool.getAxialRakeAngle());
+        et_tool_radialRakeAngle.setText(tool.getRadialRakeAngle());
+        et_tool_axialRearAngle.setText(tool.getAxialRearAngle());
+        et_tool_radialRearAngle.setText(tool.getRadialRearAngle());
+        et_tool_cuttingEdgeAngle.setText(tool.getFilletRadius());
+        et_tool_faceContactDiameter.setText(tool.getFaceContactDiameter());
+        et_tool_tipChamfer.setText(tool.getTipChamfer());
+        et_tool_chamferWidth.setText(tool.getChamferWidth());
+        et_tool_filletRadius.setText(tool.getFilletRadius());
         et_tool_maximumRegrinds.setText(tool.getMaximumRegrinds());
         et_tool_maxRotationalSpeed.setText(tool.getMaxRotationalSpeed());
         et_tool_weight.setText(tool.getWeight());
@@ -260,6 +314,9 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_serial.setEnabled(enabled);
         et_tool_brand.setEnabled(enabled);
         et_tool_cuttingDiameter.setEnabled(enabled);
+        et_tool_cuttingDiameterTOLUpper.setEnabled(enabled);
+        et_tool_cuttingDiameterTOLLower.setEnabled(enabled);
+        et_tool_filletRadius.setEnabled(enabled);
         et_tool_depthOfCutMaximum.setEnabled(enabled);
         et_tool_maxRampingAngle.setEnabled(enabled);
         et_tool_usableLength.setEnabled(enabled);
@@ -274,8 +331,15 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_connectionDiameter.setEnabled(enabled);
         et_tool_functionalLength.setEnabled(enabled);
         et_tool_fluteHelixAngle.setEnabled(enabled);
-        et_tool_radialRakeAngle.setEnabled(enabled);
         et_tool_axialRakeAngle.setEnabled(enabled);
+        et_tool_radialRakeAngle.setEnabled(enabled);
+        et_tool_axialRearAngle.setEnabled(enabled);
+        et_tool_radialRearAngle.setEnabled(enabled);
+        et_tool_cuttingEdgeAngle.setEnabled(enabled);
+        et_tool_faceContactDiameter.setEnabled(enabled);
+        et_tool_tipChamfer.setEnabled(enabled);
+        et_tool_chamferWidth.setEnabled(enabled);
+        et_tool_centerCuttingCapability.setEnabled(enabled);
         et_tool_maximumRegrinds.setEnabled(enabled);
         et_tool_maxRotationalSpeed.setEnabled(enabled);
         et_tool_weight.setEnabled(enabled);
@@ -295,6 +359,9 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_serial= (EditText) findViewById(R.id.et_tool_serial);
         et_tool_brand= (EditText) findViewById(R.id.et_tool_brand);
         et_tool_cuttingDiameter= (EditText) findViewById(R.id.et_tool_cuttingDiameter);
+        et_tool_cuttingDiameterTOLUpper= (EditText) findViewById(R.id.et_tool_cuttingDiameterTOLUpper);
+        et_tool_cuttingDiameterTOLLower= (EditText) findViewById(R.id.et_tool_cuttingDiameterTOLLower);
+        et_tool_filletRadius= (EditText) findViewById(R.id.et_tool_filletRadius);
         et_tool_depthOfCutMaximum= (EditText) findViewById(R.id.et_tool_depthOfCutMaximum);
         et_tool_maxRampingAngle= (EditText) findViewById(R.id.et_tool_maxRampingAngle);
         et_tool_usableLength= (EditText) findViewById(R.id.et_tool_usableLength);
@@ -312,8 +379,15 @@ public class ToolDetailActivity extends AppCompatActivity {
         et_tool_connectionDiameter= (EditText) findViewById(R.id.et_tool_connectionDiameter);
         et_tool_functionalLength= (EditText) findViewById(R.id.et_tool_functionalLength);
         et_tool_fluteHelixAngle= (EditText) findViewById(R.id.et_tool_fluteHelixAngle);
-        et_tool_radialRakeAngle= (EditText) findViewById(R.id.et_tool_radialRakeAngle);
         et_tool_axialRakeAngle= (EditText) findViewById(R.id.et_tool_axialRakeAngle);
+        et_tool_radialRakeAngle= (EditText) findViewById(R.id.et_tool_radialRakeAngle);
+        et_tool_axialRearAngle= (EditText) findViewById(R.id.et_tool_axialRearAngle);
+        et_tool_radialRearAngle= (EditText) findViewById(R.id.et_tool_radialRearAngle);
+        et_tool_cuttingEdgeAngle= (EditText) findViewById(R.id.et_tool_cuttingEdgeAngle);
+        et_tool_faceContactDiameter= (EditText) findViewById(R.id.et_tool_faceContactDiameter);
+        et_tool_tipChamfer= (EditText) findViewById(R.id.et_tool_tipChamfer);
+        et_tool_chamferWidth= (EditText) findViewById(R.id.et_tool_chamferWidth);
+        et_tool_centerCuttingCapability= (EditText) findViewById(R.id.et_tool_centerCuttingCapability);
         et_tool_maximumRegrinds= (EditText) findViewById(R.id.et_tool_maximumRegrinds);
         et_tool_maxRotationalSpeed= (EditText) findViewById(R.id.et_tool_maxRotationalSpeed);
         et_tool_weight= (EditText) findViewById(R.id.et_tool_weight);

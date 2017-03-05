@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.view.View;
 
 /**
  * Created by zhengxiaohu on 2017/2/24.
@@ -29,6 +30,9 @@ public class DataSearchDbAdapter {
     public static final String COL_SERIAL="serial";
     public static final String COL_BRAND="brand";
     public static final String COL_CUTTINGDIAMETER="cuttingDiameter";
+    public static final String COL_CUTTINGDIAMETERTOLUPPER="cuttingDiameterTOLUpper";
+    public static final String COL_CUTTINGDIAMETERTOLLOWER="cuttingDiameterTOLLower";
+    public static final String COL_FILLETRADIUS="filletRadius";
     public static final String COL_DEPTHOFCUTMAXIMUM="depthOfCutMaximum";
     public static final String COL_MAXRAMPINGANGLE="maxRampingAngle";
     public static final String COL_USABLELENGTH="usableLength";
@@ -43,8 +47,15 @@ public class DataSearchDbAdapter {
     public static final String COL_CONNECTIONDIAMETER="connectionDiameter";
     public static final String COL_FUNCTIONALLENGTH="functionalLength";
     public static final String COL_FLUTEHELIXANGLE="fluteHelixAngle";
-    public static final String COL_RADIALRAKEANGLE="radialRakeAngle";
     public static final String COL_AXIALRAKEANGLE="axialRakeAngle";
+    public static final String COL_RADIALRAKEANGLE="radialRakeAngle";
+    public static final String COL_AXIALREARANGLE="axialRearAngle";
+    public static final String COL_RADIALREARANGLE="radialRearAngle";
+    public static final String COL_CUTTINGEDGEANGLE="cuttingEdgeAngle";
+    public static final String COL_FACECONTACTDIAMETER="faceContactDiameter";
+    public static final String COL_TIPCHAMFER="tipChamfer";
+    public static final String COL_CHAMFERWIDTH="chamferWidth";
+    public static final String COL_CENTERCUTTINGCAPABILITY="centerCuttingCapability";
     public static final String COL_MAXIMUMREGRINDS="maximumRegrinds";
     public static final String COL_MAXROTATIONSPEED="maxRotationSpeed";
     public static final String COL_WEIGHT="weight";
@@ -60,29 +71,39 @@ public class DataSearchDbAdapter {
     private static final int INDEX_SERIAL=INDEX_ID+3;
     private static final int INDEX_BRAND=INDEX_ID+4;
     private static final int INDEX_CUTTINGDIAMETER=INDEX_ID+5;
-    private static final int INDEX_DEPTHOFCUTMAXIMUM=INDEX_ID+6;
-    private static final int INDEX_MAXRAMPINGANGLE=INDEX_ID+7;
-    private static final int INDEX_USABLELENGTH=INDEX_ID+8;
-    private static final int INDEX_TEETHNUM=INDEX_ID+9;
-    private static final int INDEX_TOOLADAPTER=INDEX_ID+10;
-    private static final int INDEX_CONNECTIONDIAMETERTOLERANCE=INDEX_ID+11;
-    private static final int INDEX_GRADE=INDEX_ID+12;
-    private static final int INDEX_SUBSTRATE=INDEX_ID+13;
-    private static final int INDEX_COATING=INDEX_ID+14;
-    private static final int INDEX_BASICSTANDARDGROUP=INDEX_ID+15;
-    private static final int INDEX_COOLANTENTRYSTYLECODE=INDEX_ID+16;
-    private static final int INDEX_CONNECTIONDIAMETER=INDEX_ID+17;
-    private static final int INDEX_FUNCTIONALLENGTH=INDEX_ID+18;
-    private static final int INDEX_FLUTEHELIXANGLE=INDEX_ID+19;
-    private static final int INDEX_RADIALRAKEANGLE=INDEX_ID+20;
-    private static final int INDEX_AXIALRAKEANGLE=INDEX_ID+21;
-    private static final int INDEX_MAXIMUMREGRINDS=INDEX_ID+22;
-    private static final int INDEX_MAXROTATIONSPEED=INDEX_ID+23;
-    private static final int INDEX_WEIGHT=INDEX_ID+24;
-    private static final int INDEX_LIFECYCLESTATE=INDEX_ID+25;
-    private static final int INDEX_SUITABLEFORMATERIAL=INDEX_ID+26;
-    private static final int INDEX_APPLICATION=INDEX_ID+27;
-    private static final int INDEX_USED=INDEX_ID+28;
+    public static final int INDEX_CUTTINGDIAMETERTOLUPPER=INDEX_ID+6;
+    public static final int INDEX_CUTTINGDIAMETERTOLLOWER=INDEX_ID+7;
+    public static final int INDEX_FILLETRADIUS=INDEX_ID+8;
+    private static final int INDEX_DEPTHOFCUTMAXIMUM=INDEX_ID+9;
+    private static final int INDEX_MAXRAMPINGANGLE=INDEX_ID+10;
+    private static final int INDEX_USABLELENGTH=INDEX_ID+11;
+    private static final int INDEX_TEETHNUM=INDEX_ID+12;
+    private static final int INDEX_TOOLADAPTER=INDEX_ID+13;
+    private static final int INDEX_CONNECTIONDIAMETERTOLERANCE=INDEX_ID+14;
+    private static final int INDEX_GRADE=INDEX_ID+15;
+    private static final int INDEX_SUBSTRATE=INDEX_ID+16;
+    private static final int INDEX_COATING=INDEX_ID+17;
+    private static final int INDEX_BASICSTANDARDGROUP=INDEX_ID+18;
+    private static final int INDEX_COOLANTENTRYSTYLECODE=INDEX_ID+19;
+    private static final int INDEX_CONNECTIONDIAMETER=INDEX_ID+20;
+    private static final int INDEX_FUNCTIONALLENGTH=INDEX_ID+21;
+    private static final int INDEX_FLUTEHELIXANGLE=INDEX_ID+22;
+    private static final int INDEX_AXIALRAKEANGLE=INDEX_ID+23;
+    private static final int INDEX_RADIALRAKEANGLE=INDEX_ID+24;
+    public static final int INDEX_AXIALREARANGLE=INDEX_ID+25;
+    public static final int INDEX_RADIALREARANGLE=INDEX_ID+26;
+    public static final int INDEX_CUTTINGEDGEANGLE=INDEX_ID+27;
+    public static final int INDEX_FACECONTACTDIAMETER=INDEX_ID+28;
+    public static final int INDEX_TIPCHAMFER=INDEX_ID+29;
+    public static final int INDEX_CHAMFERWIDTH=INDEX_ID+30;
+    public static final int INDEX_CENTERCUTTINGCAPABILITY=INDEX_ID+31;
+    private static final int INDEX_MAXIMUMREGRINDS=INDEX_ID+32;
+    private static final int INDEX_MAXROTATIONSPEED=INDEX_ID+33;
+    private static final int INDEX_WEIGHT=INDEX_ID+34;
+    private static final int INDEX_LIFECYCLESTATE=INDEX_ID+35;
+    private static final int INDEX_SUITABLEFORMATERIAL=INDEX_ID+36;
+    private static final int INDEX_APPLICATION=INDEX_ID+37;
+    private static final int INDEX_USED=INDEX_ID+38;
 
     //用于日志
     private static final String TAG="DataSearchDbAdapter";
@@ -95,6 +116,9 @@ public class DataSearchDbAdapter {
             COL_SERIAL+" TEXT, "+
             COL_BRAND+" TEXT, "+
             COL_CUTTINGDIAMETER+" TEXT, "+
+            COL_CUTTINGDIAMETERTOLUPPER+" TEXT, "+
+            COL_CUTTINGDIAMETERTOLLOWER+" TEXT, "+
+            COL_FILLETRADIUS+" TEXT, "+
             COL_DEPTHOFCUTMAXIMUM+" TEXT, "+
             COL_MAXRAMPINGANGLE+" TEXT, "+
             COL_USABLELENGTH+" TEXT, "+
@@ -109,8 +133,15 @@ public class DataSearchDbAdapter {
             COL_CONNECTIONDIAMETER+" TEXT, "+
             COL_FUNCTIONALLENGTH+" TEXT, "+
             COL_FLUTEHELIXANGLE+" TEXT, "+
-            COL_RADIALRAKEANGLE+" TEXT, "+
             COL_AXIALRAKEANGLE+" TEXT, "+
+            COL_RADIALRAKEANGLE+" TEXT, "+
+            COL_AXIALREARANGLE+" TEXT, "+
+            COL_RADIALREARANGLE+" TEXT, "+
+            COL_CUTTINGEDGEANGLE+" TEXT, "+
+            COL_FACECONTACTDIAMETER+" TEXT, "+
+            COL_TIPCHAMFER+" TEXT, "+
+            COL_CHAMFERWIDTH+" TEXT, "+
+            COL_CENTERCUTTINGCAPABILITY+" TEXT, "+
             COL_MAXIMUMREGRINDS+" TEXT, "+
             COL_MAXROTATIONSPEED+" TEXT, "+
             COL_WEIGHT+" TEXT, "+
@@ -171,19 +202,25 @@ public class DataSearchDbAdapter {
 
     //CREATE
     public void createTool(String name, String type, String serial, String brand, String cuttingDiameter,
+                           String cuttingDiameterTOLUpper,String cuttingDiameterTOLLower,String filletRadius,
                            String depthOfCutMaximum, String maxRampingAngle, String usableLength,
                            String peripheralEffectiveCuttingEdgeCount, String adaptiveInterfaceMachineDirection,
                            String connectionDiameterTolerance, String grade, String substrate, String coating,
                            String basicStandardGroup, String coolantEntryStyleCode, String connectionDiameter,
-                           String functionalLength, String fluteHelixAngle, String radialRakeAngle,
-                           String axialRakeAngle, String maximumRegrinds, String maxRotationalSpeed, String weight,
-                           String lifeCycleState, String suitableForMaterial, String application,boolean used){
+                           String functionalLength, String fluteHelixAngle, String axialRakeAngle,String radialRakeAngle,
+                           String axialRearAngle, String radialRearAngle, String cuttingEdgeAngle,
+                           String faceContactDiameter,String tipChamfer,String chamferWidth,String centerCuttingCapability,
+                           String maximumRegrinds, String maxRotationalSpeed, String weight, String lifeCycleState,
+                           String suitableForMaterial, String application,boolean used){
         ContentValues values=new ContentValues();
         values.put(COL_NAME,name);
         values.put(COL_TYPE,type);
         values.put(COL_SERIAL,serial);
         values.put(COL_BRAND,brand);
         values.put(COL_CUTTINGDIAMETER,cuttingDiameter);
+        values.put(COL_CUTTINGDIAMETERTOLUPPER,cuttingDiameterTOLUpper);
+        values.put(COL_CUTTINGDIAMETERTOLLOWER,cuttingDiameterTOLLower);
+        values.put(COL_FILLETRADIUS,filletRadius);
         values.put(COL_DEPTHOFCUTMAXIMUM,depthOfCutMaximum);
         values.put(COL_MAXRAMPINGANGLE,maxRampingAngle);
         values.put(COL_USABLELENGTH,usableLength);
@@ -198,8 +235,15 @@ public class DataSearchDbAdapter {
         values.put(COL_CONNECTIONDIAMETER,connectionDiameter);
         values.put(COL_FUNCTIONALLENGTH,functionalLength);
         values.put(COL_FLUTEHELIXANGLE,fluteHelixAngle);
-        values.put(COL_RADIALRAKEANGLE,radialRakeAngle);
         values.put(COL_AXIALRAKEANGLE,axialRakeAngle);
+        values.put(COL_RADIALRAKEANGLE,radialRakeAngle);
+        values.put(COL_AXIALREARANGLE,axialRearAngle);
+        values.put(COL_RADIALREARANGLE,radialRearAngle);
+        values.put(COL_CUTTINGEDGEANGLE,cuttingEdgeAngle);
+        values.put(COL_FACECONTACTDIAMETER,faceContactDiameter);
+        values.put(COL_TIPCHAMFER,tipChamfer);
+        values.put(COL_CHAMFERWIDTH,chamferWidth);
+        values.put(COL_CENTERCUTTINGCAPABILITY,centerCuttingCapability);
         values.put(COL_MAXIMUMREGRINDS,maximumRegrinds);
         values.put(COL_MAXROTATIONSPEED,maxRotationalSpeed);
         values.put(COL_WEIGHT,weight);
@@ -229,43 +273,73 @@ public class DataSearchDbAdapter {
     //fetch tool by id
     public Tool fecthToolById(int id){
         Cursor cursor=mDb.query(TABLE_NAME_TOOL,new String[]{COL_ID,COL_NAME,COL_TYPE,COL_SERIAL,COL_BRAND,
-        COL_CUTTINGDIAMETER,COL_DEPTHOFCUTMAXIMUM,COL_MAXRAMPINGANGLE,COL_USABLELENGTH,COL_TEETHNUM,
+        COL_CUTTINGDIAMETER,COL_CUTTINGDIAMETERTOLUPPER,COL_CUTTINGDIAMETERTOLLOWER,COL_FILLETRADIUS,
+                COL_DEPTHOFCUTMAXIMUM,COL_MAXRAMPINGANGLE,COL_USABLELENGTH,COL_TEETHNUM,
         COL_TOOLADAPTER,COL_CONNECTIONDIAMETERTOLERANCE,COL_GRADE,COL_SUBSTRATE,COL_COATING,
         COL_BASICSTANDARDGROUP,COL_COOLANTENTRYSTYLECODE,COL_CONNECTIONDIAMETER,COL_FUNCTIONALLENGTH,
-        COL_FLUTEHELIXANGLE,COL_RADIALRAKEANGLE,COL_AXIALRAKEANGLE,COL_MAXIMUMREGRINDS,
-                COL_MAXROTATIONSPEED,COL_WEIGHT, COL_LIFECYCLESTATE,COL_SUITABLEFORMATERIAL,
-                COL_APPLICATION,COL_USED},COL_ID+"=?",new String[]{String.valueOf(id)},null,null,null,null);
+        COL_FLUTEHELIXANGLE,COL_AXIALRAKEANGLE,COL_RADIALRAKEANGLE,COL_AXIALREARANGLE,
+                COL_RADIALREARANGLE,COL_CUTTINGEDGEANGLE,COL_FACECONTACTDIAMETER,COL_TIPCHAMFER,
+                COL_CHAMFERWIDTH,COL_CENTERCUTTINGCAPABILITY,COL_MAXIMUMREGRINDS, COL_MAXROTATIONSPEED,
+                COL_WEIGHT, COL_LIFECYCLESTATE,COL_SUITABLEFORMATERIAL, COL_APPLICATION,COL_USED},
+                COL_ID+"=?",new String[]{String.valueOf(id)},null,null,null,null);
 
         if (cursor!=null){
             cursor.moveToFirst();
         }
-        return new Tool(cursor.getInt(INDEX_ID),cursor.getString(INDEX_NAME),cursor.getString(INDEX_TYPE),
-                cursor.getString(INDEX_SERIAL),cursor.getString(INDEX_BRAND),
-                cursor.getString(INDEX_CUTTINGDIAMETER),cursor.getString(INDEX_DEPTHOFCUTMAXIMUM),
-                cursor.getString(INDEX_MAXRAMPINGANGLE),cursor.getString(INDEX_USABLELENGTH),
-                cursor.getString(INDEX_TEETHNUM),cursor.getString(INDEX_TOOLADAPTER),
-                cursor.getString(INDEX_CONNECTIONDIAMETERTOLERANCE),cursor.getString(INDEX_GRADE),
-                cursor.getString(INDEX_SUBSTRATE),cursor.getString(INDEX_COATING),
-                cursor.getString(INDEX_BASICSTANDARDGROUP),cursor.getString(INDEX_COOLANTENTRYSTYLECODE),
-                cursor.getString(INDEX_CONNECTIONDIAMETER),cursor.getString(INDEX_FUNCTIONALLENGTH),
-                cursor.getString(INDEX_FLUTEHELIXANGLE),cursor.getString(INDEX_RADIALRAKEANGLE),
-                cursor.getString(INDEX_AXIALRAKEANGLE),cursor.getString(INDEX_MAXIMUMREGRINDS),
-                cursor.getString(INDEX_MAXROTATIONSPEED),cursor.getString(INDEX_WEIGHT),
-                cursor.getString(INDEX_LIFECYCLESTATE),cursor.getString(INDEX_SUITABLEFORMATERIAL),
-                cursor.getString(INDEX_APPLICATION),cursor.getInt(INDEX_USED)
+        return new Tool(cursor.getInt(INDEX_ID),
+                cursor.getString(INDEX_NAME),
+                cursor.getString(INDEX_TYPE),
+                cursor.getString(INDEX_SERIAL),
+                cursor.getString(INDEX_BRAND),
+                cursor.getString(INDEX_CUTTINGDIAMETER),
+                cursor.getString(INDEX_CUTTINGDIAMETERTOLUPPER),
+                cursor.getString(INDEX_CUTTINGDIAMETERTOLLOWER),
+                cursor.getString(INDEX_FILLETRADIUS),
+                cursor.getString(INDEX_DEPTHOFCUTMAXIMUM),
+                cursor.getString(INDEX_MAXRAMPINGANGLE),
+                cursor.getString(INDEX_USABLELENGTH),
+                cursor.getString(INDEX_TEETHNUM),
+                cursor.getString(INDEX_TOOLADAPTER),
+                cursor.getString(INDEX_CONNECTIONDIAMETERTOLERANCE),
+                cursor.getString(INDEX_GRADE),
+                cursor.getString(INDEX_SUBSTRATE),
+                cursor.getString(INDEX_COATING),
+                cursor.getString(INDEX_BASICSTANDARDGROUP),
+                cursor.getString(INDEX_COOLANTENTRYSTYLECODE),
+                cursor.getString(INDEX_CONNECTIONDIAMETER),
+                cursor.getString(INDEX_FUNCTIONALLENGTH),
+                cursor.getString(INDEX_FLUTEHELIXANGLE),
+                cursor.getString(INDEX_AXIALRAKEANGLE),
+                cursor.getString(INDEX_RADIALRAKEANGLE),
+                cursor.getString(INDEX_AXIALREARANGLE),
+                cursor.getString(INDEX_RADIALREARANGLE),
+                cursor.getString(INDEX_CUTTINGEDGEANGLE),
+                cursor.getString(INDEX_FACECONTACTDIAMETER),
+                cursor.getString(INDEX_TIPCHAMFER),
+                cursor.getString(INDEX_CHAMFERWIDTH),
+                cursor.getString(INDEX_CENTERCUTTINGCAPABILITY),
+                cursor.getString(INDEX_MAXIMUMREGRINDS),
+                cursor.getString(INDEX_MAXROTATIONSPEED),
+                cursor.getString(INDEX_WEIGHT),
+                cursor.getString(INDEX_LIFECYCLESTATE),
+                cursor.getString(INDEX_SUITABLEFORMATERIAL),
+                cursor.getString(INDEX_APPLICATION),
+                cursor.getInt(INDEX_USED)
                 );
     }
 
     //fetch all tools
     public Cursor fetchAllTools() {
-        Cursor mCursor = mDb.query(TABLE_NAME_TOOL, new String[]{COL_ID, COL_NAME, COL_TYPE, COL_SERIAL,
-                COL_BRAND, COL_CUTTINGDIAMETER, COL_DEPTHOFCUTMAXIMUM, COL_MAXRAMPINGANGLE,
-                COL_USABLELENGTH, COL_TEETHNUM, COL_TOOLADAPTER, COL_CONNECTIONDIAMETERTOLERANCE,
-                COL_GRADE, COL_SUBSTRATE, COL_COATING, COL_BASICSTANDARDGROUP, COL_COOLANTENTRYSTYLECODE,
-                COL_CONNECTIONDIAMETER, COL_FUNCTIONALLENGTH, COL_FLUTEHELIXANGLE, COL_RADIALRAKEANGLE,
-                COL_AXIALRAKEANGLE, COL_MAXIMUMREGRINDS, COL_MAXROTATIONSPEED, COL_WEIGHT,
-                COL_LIFECYCLESTATE, COL_SUITABLEFORMATERIAL,
-                COL_APPLICATION,COL_USED}, null, null, null, null, null);
+        Cursor mCursor = mDb.query(TABLE_NAME_TOOL, new String[]{COL_ID,COL_NAME,COL_TYPE,COL_SERIAL,COL_BRAND,
+                COL_CUTTINGDIAMETER,COL_CUTTINGDIAMETERTOLUPPER,COL_CUTTINGDIAMETERTOLLOWER,COL_FILLETRADIUS,
+                COL_DEPTHOFCUTMAXIMUM,COL_MAXRAMPINGANGLE,COL_USABLELENGTH,COL_TEETHNUM,
+                COL_TOOLADAPTER,COL_CONNECTIONDIAMETERTOLERANCE,COL_GRADE,COL_SUBSTRATE,COL_COATING,
+                COL_BASICSTANDARDGROUP,COL_COOLANTENTRYSTYLECODE,COL_CONNECTIONDIAMETER,COL_FUNCTIONALLENGTH,
+                COL_FLUTEHELIXANGLE,COL_AXIALRAKEANGLE,COL_RADIALRAKEANGLE,COL_AXIALREARANGLE,
+                COL_RADIALREARANGLE,COL_CUTTINGEDGEANGLE,COL_FACECONTACTDIAMETER,COL_TIPCHAMFER,
+                COL_CHAMFERWIDTH,COL_CENTERCUTTINGCAPABILITY,COL_MAXIMUMREGRINDS, COL_MAXROTATIONSPEED,
+                COL_WEIGHT, COL_LIFECYCLESTATE,COL_SUITABLEFORMATERIAL, COL_APPLICATION,COL_USED},
+                null, null, null, null, null);
 
         if (mCursor!=null){
             mCursor.moveToFirst();
@@ -306,6 +380,9 @@ public class DataSearchDbAdapter {
         values.put(COL_SERIAL,tool.getSerial());
         values.put(COL_BRAND,tool.getBrand());
         values.put(COL_CUTTINGDIAMETER,tool.getCuttingDiameter());
+        values.put(COL_CUTTINGDIAMETERTOLUPPER,tool.getCuttingDiameterTOLUpper());
+        values.put(COL_CUTTINGDIAMETERTOLLOWER,tool.getCuttingDiameterTOLLower());
+        values.put(COL_FILLETRADIUS,tool.getFilletRadius());
         values.put(COL_DEPTHOFCUTMAXIMUM,tool.getDepthOfCutMaximum());
         values.put(COL_MAXRAMPINGANGLE,tool.getMaxRampingAngle());
         values.put(COL_USABLELENGTH,tool.getUsableLength());
@@ -320,8 +397,15 @@ public class DataSearchDbAdapter {
         values.put(COL_CONNECTIONDIAMETER,tool.getConnectionDiameter());
         values.put(COL_FUNCTIONALLENGTH,tool.getFunctionalLength());
         values.put(COL_FLUTEHELIXANGLE,tool.getFluteHelixAngle());
-        values.put(COL_RADIALRAKEANGLE,tool.getRadialRakeAngle());
         values.put(COL_AXIALRAKEANGLE,tool.getAxialRakeAngle());
+        values.put(COL_RADIALRAKEANGLE,tool.getRadialRakeAngle());
+        values.put(COL_AXIALREARANGLE,tool.getAxialRearAngle());
+        values.put(COL_RADIALREARANGLE,tool.getRadialRearAngle());
+        values.put(COL_CUTTINGEDGEANGLE,tool.getCuttingEdgeAngle());
+        values.put(COL_FACECONTACTDIAMETER,tool.getFaceContactDiameter());
+        values.put(COL_TIPCHAMFER,tool.getTipChamfer());
+        values.put(COL_CHAMFERWIDTH,tool.getChamferWidth());
+        values.put(COL_CENTERCUTTINGCAPABILITY,tool.getCenterCuttingCapability());
         values.put(COL_MAXIMUMREGRINDS,tool.getMaximumRegrinds());
         values.put(COL_MAXROTATIONSPEED,tool.getMaxRotationalSpeed());
         values.put(COL_WEIGHT,tool.getWeight());
