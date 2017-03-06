@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by zhengxiaohu on 2017/2/22.实现包裹接口Parcelable，以通过intent在activity之间传递Tool对象
+ * Created by zhengxiaohu on 2017/2/22.实现序列化接口Parcelable，以通过intent在activity之间传递Tool对象
  * 超类:Tool 描述通用整体立铣刀的数据模型
  */
 

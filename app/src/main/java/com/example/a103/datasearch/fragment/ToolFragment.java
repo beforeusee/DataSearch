@@ -51,6 +51,7 @@ public class ToolFragment extends Fragment {
         toolFragment.setArguments(bundle);
         return toolFragment;
     }
+
     @Nullable
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)  //版本
     @Override
@@ -194,6 +195,5 @@ public class ToolFragment extends Fragment {
         intent.putExtra("tool_isEditOperation",isEditOperation);
         startActivity(intent);
         Toast.makeText(getContext(),"进入了刀具详细页面",Toast.LENGTH_SHORT).show();
-
     }
 }
