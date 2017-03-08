@@ -35,8 +35,6 @@ public class DataSearchFragmentPagerAdapter extends FragmentPagerAdapter {
     private int[] mTabImgs;
     private LinearLayout mTabView;
 
-
-
     public DataSearchFragmentPagerAdapter(FragmentManager fragmentManager){
         super(fragmentManager);
     }

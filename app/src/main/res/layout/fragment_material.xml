@@ -1,25 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_material"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="218dp"
-        android:text="Page:"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
-    <TextView
-        android:layout_width="wrap_content"
+        android:text="工件材料管理"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:id="@+id/tv_material_title"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/title_material"
-        android:layout_below="@+id/tv_material"
-        android:layout_centerHorizontal="true"
-        android:textSize="50dp"
-        android:text="material"
-        />
-</LinearLayout>
+        android:orientation="horizontal"
+        android:id="@+id/ll_material_management"
+        android:layout_below="@+id/tv_material_title"
+        android:layout_above="@+id/tr_material_delete_edit_add">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:id="@+id/ll_material_categories">
+
+            <TextView
+                android:id="@+id/tv_material_standard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标准 AISI 米制"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_material_standard"
+                android:id="@+id/tv_material_categories"
+                android:text="分类"
+                android:textSize="20sp"/>
+
+            <ExpandableListView
+                android:id="@+id/elv_material_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_material_categories"
+                android:layout_margin="5dp"
+                android:scrollbars="horizontal|vertical"
+                android:touchscreenBlocksFocus="true">
+            </ExpandableListView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="vertical"
+            android:id="@+id/ll_material_detail"
+            android:layout_toEndOf="@+id/ll_material_categories">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/ll_material_detail_properties">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="材料属性布局"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/ll_material_detail_properties"
+                android:id="@+id/ll_material_detail_coefficientParameters">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="切削力系数参数布局"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/ll_material_detail_coefficientParameters"
+                android:id="@+id/ll_material_detail_limits">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="限制布局"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/ll_material_detail_limits"
+                android:id="@+id/ll_material_detail_materialStandards">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="材料标准布局"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TableRow
+        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tr_material_delete_edit_add"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_material_add_categories"
+            android:text="新建类"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            />
+        <Button
+            android:id="@+id/btn_material_delete_categories"
+            android:text="删除类"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"/>
+        <Button
+            android:id="@+id/btn_material_add_materialDetail"
+            android:text="新建"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_material_delete_materialDetail"
+            android:text="删除"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_material_commit_materialDetail"
+            android:text="应用"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_material_cancel_MaterialDetail"
+            android:text="取消"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+    </TableRow>
+</RelativeLayout>
