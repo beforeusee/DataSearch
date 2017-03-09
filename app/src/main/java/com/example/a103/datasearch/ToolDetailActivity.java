@@ -69,7 +69,7 @@ public class ToolDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tool_detail);
 
-        initToolDetailView();
+        initialToolDetailView();
 
         Intent intent=getIntent();
         isEditOperation=false;
@@ -350,9 +350,9 @@ public class ToolDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * 初始化刀具的详细页面
+     * 初始化刀具的控件
      */
-    private void initToolDetailView() {
+    private void initialToolDetailView() {
         cb_tool_used= (CheckBox) findViewById(R.id.cb_tool_used);
         et_tool_name= (EditText) findViewById(R.id.et_tool_name);
         et_tool_type= (EditText) findViewById(R.id.et_tool_type);

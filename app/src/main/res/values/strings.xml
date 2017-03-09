@@ -11,4 +11,31 @@
     <string name="info_parameter">参数信息</string>
     <string name="info_advanced">高级信息</string>
     <string name="machine_name">XH7132A五轴联动加工中心</string>
+
+    <string-array name="materialStandards">
+        <item>AISI</item>
+        <item>AFNOR</item>
+        <item>BS</item>
+        <item>CMC</item>
+        <item>DIN-nr</item>
+        <item>EN</item>
+        <item>JIS</item>
+        <item>SAE</item>
+        <item>SS</item>
+        <item>UNF</item>
+        <item>UNI</item>
+        <item>W.-nr.</item>
+    </string-array>
+
+    <string-array name="materialUnit">
+        <item>米制</item>
+        <item>英制</item>
+    </string-array>
+
+    <string-array name="coefficientParameterForceModel">
+        <item>Average Cutting Coefficient</item>
+        <item>Variable Cut Coefficient</item>
+        <item>High-Order Mech</item>
+    </string-array>
+
 </resources>
