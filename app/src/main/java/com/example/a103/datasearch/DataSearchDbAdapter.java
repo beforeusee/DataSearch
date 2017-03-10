@@ -15,8 +15,8 @@ import android.view.View;
  */
 
 public class DataSearchDbAdapter {
-    private static final String DATABASE_NAME="dataSearchDatabase";
-    private static final int DATABASE_VERSION=1;
+    public static final String DATABASE_NAME="dataSearchDatabase"; //数据库名称
+    public static final int DATABASE_VERSION=1;                      //数据库版本
     private static final String TABLE_NAME_TOOL="tool";
 
     private DatabaseHelper mDbHelper;
@@ -109,7 +109,7 @@ public class DataSearchDbAdapter {
     private static final String TAG="DataSearchDbAdapter";
 
     //SQL statement used to create the database
-    private static final String DATABASE_CREATE_TOOL="CREATE TABLE IF NOT EXISTS "+TABLE_NAME_TOOL+ " ( "+
+    private static final String CREATE_TABLE_TOOL="CREATE TABLE IF NOT EXISTS "+TABLE_NAME_TOOL+ " ( "+
             COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
             COL_NAME+" TEXT, "+
             COL_TYPE+" TEXT, "+
@@ -163,8 +163,8 @@ public class DataSearchDbAdapter {
         //创建数据库
         @Override
         public void onCreate(SQLiteDatabase db) {
-            Log.w(TAG,DATABASE_CREATE_TOOL);
-            db.execSQL(DATABASE_CREATE_TOOL);
+            Log.w(TAG,CREATE_TABLE_TOOL);
+            db.execSQL(CREATE_TABLE_TOOL);
         }
 
         @Override
@@ -197,7 +197,7 @@ public class DataSearchDbAdapter {
     }
 
     /**
-     * 数据库的CRUD操作；CRUD表示创建，读取，更新，删除
+     * 数据库表Tool的CRUD操作；CRUD表示创建，读取，更新，删除
      */
 
     //CREATE
@@ -258,11 +258,17 @@ public class DataSearchDbAdapter {
 
     //overload to take a tool
     public long createTool(Tool tool){
+        long createResult=0;
         ContentValues values=new ContentValues();
         putToolToContentValues(values, tool);
 
-        //Inserting Row
-        return mDb.insert(TABLE_NAME_TOOL,null,values);
+        try {
+            //Inserting Row
+            createResult=mDb.insert(TABLE_NAME_TOOL,null,values);
+        }catch (Exception e){
+            Log.w(TAG,"创建刀具失败");
+        }
+        return createResult;
     }
 
     /**
@@ -271,7 +277,7 @@ public class DataSearchDbAdapter {
      * @return
      */
     //fetch tool by id
-    public Tool fecthToolById(int id){
+    public Tool fetchToolById(int id){
         Cursor cursor=mDb.query(TABLE_NAME_TOOL,new String[]{COL_ID,COL_NAME,COL_TYPE,COL_SERIAL,COL_BRAND,
         COL_CUTTINGDIAMETER,COL_CUTTINGDIAMETERTOLUPPER,COL_CUTTINGDIAMETERTOLLOWER,COL_FILLETRADIUS,
                 COL_DEPTHOFCUTMAXIMUM,COL_MAXRAMPINGANGLE,COL_USABLELENGTH,COL_TEETHNUM,
