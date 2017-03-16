@@ -1,15 +1,19 @@
 package com.example.a103.datasearch;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.Tool;
+import com.example.a103.datasearch.utils.DatabaseApplication;
 
 public class ToolDetailActivity extends AppCompatActivity {
 
@@ -62,7 +66,6 @@ public class ToolDetailActivity extends AppCompatActivity {
     Button btn_tool_commit;      //提交按钮
 
     private boolean isEditOperation; //是否是编辑状态
-//    public static final String action="tool.listView.refresh";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,99 +98,22 @@ public class ToolDetailActivity extends AppCompatActivity {
         btn_tool_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //根据ToolDetail获取tool的属性值，并设置到tool中
-//                setToolFromToolDetail(tool);
-                //实例化Tool对象tool
 
-                setToolEditable(false);
-                DataSearchDbAdapter mDbAdapter=new DataSearchDbAdapter(ToolDetailActivity.this);
-                mDbAdapter.open();
+                setToolEditable(false);  //设置刀具界面不可编辑
+
+                SQLiteDatabase db= DatabaseApplication.getDb();             //获取整个application的数据库对象db
+                DaoSession daoSession=DatabaseApplication.getDaoSession(); //获取整个application的dao对象管理者
 
                 if (isEditOperation){
-                    Tool toolEdited=new Tool(tool.getId(),
-                            et_tool_name.getText().toString(),
-                            et_tool_type.getText().toString(),
-                            et_tool_serial.getText().toString(),
-                            et_tool_brand.getText().toString(),
-                            et_tool_cuttingDiameter.getText().toString(),
-                            et_tool_cuttingDiameterTOLUpper.getText().toString(),
-                            et_tool_cuttingDiameterTOLLower.getText().toString(),
-                            et_tool_filletRadius.getText().toString(),
-                            et_tool_depthOfCutMaximum.getText().toString(),
-                            et_tool_maxRampingAngle.getText().toString(),
-                            et_tool_usableLength.getText().toString(),
-                            et_tool_peripheralEffectiveCuttingEdgeCount.getText().toString(),
-                            et_tool_adaptiveInterfaceMachineDirection.getText().toString(),
-                            et_tool_connectionDiameterTolerance.getText().toString(),
-                            et_tool_grade.getText().toString(),
-                            et_tool_substrate.getText().toString(),
-                            et_tool_coating.getText().toString(),
-                            et_tool_basicStandardGroup.getText().toString(),
-                            et_tool_coolantEntryStyleCode.getText().toString(),
-                            et_tool_connectionDiameter.getText().toString(),
-                            et_tool_functionalLength.getText().toString(),
-                            et_tool_fluteHelixAngle.getText().toString(),
-                            et_tool_axialRakeAngle.getText().toString(),
-                            et_tool_radialRakeAngle.getText().toString(),
-                            et_tool_axialRearAngle.getText().toString(),
-                            et_tool_radialRearAngle.getText().toString(),
-                            et_tool_cuttingEdgeAngle.getText().toString(),
-                            et_tool_faceContactDiameter.getText().toString(),
-                            et_tool_tipChamfer.getText().toString(),
-                            et_tool_chamferWidth.getText().toString(),
-                            et_tool_centerCuttingCapability.getText().toString(),
-                            et_tool_maximumRegrinds.getText().toString(),
-                            et_tool_maxRotationalSpeed.getText().toString(),
-                            et_tool_weight.getText().toString(),
-                            et_tool_lifeCycleState.getText().toString(),
-                            et_tool_suitableForMaterial.getText().toString(),
-                            et_tool_application.getText().toString(),
-                            cb_tool_used.isChecked()?1:0);
-
-                    mDbAdapter.updateTool(toolEdited);
-                    Log.w("是否刷新了刀具:",toolEdited.getName());
-
+                    Tool toolEdited=new Tool();
+                    toolEdited.setId(tool.getId());
+                    setToolFromToolDetail(toolEdited);
+                    daoSession.getToolDao().update(toolEdited);  //编辑状态，更新刀具
                 }else {
-                    Log.w("mDbAdapter成功创建?",String.valueOf(mDbAdapter!=null));  //调试的Log日志
-                    mDbAdapter.createTool(et_tool_name.getText().toString(),
-                            et_tool_type.getText().toString(),
-                            et_tool_serial.getText().toString(),
-                            et_tool_brand.getText().toString(),
-                            et_tool_cuttingDiameter.getText().toString(),
-                            et_tool_cuttingDiameterTOLUpper.getText().toString(),
-                            et_tool_cuttingDiameterTOLLower.getText().toString(),
-                            et_tool_filletRadius.getText().toString(),
-                            et_tool_depthOfCutMaximum.getText().toString(),
-                            et_tool_maxRampingAngle.getText().toString(),
-                            et_tool_usableLength.getText().toString(),
-                            et_tool_peripheralEffectiveCuttingEdgeCount.getText().toString(),
-                            et_tool_adaptiveInterfaceMachineDirection.getText().toString(),
-                            et_tool_connectionDiameterTolerance.getText().toString(),
-                            et_tool_grade.getText().toString(),
-                            et_tool_substrate.getText().toString(),
-                            et_tool_coating.getText().toString(),
-                            et_tool_basicStandardGroup.getText().toString(),
-                            et_tool_coolantEntryStyleCode.getText().toString(),
-                            et_tool_connectionDiameter.getText().toString(),
-                            et_tool_functionalLength.getText().toString(),
-                            et_tool_fluteHelixAngle.getText().toString(),
-                            et_tool_axialRakeAngle.getText().toString(),
-                            et_tool_radialRakeAngle.getText().toString(),
-                            et_tool_axialRearAngle.getText().toString(),
-                            et_tool_radialRearAngle.getText().toString(),
-                            et_tool_cuttingEdgeAngle.getText().toString(),
-                            et_tool_faceContactDiameter.getText().toString(),
-                            et_tool_tipChamfer.getText().toString(),
-                            et_tool_chamferWidth.getText().toString(),
-                            et_tool_centerCuttingCapability.getText().toString(),
-                            et_tool_maximumRegrinds.getText().toString(),
-                            et_tool_maxRotationalSpeed.getText().toString(),
-                            et_tool_weight.getText().toString(),
-                            et_tool_lifeCycleState.getText().toString(),
-                            et_tool_suitableForMaterial.getText().toString(),
-                            et_tool_application.getText().toString(),
-                            cb_tool_used.isChecked());
-                    Log.w("创建的刀具名称",et_tool_name.getText().toString());
+
+                    Tool newTool=new Tool();
+                    setToolFromToolDetail(newTool);
+                    daoSession.getToolDao().save(newTool);       //新建刀具
                 }
 
                 //发送广播，通知ToolFragment进行刀具列表的刷新

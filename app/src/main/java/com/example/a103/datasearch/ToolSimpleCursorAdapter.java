@@ -7,6 +7,8 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.a103.datasearch.data.Tool;
+
 /**
  * Created by zhengxiaohu on 2017/2/27.
  */
@@ -28,7 +30,7 @@ public class ToolSimpleCursorAdapter extends SimpleCursorAdapter {
         ViewHolder holder= (ViewHolder) view.getTag();
         if (holder==null){
             holder=new ViewHolder();
-            holder.colImp=cursor.getColumnIndexOrThrow(DataSearchDbAdapter.COL_USED);
+            holder.colImp=cursor.getColumnIndexOrThrow("USED");
             holder.listTab=view.findViewById(R.id.tool_row_tab);
             view.setTag(holder);
         }

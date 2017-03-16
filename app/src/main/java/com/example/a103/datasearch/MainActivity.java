@@ -1,11 +1,8 @@
 package com.example.a103.datasearch;
 
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
-    private TextView mTextView;
     private List<String> mTabList=new ArrayList<>();
     private DataSearchFragmentPagerAdapter mAdapter;
     private int[] mTabImgs=new int[]{R.drawable.mac,R.drawable.tool,
@@ -50,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             mTabLayout.getTabAt(i).setCustomView(mAdapter.getTabView(i));
         }
         mTabLayout.addOnTabSelectedListener(this);  //添加tab标签页选择侦听事件
-//        initView();
-//        initEvents();
     }
 
     /**

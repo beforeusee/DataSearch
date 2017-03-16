@@ -1,4 +1,4 @@
-package com.example.a103.datasearch;
+package com.example.a103.datasearch.utils;
 
 /**
  * Created by zhengxiaohu on 2017/2/14.

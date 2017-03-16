@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
 
-import com.example.a103.datasearch.Constant;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.ExpandableListViewAdapter;
 import com.example.a103.datasearch.R;
 
@@ -32,6 +32,8 @@ public class MaterialFragment extends Fragment {
     private ExpandableListView mExpandableListView;             //材料种类分类二级目录
     private ExpandableListViewAdapter mAdapter;                   //二级目录适配器
     private Context mContext;
+
+    //compile 'org.litepal.android:core:1.5.0'
 
     //材料属性控件声明
     EditText et_material_properties_name;                                 //材料名称
@@ -222,5 +224,4 @@ public class MaterialFragment extends Fragment {
             data.put(parentList[7],childrenList2);
         }
     }
-
 }

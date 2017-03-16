@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.a103.datasearch.Constant;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.R;
 
 /**

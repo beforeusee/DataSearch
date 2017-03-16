@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,14 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a103.datasearch.Constant;
-import com.example.a103.datasearch.DataSearchDbAdapter;
-import com.example.a103.datasearch.MainActivity;
+import com.example.a103.datasearch.utils.Constant;
+import com.example.a103.datasearch.utils.DatabaseApplication;
 import com.example.a103.datasearch.R;
-import com.example.a103.datasearch.Tool;
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.Tool;
 import com.example.a103.datasearch.ToolDetailActivity;
 import com.example.a103.datasearch.ToolSimpleCursorAdapter;
 
@@ -40,9 +40,10 @@ import com.example.a103.datasearch.ToolSimpleCursorAdapter;
 public class ToolFragment extends Fragment {
 
     private ListView mListView;
-    private DataSearchDbAdapter mDbAdapter;
     private ToolSimpleCursorAdapter mCursorAdapter;
     private Button mAddButton;
+    private SQLiteDatabase db;
+    private DaoSession mDaoSession;
 
     public static ToolFragment newInstance(String s){
         ToolFragment toolFragment=new ToolFragment();
@@ -63,28 +64,29 @@ public class ToolFragment extends Fragment {
         textView.setText(s);*/
         mListView= (ListView) view.findViewById(R.id.lv_tools);
         mListView.setDivider(null);
-        mDbAdapter=new DataSearchDbAdapter(getContext());
 
-        mDbAdapter.open();
+        db= DatabaseApplication.getDb();
+        mDaoSession=DatabaseApplication.getDaoSession();
 
         mAddButton= (Button) view.findViewById(R.id.btn_tool_add);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+
                 fireToolDetailActivity(null);
-                mCursorAdapter.changeCursor(mDbAdapter.fetchAllTools());
+                Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
+                mCursorAdapter.changeCursor(cursor);
             }
         });
-        Cursor cursor=mDbAdapter.fetchAllTools();
 
-        //from columns defined in the db,来自数据库中定义的列
-        String[] from=new String[]{DataSearchDbAdapter.COL_NAME};
+        Cursor cursor= db.query("TOOL",null,null,null,null,null,null); //获取数据库中TOOL表的cursor对象
+
+        //from columns defined in the db,来自数据库中刀具表定义的列
+        final String[] from=new String[]{"NAME"};
 
         //to the ids of views in the layout,到布局中视图的id
-        int[] to=new int[]{R.id.tool_row_text};
-
+        final int[] to=new int[]{R.id.tool_row_text};
         mCursorAdapter=new ToolSimpleCursorAdapter(getContext(),R.layout.tools_row,cursor,from,to,0);
         mListView.setAdapter(mCursorAdapter);
 
@@ -109,10 +111,11 @@ public class ToolFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //edit tool,编辑刀具
                         if (position==0){
-                            int nId=getIdFromPosition(masterPosition);
-                            Tool tool=mDbAdapter.fecthToolById(nId);
+                            long nId=getIdFromPosition(masterPosition);
+                            Tool tool=mDaoSession.getToolDao().load(nId);
                             fireToolDetailActivity(tool);
                             Toast.makeText(view.getContext(),"点击了查看刀具",Toast.LENGTH_SHORT).show();
+
                         }else {   //delete tool,删除刀具
                             //确认删除刀具的警告对话框
                             AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(getContext());
@@ -121,8 +124,9 @@ public class ToolFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     //点击“确定”，删除所选刀具
-                                    mDbAdapter.deleteToolsById(getIdFromPosition(masterPosition));
-                                    mCursorAdapter.changeCursor(mDbAdapter.fetchAllTools());
+                                    mDaoSession.getToolDao().deleteByKey(getIdFromPosition(masterPosition));
+                                    Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
+                                    mCursorAdapter.changeCursor(cursor);
                                 }
                             });
 
@@ -144,16 +148,11 @@ public class ToolFragment extends Fragment {
                 Toast.makeText(view.getContext(),"点击了"+masterPosition,Toast.LENGTH_SHORT).show();
             }
         });
-/*        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(view.getContext(),R.layout.tools_row,
-                R.id.tool_row_text,
-                new String[]{"面铣刀","方肩铣刀","球头铣刀"});
-        mListView.setAdapter(arrayAdapter);*/
 
         //注册广播来进行listView列表的刷新
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction("action.refreshTool");
         getContext().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
-
         return view;
     }
 
@@ -168,7 +167,9 @@ public class ToolFragment extends Fragment {
             String action=intent.getAction();
             if (action.equals("action.refreshTool")){
                 Log.w("接收到了广播：","是的");
-                mCursorAdapter.changeCursor(mDbAdapter.fetchAllTools());
+
+                Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
+                mCursorAdapter.changeCursor(cursor);
             }
         }
     };
@@ -180,8 +181,8 @@ public class ToolFragment extends Fragment {
      * @param nC
      * @return (int)mCursorAdapter.getItemId(nC)
      */
-    private int getIdFromPosition(int nC){
-        return (int) mCursorAdapter.getItemId(nC);
+    private long getIdFromPosition(int nC){
+        return mCursorAdapter.getItemId(nC);
     }
 
     private void fireToolDetailActivity(final Tool tool){
