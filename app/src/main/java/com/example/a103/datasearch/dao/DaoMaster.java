@@ -21,20 +21,20 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        ToolDao.createTable(db, ifNotExists);
         CoefficientParametersDao.createTable(db, ifNotExists);
-        MaterialCuttingLimitsDao.createTable(db, ifNotExists);
         MaterialDao.createTable(db, ifNotExists);
         MaterialCategoriesDao.createTable(db, ifNotExists);
+        MaterialCuttingLimitsDao.createTable(db, ifNotExists);
+        ToolDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        ToolDao.dropTable(db, ifExists);
         CoefficientParametersDao.dropTable(db, ifExists);
-        MaterialCuttingLimitsDao.dropTable(db, ifExists);
         MaterialDao.dropTable(db, ifExists);
         MaterialCategoriesDao.dropTable(db, ifExists);
+        MaterialCuttingLimitsDao.dropTable(db, ifExists);
+        ToolDao.dropTable(db, ifExists);
     }
 
     /**
@@ -53,11 +53,11 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(ToolDao.class);
         registerDaoClass(CoefficientParametersDao.class);
-        registerDaoClass(MaterialCuttingLimitsDao.class);
         registerDaoClass(MaterialDao.class);
         registerDaoClass(MaterialCategoriesDao.class);
+        registerDaoClass(MaterialCuttingLimitsDao.class);
+        registerDaoClass(ToolDao.class);
     }
 
     public DaoSession newSession() {

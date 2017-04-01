@@ -7,15 +7,34 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    
+
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/colorAccent</item>
         <item name="tabIndicatorHeight">0dp</item>
-        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingStart">10dp</item>
+        <item name="tabPaddingEnd">10dp</item>
         <item name="tabTextColor">#FFF</item>
-        <item name="tabPaddingEnd">12dp</item>
-        <item name="tabSelectedTextColor">#f00</item>
-        <item name="android:textSize">100dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance.Large</item>
     </style>
 
+    <style name="MyCustomTextAppearance.Large" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <declare-styleable name="CustomTitleBar">
+        <attr name="title_background_color" format="reference|integer"/>
+        <attr name="left_button_visible" format="boolean"/>
+        <attr name="right_button_visible" format="boolean"/>
+        <attr name="title_text" format="string"/>
+        <attr name="title_text_color" format="color"/>
+        <attr name="title_text_drawable" format="reference|integer"/>
+        <attr name="left_button_text" format="string"/>
+        <attr name="left_button_text_color" format="color"/>
+        <attr name="left_button_drawable" format="reference|integer"/>
+        <attr name="right_button_text" format="string"/>
+        <attr name="right_button_text_color" format="color"/>
+        <attr name="right_button_drawable" format="reference|integer"/>
+    </declare-styleable>
 </resources>

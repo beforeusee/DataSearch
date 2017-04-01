@@ -1,5 +1,6 @@
 package com.example.a103.datasearch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -77,7 +78,7 @@ public class ToolDetailActivity extends AppCompatActivity {
         Intent intent=getIntent();
         isEditOperation=false;
         isEditOperation=intent.getBooleanExtra("tool_isEditOperation",true);
-        final Tool tool=getIntent().getParcelableExtra("Tool");
+        final Tool tool=intent.getParcelableExtra("Tool");
 
         if (isEditOperation){
             setToolDetailFromTool(tool);  //如果刀具处于查看可编辑状态，根据对象tool，初始化刀具设置页面的值
@@ -110,7 +111,6 @@ public class ToolDetailActivity extends AppCompatActivity {
                     setToolFromToolDetail(toolEdited);
                     daoSession.getToolDao().update(toolEdited);  //编辑状态，更新刀具
                 }else {
-
                     Tool newTool=new Tool();
                     setToolFromToolDetail(newTool);
                     daoSession.getToolDao().save(newTool);       //新建刀具
@@ -135,6 +135,20 @@ public class ToolDetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 在方法中构建了Intent，另外detailActivity方法中需要的数据都是通过actionStart()方法的参数传递过来的，然后把
+     * 它们存储到Intent中，最后调用startActivity方法启动ToolDetailActivity.所有需要启动的活动都应该添加类似的方法
+     * @param context
+     */
+    public static void actionStart(Context context,final Tool tool){
+        Intent intent=new Intent(context,ToolDetailActivity.class);
+
+        intent.putExtra("Tool",tool);                    //刀具对象
+        final boolean isEditOperation=(tool!=null);     //刀具是否已经存在处于编辑状态,传入tool不为null表示已经存在
+        intent.putExtra("tool_isEditOperation",isEditOperation);
+        context.startActivity(intent);
     }
 
     /**

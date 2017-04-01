@@ -44,6 +44,8 @@ public class ToolFragment extends Fragment {
     private Button mAddButton;
     private SQLiteDatabase db;
     private DaoSession mDaoSession;
+    private static final String TAG = "ToolFragment";
+    private BroadcastReceiver mRefreshBroadcastReceiver;  //广播接收
 
     public static ToolFragment newInstance(String s){
         ToolFragment toolFragment=new ToolFragment();
@@ -119,7 +121,8 @@ public class ToolFragment extends Fragment {
                         }else {   //delete tool,删除刀具
                             //确认删除刀具的警告对话框
                             AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(getContext());
-                            alertDialogBuilder.setTitle("确定删除该刀具吗？");
+                            alertDialogBuilder.setTitle("提示");
+                            alertDialogBuilder.setMessage("确定删除该刀具吗？");
                             alertDialogBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -148,33 +151,63 @@ public class ToolFragment extends Fragment {
                 Toast.makeText(view.getContext(),"点击了"+masterPosition,Toast.LENGTH_SHORT).show();
             }
         });
-
         //注册广播来进行listView列表的刷新
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction("action.refreshTool");
-        getContext().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
+        mRefreshBroadcastReceiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                //如果接收到广播消息，更新listView列表
+                String action=intent.getAction();
+                if (action.equals("action.refreshTool")){
+                    Log.d("接收到了广播：","是的");
+
+                    Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
+                    mCursorAdapter.changeCursor(cursor);
+                }
+            }
+        };
+        getActivity().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
+        Log.d(TAG, "onStart: 注册广播");
+        Log.d(TAG, "onCreateView: 执行");
         return view;
+    }
+
+    @Override
+    public void onStart() {
+
+        Log.d(TAG, "onStart: 执行onStart方法");
+        super.onStart();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /**
      * 广播接收
      */
-    private BroadcastReceiver mRefreshBroadcastReceiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
 
-            //如果接收到广播消息，更新listView列表
-            String action=intent.getAction();
-            if (action.equals("action.refreshTool")){
-                Log.w("接收到了广播：","是的");
 
-                Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
-                mCursorAdapter.changeCursor(cursor);
-            }
+    @Override
+    public void onStop() {
+
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mRefreshBroadcastReceiver!=null){
+            getActivity().unregisterReceiver(mRefreshBroadcastReceiver);
         }
-    };
 
-
+        Log.d(TAG, "onDestroy: 注销广播接收器");
+        Log.d(TAG, "onDestroyView: 执行onDestroyView");
+        super.onDestroyView();
+    }
 
     /**
      * 根据刀具在ListView中的位置来获取它的Id
@@ -186,15 +219,8 @@ public class ToolFragment extends Fragment {
     }
 
     private void fireToolDetailActivity(final Tool tool){
-        Intent intent=new Intent(getActivity(),ToolDetailActivity.class);
-        intent.putExtra("tool_ID",0);
-        intent.putExtra("Tool",tool);
-
-        //如何传递对象到ToolDetailActivity中？
-
-        final boolean isEditOperation=(tool!=null);
-        intent.putExtra("tool_isEditOperation",isEditOperation);
-        startActivity(intent);
+        ToolDetailActivity.actionStart(getContext(),tool);
         Toast.makeText(getContext(),"进入了刀具详细页面",Toast.LENGTH_SHORT).show();
     }
+
 }

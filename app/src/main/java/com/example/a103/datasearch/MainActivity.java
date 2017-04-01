@@ -6,6 +6,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,30 +24,80 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
 
     private TabLayout mTabLayout;
+    private TabLayout.Tab machineTab;
+    private TabLayout.Tab toolTab;
+    private TabLayout.Tab materialTab;
+    private TabLayout.Tab parameterTab;
+    private TabLayout.Tab advancedTab;
     private ViewPager mViewPager;
     private List<String> mTabList=new ArrayList<>();
     private DataSearchFragmentPagerAdapter mAdapter;
-    private int[] mTabImgs=new int[]{R.drawable.mac,R.drawable.tool,
+
+    private int[] mTabIcons=new int[]{R.drawable.mac,R.drawable.tool,
             R.drawable.mat,R.drawable.para,R.drawable.adv};
     private List<Fragment> mFragments=new ArrayList<>();
 
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTabLayout= (TabLayout) findViewById(R.id.tab_main);
         mViewPager= (ViewPager) findViewById(R.id.vp_main);
-        initTabList();
-        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,MainActivity.this,mFragments,mTabImgs);
+        mTabLayout= (TabLayout) findViewById(R.id.tab_main);
+
+        initData();
+        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,MainActivity.this,mFragments,mTabIcons);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(0);
+
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        //initViews();
+
+        Log.d(TAG, "onCreate: 执行mAdapter创建");
+
+
+        //必须在mTabLayout与mViewPager绑定后，这样才知道mTabLayout中Tab的数量，mTabLayout相当于容器
         for (int i=0;i<mTabLayout.getTabCount();i++){
-            mTabLayout.getTabAt(i).setCustomView(mAdapter.getTabView(i));
+            mTabLayout.getTabAt(i).setCustomView(getTabView(i));
         }
+        mViewPager.setCurrentItem(0);
         mTabLayout.addOnTabSelectedListener(this);  //添加tab标签页选择侦听事件
+
+    }
+
+    private void initViews() {
+        //使用适配器mAdapter将ViewPager与Fragment绑定在一起
+        mViewPager= (ViewPager) findViewById(R.id.vp_main);
+        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,MainActivity.this,mFragments,mTabIcons);
+        mViewPager.setAdapter(mAdapter);
+
+
+        //将TabLayout与ViewPager绑定
+        mTabLayout= (TabLayout) findViewById(R.id.tab_main);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        //指定Tab的位置
+        machineTab=mTabLayout.getTabAt(0);
+        toolTab=mTabLayout.getTabAt(1);
+        materialTab=mTabLayout.getTabAt(2);
+        parameterTab=mTabLayout.getTabAt(3);
+        advancedTab=mTabLayout.getTabAt(4);
+
+
+        //设置Tab的图标
+        machineTab.setIcon(R.drawable.mac_fill);  //默认选中机床
+        toolTab.setIcon(R.drawable.tool);
+        materialTab.setIcon(R.drawable.mat);
+        parameterTab.setIcon(R.drawable.para);
+        advancedTab.setIcon(R.drawable.adv);
+
+        mViewPager.setCurrentItem(0);
+    }
+
+    private void initData() {
+        initTabList();
+        initFragmentList();
     }
 
     /**
@@ -53,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
      *  初始化tab列表
      */
     private void initTabList(){
-        mTabList.clear();
         mTabList.add(getString(R.string.item_machine));
         mTabList.add(getString(R.string.item_tool));
         mTabList.add(getString(R.string.item_material));
@@ -64,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     protected void onStart() {
         super.onStart();
-        initFragmentList();   //初始化fragment列表
+        Log.d(TAG, "onStart: 执行");
+
     }
 
     /*
@@ -72,12 +124,26 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     * 添加fragment
     */
     private void initFragmentList(){
-        mFragments.clear();
         mFragments.add(MachineFragment.newInstance(getString(R.string.item_machine)));      //
         mFragments.add(ToolFragment.newInstance(getString(R.string.item_tool)));            //
         mFragments.add(MaterialFragment.newInstance(getString(R.string.item_material)));   //
         mFragments.add(ParameterFragment.newInstance(getString(R.string.item_parameter))); //
         mFragments.add(AdvancedFragment.newInstance(getString(R.string.item_advanced)));   //
+        Log.d(TAG, "initFragmentList: 初始化底部导航栏的五个fragmentList");
+        Log.d(TAG, "initFragmentList: mFragments数量："+mFragments.size()+"个");
+    }
+
+    public View getTabView(int position){
+        View view= LayoutInflater.from(this).inflate(R.layout.layout_tab_view,null);
+        TextView tabTitle= (TextView) view.findViewById(R.id.tv_tab_text);
+        ImageView tabIcon= (ImageView) view.findViewById(R.id.iv_tab_icon);
+        tabTitle.setText(mTabList.get(position));
+        tabIcon.setImageResource(mTabIcons[position]);
+        if (0==position){
+            tabTitle.setTextColor(this.getResources().getColor(R.color.colorPrimary));
+            tabIcon.setImageResource(R.drawable.mac_fill);
+        }
+        return view;
     }
 
     @Override
@@ -100,6 +166,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
      * 设置选中的标签页的状态，图标颜色的转换，用绿色的替代黑色的
      */
     private void setTabSelectedState(TabLayout.Tab tab){
+//        if (0==tab.getPosition()){
+//            tab.setIcon(R.drawable.mac_fill);
+//        }else if (1==tab.getPosition()){
+//            tab.setIcon(R.drawable.tool_fill);
+//        }else if (2==tab.getPosition()){
+//            tab.setIcon(R.drawable.mat_fill);
+//        }else if (3==tab.getPosition()){
+//            tab.setIcon(R.drawable.para_fill);
+//        }else if (4==tab.getPosition()){
+//            tab.setIcon(R.drawable.adv_fill);
+//        }
         View customView=tab.getCustomView();
         TextView tabText= (TextView) customView.findViewById(R.id.tv_tab_text);
         ImageView tabIcon= (ImageView) customView.findViewById(R.id.iv_tab_icon);
@@ -116,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }else if (getString(R.string.item_parameter).equals(s)){
             tabIcon.setImageResource(R.drawable.para_fill);
         }
+
     }
 
     /**
@@ -123,7 +201,20 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
      * 设置未被选中的标签页的状态图片
      */
     private void setTabUnSelectedState(TabLayout.Tab tab){
+
+//        if (0==tab.getPosition()){
+//            tab.setIcon(R.drawable.mac);
+//        }else if (1==tab.getPosition()){
+//            tab.setIcon(R.drawable.tool);
+//        }else if (2==tab.getPosition()){
+//            tab.setIcon(R.drawable.mat);
+//        }else if (3==tab.getPosition()){
+//            tab.setIcon(R.drawable.para);
+//        }else if (4==tab.getPosition()){
+//            tab.setIcon(R.drawable.adv);
+//        }
         View customView=tab.getCustomView();
+
         TextView tabText= (TextView) customView.findViewById(R.id.tv_tab_text);
         ImageView tabIcon= (ImageView) customView.findViewById(R.id.iv_tab_icon);
         tabText.setTextColor(ContextCompat.getColor(this,R.color.black));

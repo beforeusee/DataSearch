@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".ToolDetailActivity">
         </activity>
-
+        <activity android:name=".MaterialCategoriesManagementActivity">
+        </activity>
     </application>
 
 </manifest>

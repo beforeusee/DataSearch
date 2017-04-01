@@ -27,7 +27,7 @@ public class ToolSimpleCursorAdapter extends SimpleCursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         super.bindView(view, context, cursor);
 
-        ViewHolder holder= (ViewHolder) view.getTag();
+        ViewHolder holder= (ViewHolder) view.getTag(); //用来缓存
         if (holder==null){
             holder=new ViewHolder();
             holder.colImp=cursor.getColumnIndexOrThrow("USED");
@@ -44,6 +44,7 @@ public class ToolSimpleCursorAdapter extends SimpleCursorAdapter {
         }
     }
 
+    //缓存类
     static class ViewHolder{
         //存储索引
         int colImp;

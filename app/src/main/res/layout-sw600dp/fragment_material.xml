@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="工件材料信息"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:id="@+id/tv_material_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/ll_material_management">
+
+        <fragment
+            android:id="@+id/material_categories_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:name="com.example.a103.datasearch.fragment.MaterialCategoriesFragment"
+            tools:layout="@layout/fragment_material_categories"/>
+
+        <FrameLayout
+            android:id="@+id/material_detail_layout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <fragment
+                android:id="@+id/material_detail_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="com.example.a103.datasearch.fragment.MaterialDetailFragment"
+                tools:layout="@layout/fragment_material_detail"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>

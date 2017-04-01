@@ -1,21 +1,38 @@
 package com.example.a103.datasearch.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.example.a103.datasearch.MaterialSimpleCursorTreeAdapter;
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.dao.MaterialCategoriesDao;
+import com.example.a103.datasearch.data.Material;
+import com.example.a103.datasearch.data.MaterialCategories;
 import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.ExpandableListViewAdapter;
 import com.example.a103.datasearch.R;
+import com.example.a103.datasearch.utils.DatabaseApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +46,19 @@ import java.util.Map;
 
 public class MaterialFragment extends Fragment {
     //声明与二级目录了相关的成员变量
-    private ExpandableListView mExpandableListView;             //材料种类分类二级目录
+    ExpandableListView mExpandableListView;             //材料种类分类二级目录
     private ExpandableListViewAdapter mAdapter;                   //二级目录适配器
     private Context mContext;
-
-    //compile 'org.litepal.android:core:1.5.0'
+    private static final String TAG = "MaterialFragment";
+    private SQLiteDatabase db;
+    private DaoSession daoSession;
+    private View groupView;
+    MaterialCategoriesFragment materialCategoriesFragment;
+    MaterialDetailFragment materialDetailFragment;
 
     //材料属性控件声明
     EditText et_material_properties_name;                                 //材料名称
-    EditText et_material_properties_categories;                          //种类
+    EditText et_material_properties_categories;                          //材料类别
     EditText et_material_properties_ingredient;                          //成分
     EditText et_material_properties_hardness;                            //硬度
     EditText et_material_properties_density;                             //密度
@@ -97,42 +118,245 @@ public class MaterialFragment extends Fragment {
     Button btn_material_cancel_userMaterial;    //取消用户材料
 
 
-    //TODO 数据集，后期数据来源接入数据库的数据
+    //TODO 数据集，后期数据接入数据库的数据
     private Map<String,List<String>> data=new HashMap<>();
+    List<String> groupList=new ArrayList<>();
     private List<String> childrenList1=new ArrayList<>();
     private List<String> childrenList2=new ArrayList<>();
     private List<String> childrenList3=new ArrayList<>();
 
-    public static final String[] parentList=new String[]{"0","1","2","3",
-            "4","5","6","7","8"};
+    public static final String[] parentList=new String[]{"Aluminum","MAL Materials","Copper",
+            "Copper[high-Alloy]", "Iron[Chilled Cast]","Steel[Casting]","Steel[High Alloy]","Titanium",
+            "Wood"};
+
 
     public static MaterialFragment newInstance(String s){
         MaterialFragment materialFragment=new MaterialFragment();
-        Bundle bundle=new Bundle();
+       /* Bundle bundle=new Bundle();
         bundle.putString(Constant.ARGS,s);
-        materialFragment.setArguments(bundle);
+        materialFragment.setArguments(bundle);*/
         return materialFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_material,container,false);
+
+//        groupView=inflater.inflate(R.layout.fragment_material,container,false);
+        initChildFragment();
+        return groupView;
+
 /*        Bundle bundle = getArguments();
         String s = bundle.getString(Constant.ARGS);*/
-        mContext=getContext();
+        /*mContext=getContext();
         initialMaterialDetailView(view);
-        initialData();
-        mAdapter=new ExpandableListViewAdapter(mContext,data);
+        db= DatabaseApplication.getDb();
+        daoSession=DatabaseApplication.getDaoSession();
+
+        initialSysData();
+        final Cursor groupCursor=db.query(MaterialCategoriesDao.TABLENAME,null,null,null,null,null,null);
+        final String groupFrom[]=new String[]{"NAME"};
+        final String childFrom[]=new String[]{"NAME"};
+        final int[] groupTo=new int[]{R.id.tv_material_parent_title};
+        final int[] childTo=new int[]{R.id.tv_material_child_title};
+        final MaterialSimpleCursorTreeAdapter mAdapter=new MaterialSimpleCursorTreeAdapter(mContext,
+                groupCursor,
+                R.layout.material_expandablelistview_group_item,
+                groupFrom,
+                groupTo,
+                R.layout.material_expandablelistview_child_item,
+                childFrom,
+                childTo);
         mExpandableListView.setAdapter(mAdapter);
-        return view;
+
+        //材料分类按钮注册了一个回调函数，将在此处理数据创建的逻辑
+
+        try {
+            finalize();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+*/
+        /*btn_material_add_userCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog=new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.add_material_categories_dialog);
+
+                final EditText editMaterialCategories= (EditText) dialog.findViewById(R.id.et_add_material_categories);
+                Button categoriesCommitButton= (Button) dialog.findViewById(R.id.add_material_categories__button_commit);
+                Button categoriesCancelButton= (Button) dialog.findViewById(R.id.add_material_categories_button_cancel);
+
+
+                //给提交按钮注册了一个回调函数，回调函数实现了OnClickListener接口中的onClick()方法
+                categoriesCommitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //如果输入不为空，则创建该分类，否则弹出提示对话框
+                        if (!("".equals(editMaterialCategories.getText().toString().trim()))){
+                            //创建MaterialCategories对象
+                            MaterialCategories categories=new MaterialCategories();
+                            categories.setName(editMaterialCategories.getText().toString());
+
+                            //TODO 检查数据库中是否存在该项，如果存在则不写入并抛出异常提示，如果不存在则写入并更新UI
+
+                            //存入数据库
+                            daoSession.getMaterialCategoriesDao().save(categories);
+
+                            //TODO UI更新逻辑不对
+//                            final Cursor groupCursor=db.query("MATERIAL",null,null,null,null,null,null);
+//                            mAdapter.changeCursor(groupCursor);
+//                            mExpandableListView.setAdapter(mAdapter);
+
+//                            //更新UI
+//                            if (groupList.size()>0){
+//                                groupList.clear();
+//                                List<MaterialCategories> categoriesList=daoSession.getMaterialCategoriesDao().loadAll();
+//                                for (int i=0;i<categoriesList.size();i++){
+//                                    groupList.add(categoriesList.get(i).getName());
+//                                }
+//                                data.put(groupList.get(categoriesList.size()-1),null);
+//                                //test
+//                                for (int i=0;i<data.size();i++){
+//                                    Log.d(TAG, "onClick: 材料分类列表:"+data.get(categories.getName()));
+//                                }
+//
+//                                //mAdapter.notifyDataSetChanged();
+//                            }
+
+                            //销毁对话框
+                            dialog.dismiss();
+                        }else {
+                            //输入为空的提示，更好的做法是创建自定义异常类，在此处抛出自定义异常类
+                            Toast.makeText(getContext(),"输入不能为空!",Toast.LENGTH_SHORT).show();
+                        }
+                        Log.d(TAG, "onClick: 数据分类表的数据项总共有："+daoSession.getMaterialCategoriesDao().count());
+                    }
+                });
+
+                //给取消按钮注册一个回调函数
+                categoriesCancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });*/
+
+//        //添加材料
+//        btn_material_add_userMaterial.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Material material=new Material();
+//                material=initialMaterialFromDetail(material);
+//                daoSession.getMaterialDao().save(material);
+//                //TODO 更新UI
+//
+//            }
+//        });
+
+
+//        mAdapter=new ExpandableListViewAdapter(mContext,data,groupList);
+
+//        for (String group:groupList){
+//            Log.d(TAG, "onCreateView: "+"groupListName= "+group+", childListName"+data.get(group));
+//        }
     }
 
+    private void initChildFragment() {
+        Log.d(TAG, "initChildFragment: ");
+
+        //注意：1)Fragment的嵌套使用中，操作子Fragment时一定要用getChildFragmentManager()来操作；
+        //      2)而且还要注意父Fragment销毁后，子Fragment不会自动销毁，要在父Fragment中的DestroyView方法中添加
+        //        销毁子Fragment的方法，而且要用commitAllowingStateLoss()
+        materialCategoriesFragment= (MaterialCategoriesFragment) getChildFragmentManager().
+                findFragmentById(R.id.material_categories_fragment);
+        materialDetailFragment= (MaterialDetailFragment) getChildFragmentManager().
+                findFragmentById(R.id.material_detail_fragment);
+        if (materialCategoriesFragment!=null){
+            Log.d(TAG, "initChildFragment: init materialCategoriesFragment success and no null");
+        }
+        if (materialDetailFragment!=null){
+            Log.d(TAG, "initChildFragment: init materialDetailFragment success and no null");
+        }
+        /*materialCategoriesFragment=new MaterialCategoriesFragment();
+        FragmentTransaction transaction=getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.empty_material_fragment_container,materialCategoriesFragment);
+        transaction.commit();*/
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (materialCategoriesFragment!=null){
+            Log.d(TAG, "onDestroyView: materialCategoriesFragment no null");
+            FragmentManager fragmentManager=getChildFragmentManager();
+            if (fragmentManager!=null&&!fragmentManager.isDestroyed()){
+                final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                if (fragmentTransaction!=null){
+                    fragmentTransaction.remove(materialCategoriesFragment).commitAllowingStateLoss();
+//                    fragmentTransaction.commitAllowingStateLoss();
+//                    fragmentManager.executePendingTransactions();
+                    Log.d(TAG, "onDestroyView: materialCategoriesFragment destroy");
+                }
+            }
+        }
+
+        if (materialDetailFragment!=null){
+            Log.d(TAG, "onDestroyView: materialDetailFragment no null");
+            FragmentManager fragmentManager=getChildFragmentManager();
+            if (fragmentManager!=null&&!fragmentManager.isDestroyed()){
+                final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                if (fragmentTransaction!=null){
+                    fragmentTransaction.remove(materialDetailFragment).commitAllowingStateLoss();
+//                    fragmentTransaction.commitAllowingStateLoss();
+//                    fragmentManager.executePendingTransactions();
+                    Log.d(TAG, "onDestroyView: materialDetailFragment destroy");
+                }
+            }
+        }
+        /*MaterialCategoriesFragment fragment= (MaterialCategoriesFragment) getChildFragmentManager().
+                findFragmentById(R.id.material_categories_fragment);
+        if (fragment!=null){
+            getFragmentManager().beginTransaction().remove(fragment).commit();
+        }*/
+    }
+
+    private Material initialMaterialFromDetail(Material material){
+
+        //material.setMaterialCategoriesId(et_material_properties_categories.getText().toString());
+        material.setName(et_material_properties_name.getText().toString());
+        material.setIngredient(et_material_properties_ingredient.getText().toString());
+        material.setHardness(et_material_properties_hardness.getText().toString());
+        material.setDensity(et_material_properties_density.getText().toString());
+        material.setThermalConductivity(et_material_properties_thermalConductivity.getText().toString());
+        material.setSpecificHeatCapacity(et_material_properties_specificHeatCapacity.getText().toString());
+        material.setYoungsModulus(et_material_properties_youngsModulus.getText().toString());
+        material.setImpactStrength(et_material_properties_impactStrength.getText().toString());
+        material.setExtension(et_material_properties_extension.getText().toString());
+        material.setAreaReduction(et_material_properties_areaReduction.getText().toString());
+        material.setConductiveCoefficient(et_material_properties_conductiveCoefficient.getText().toString());
+        material.setCondition(et_material_properties_condition.getText().toString());
+        material.setTensileStrength(et_material_properties_tensileStrength.getText().toString());
+        material.setYieldStrength(et_material_properties_yieldStrength.getText().toString());
+        material.setShearStrength(et_material_properties_shearStrength.getText().toString());
+        material.setHeatTreatment(et_material_properties_heatTreatment.getText().toString());
+        material.setLowMeltingPoint(et_material_properties_lowMeltingPoint.getText().toString());
+        material.setHighMeltingPoint(et_material_properties_highMeltingPoint.getText().toString());
+        material.setThermalExpansionCoefficient(et_material_properties_thermalExpansionCoefficient.getText().toString());
+        material.setStandard(cb_material_standards_AISI.getText().toString());
+        return material;
+    }
     private void initialMaterialDetailView(View view) {
 
         mExpandableListView= (ExpandableListView)view.findViewById(R.id.elv_material_categories);
         et_material_properties_name= (EditText) view.findViewById(R.id.et_material_detail_properties_name);
-        et_material_properties_categories= (EditText) view.findViewById(R.id.et_material_detail_properties_categories);
+//        et_material_properties_categories= (EditText) view.findViewById(R.id.et_material_detail_properties_categories);
         et_material_properties_ingredient= (EditText) view.findViewById(R.id.et_material_detail_properties_ingredient);
         et_material_properties_hardness= (EditText) view.findViewById(R.id.et_material_detail_properties_hardness);
         et_material_properties_density= (EditText) view.findViewById(R.id.et_material_detail_properties_density);
@@ -180,48 +404,41 @@ public class MaterialFragment extends Fragment {
         cb_material_standards_UNI= (CheckBox) view.findViewById(R.id.cb_material_standards_UNI);
         cb_material_standards_W_nr= (CheckBox) view.findViewById(R.id.cb_material_standards_W_nr);
 
-        btn_material_add_userCategories= (Button) view.findViewById(R.id.btn_material_add_userCategories);
-        btn_material_delete_userCategories= (Button) view.findViewById(R.id.btn_material_delete_userCategories);
-        btn_material_add_userMaterial= (Button) view.findViewById(R.id.btn_material_add_userMaterial);
-        btn_material_delete_userMaterial= (Button) view.findViewById(R.id.btn_material_delete_userMaterial);
-        btn_material_commit_userMaterial= (Button) view.findViewById(R.id.btn_material_commit_userMaterial);
-        btn_material_cancel_userMaterial= (Button) view.findViewById(R.id.btn_material_cancel_userMaterial);
+//        btn_material_add_userCategories= (Button) view.findViewById(R.id.btn_material_add_categories);
+//        btn_material_delete_userCategories= (Button) view.findViewById(R.id.btn_material_delete_categories);
+//        btn_material_add_userMaterial= (Button) view.findViewById(R.id.btn_material_add_userMaterial);
+//        btn_material_delete_userMaterial= (Button) view.findViewById(R.id.btn_material_delete_userMaterial);
+//        btn_material_commit_userMaterial= (Button) view.findViewById(R.id.btn_material_commit_userMaterial);
+//        btn_material_cancel_userMaterial= (Button) view.findViewById(R.id.btn_material_cancel_userMaterial);
     }
 
-    private void initialData() {
+    private void initialSysData() {
 
         if (childrenList1.size()==0)
         {
             childrenList1.add("Aluminum 6061-T6 [95]");
             childrenList1.add("Aluminum 6063");
-            childrenList1.add("Aluminum 7075-T6 [150]");
-            childrenList1.add("Aluminum 6061-T6 [95]");
-            childrenList1.add("Aluminum 6063");
-            childrenList1.add("Aluminum 7075-T6 [150]");
         }
 
         if (childrenList2.size()==0){
             childrenList2.add("Aluminum 7050-T7451 [140]");
-            childrenList2.add("Titanium Alloy Ti6Al4V[340]");
-            childrenList2.add("Aluminum 7050-T7451 [140]");
-            childrenList2.add("Titanium Alloy Ti6Al4V[340] 12334390t3043t3");
+
         }
 
         if (childrenList3.size()==0){
             childrenList3.add("Copper 3021");
-            childrenList3.add("Copper 3022");
-            childrenList3.add("Copper 3023");
+
         }
 
         if (data.size()==0){
             data.put(parentList[0],childrenList1);
             data.put(parentList[1],childrenList2);
             data.put(parentList[2],childrenList3);
-            data.put(parentList[3],childrenList1);
-            data.put(parentList[4],childrenList2);
-            data.put(parentList[5],childrenList3);
-            data.put(parentList[6],childrenList1);
-            data.put(parentList[7],childrenList2);
+
+        }
+
+        for (int i=0;i<parentList.length;i++){
+            groupList.add(parentList[i]);
         }
     }
 }

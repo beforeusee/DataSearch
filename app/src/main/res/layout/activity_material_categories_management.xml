@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_material_categories_management"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.a103.datasearch.MaterialCategoriesManagementActivity">
+
+    <com.example.a103.datasearch.utils.CustomTitleBar
+        android:id="@+id/custom_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:left_button_visible="false"
+        app:right_button_text="完成"
+        app:title_background_color="@color/colorPrimary"
+        app:title_text="分类管理"/>
+
+    <include layout="@layout/add_bar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/material_categories_management_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
