@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="300dp"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
               android:id="@+id/add_material_categories_layout">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/tv_add_material_categories_dialog_title"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:padding="10dp"
-        android:text="新建材料分类"
+        android:text="添加材料分类"
         android:textSize="24sp"/>
 
     <EditText
@@ -20,9 +21,12 @@
         android:layout_margin="4dp"
         android:gravity="start"
         android:textColor="@color/black"
-        android:hint="请输入材料的类名"
-        android:id="@+id/et_add_material_categories"></EditText>
-    <requestFocus/>
+        android:hint="请为新的分类输入名称"
+        android:id="@+id/et_add_material_categories">
+        <requestFocus/>
+    </EditText>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,8 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:id="@+id/add_material_categories__button_commit"
+            android:id="@+id/add_material_categories_button_commit"
             android:textSize="20sp"
-            android:text="提交"/>
+            android:text="确定"/>
     </LinearLayout>
 </LinearLayout>

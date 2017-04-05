@@ -20,27 +20,18 @@
         android:orientation="horizontal"
         android:id="@+id/ll_material_management">
 
-        <fragment
-            android:id="@+id/material_categories_fragment"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:name="com.example.a103.datasearch.fragment.MaterialCategoriesFragment"
-            tools:layout="@layout/fragment_material_categories"/>
-
         <FrameLayout
-            android:id="@+id/material_detail_layout"
+            android:id="@+id/material_categories_fragment_container"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
+        </FrameLayout>
 
-            <fragment
-                android:id="@+id/material_detail_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:name="com.example.a103.datasearch.fragment.MaterialDetailFragment"
-                tools:layout="@layout/fragment_material_detail"/>
-
+        <FrameLayout
+            android:id="@+id/material_detail_fragment_container"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
         </FrameLayout>
 
     </LinearLayout>
