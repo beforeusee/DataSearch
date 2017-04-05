@@ -133,8 +133,7 @@ public class ToolFragment extends Fragment {
                                 }
                             });
 
-                            alertDialogBuilder.setNegativeButton("取消",
-                            new DialogInterface.OnClickListener() {
+                            alertDialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -154,6 +153,7 @@ public class ToolFragment extends Fragment {
         //注册广播来进行listView列表的刷新
         IntentFilter intentFilter=new IntentFilter();
         intentFilter.addAction("action.refreshTool");
+        //创建广播接收器
         mRefreshBroadcastReceiver=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -161,7 +161,7 @@ public class ToolFragment extends Fragment {
                 //如果接收到广播消息，更新listView列表
                 String action=intent.getAction();
                 if (action.equals("action.refreshTool")){
-                    Log.d("接收到了广播：","是的");
+                    Log.d(TAG, "onReceive: 接收到刷新刀具列表的广播");;
 
                     Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
                     mCursorAdapter.changeCursor(cursor);
@@ -169,33 +169,8 @@ public class ToolFragment extends Fragment {
             }
         };
         getActivity().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
-        Log.d(TAG, "onStart: 注册广播");
-        Log.d(TAG, "onCreateView: 执行");
+        Log.d(TAG, "onCreateView: 注册刷新刀具列表的广播");
         return view;
-    }
-
-    @Override
-    public void onStart() {
-
-        Log.d(TAG, "onStart: 执行onStart方法");
-        super.onStart();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    /**
-     * 广播接收
-     */
-
-
-    @Override
-    public void onStop() {
-
-        super.onStop();
     }
 
     @Override
@@ -203,9 +178,7 @@ public class ToolFragment extends Fragment {
         if (mRefreshBroadcastReceiver!=null){
             getActivity().unregisterReceiver(mRefreshBroadcastReceiver);
         }
-
-        Log.d(TAG, "onDestroy: 注销广播接收器");
-        Log.d(TAG, "onDestroyView: 执行onDestroyView");
+        Log.d(TAG, "onDestroyView: 注销刷新刀具列表的广播");
         super.onDestroyView();
     }
 
@@ -222,5 +195,4 @@ public class ToolFragment extends Fragment {
         ToolDetailActivity.actionStart(getContext(),tool);
         Toast.makeText(getContext(),"进入了刀具详细页面",Toast.LENGTH_SHORT).show();
     }
-
 }

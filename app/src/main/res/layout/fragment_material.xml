@@ -13,11 +13,11 @@
         android:gravity="center"
         android:id="@+id/tv_material_title"/>
 
-    <fragment
-        android:id="@+id/material_categories_fragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.a103.datasearch.fragment.MaterialCategoriesFragment"
-        tools:layout="@layout/fragment_material_categories"/>
+        android:id="@+id/material_categories_fragment_container">
+
+    </FrameLayout>
 
 </LinearLayout>

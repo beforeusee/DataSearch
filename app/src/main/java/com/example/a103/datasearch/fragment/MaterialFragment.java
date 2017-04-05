@@ -53,8 +53,11 @@ public class MaterialFragment extends Fragment {
     private SQLiteDatabase db;
     private DaoSession daoSession;
     private View groupView;
-    MaterialCategoriesFragment materialCategoriesFragment;
-    MaterialDetailFragment materialDetailFragment;
+    private static final String MATERIAL_CATEGORIES_FRAGMENT_TAG="materialCategoriesFragment";
+    private static final String MATERIAL_DETAIL_FRAGMENT_TAG="materialDetailFragment";
+
+    MaterialCategoriesFragment materialCategoriesFragment=new MaterialCategoriesFragment();
+    MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
 
     //材料属性控件声明
     EditText et_material_properties_name;                                 //材料名称
@@ -117,7 +120,6 @@ public class MaterialFragment extends Fragment {
     Button btn_material_commit_userMaterial;    //提交用户材料
     Button btn_material_cancel_userMaterial;    //取消用户材料
 
-
     //TODO 数据集，后期数据接入数据库的数据
     private Map<String,List<String>> data=new HashMap<>();
     List<String> groupList=new ArrayList<>();
@@ -125,6 +127,7 @@ public class MaterialFragment extends Fragment {
     private List<String> childrenList2=new ArrayList<>();
     private List<String> childrenList3=new ArrayList<>();
 
+    //Test数据
     public static final String[] parentList=new String[]{"Aluminum","MAL Materials","Copper",
             "Copper[high-Alloy]", "Iron[Chilled Cast]","Steel[Casting]","Steel[High Alloy]","Titanium",
             "Wood"};
@@ -141,191 +144,43 @@ public class MaterialFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-//        groupView=inflater.inflate(R.layout.fragment_material,container,false);
-        initChildFragment();
+        groupView = inflater.inflate(R.layout.fragment_material, container, false);
+        initChildFragment(groupView);
         return groupView;
-
-/*        Bundle bundle = getArguments();
-        String s = bundle.getString(Constant.ARGS);*/
-        /*mContext=getContext();
-        initialMaterialDetailView(view);
-        db= DatabaseApplication.getDb();
-        daoSession=DatabaseApplication.getDaoSession();
-
-        initialSysData();
-        final Cursor groupCursor=db.query(MaterialCategoriesDao.TABLENAME,null,null,null,null,null,null);
-        final String groupFrom[]=new String[]{"NAME"};
-        final String childFrom[]=new String[]{"NAME"};
-        final int[] groupTo=new int[]{R.id.tv_material_parent_title};
-        final int[] childTo=new int[]{R.id.tv_material_child_title};
-        final MaterialSimpleCursorTreeAdapter mAdapter=new MaterialSimpleCursorTreeAdapter(mContext,
-                groupCursor,
-                R.layout.material_expandablelistview_group_item,
-                groupFrom,
-                groupTo,
-                R.layout.material_expandablelistview_child_item,
-                childFrom,
-                childTo);
-        mExpandableListView.setAdapter(mAdapter);
-
-        //材料分类按钮注册了一个回调函数，将在此处理数据创建的逻辑
-
-        try {
-            finalize();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-
-*/
-        /*btn_material_add_userCategories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog=new Dialog(getContext());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.add_material_categories_dialog);
-
-                final EditText editMaterialCategories= (EditText) dialog.findViewById(R.id.et_add_material_categories);
-                Button categoriesCommitButton= (Button) dialog.findViewById(R.id.add_material_categories__button_commit);
-                Button categoriesCancelButton= (Button) dialog.findViewById(R.id.add_material_categories_button_cancel);
-
-
-                //给提交按钮注册了一个回调函数，回调函数实现了OnClickListener接口中的onClick()方法
-                categoriesCommitButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        //如果输入不为空，则创建该分类，否则弹出提示对话框
-                        if (!("".equals(editMaterialCategories.getText().toString().trim()))){
-                            //创建MaterialCategories对象
-                            MaterialCategories categories=new MaterialCategories();
-                            categories.setName(editMaterialCategories.getText().toString());
-
-                            //TODO 检查数据库中是否存在该项，如果存在则不写入并抛出异常提示，如果不存在则写入并更新UI
-
-                            //存入数据库
-                            daoSession.getMaterialCategoriesDao().save(categories);
-
-                            //TODO UI更新逻辑不对
-//                            final Cursor groupCursor=db.query("MATERIAL",null,null,null,null,null,null);
-//                            mAdapter.changeCursor(groupCursor);
-//                            mExpandableListView.setAdapter(mAdapter);
-
-//                            //更新UI
-//                            if (groupList.size()>0){
-//                                groupList.clear();
-//                                List<MaterialCategories> categoriesList=daoSession.getMaterialCategoriesDao().loadAll();
-//                                for (int i=0;i<categoriesList.size();i++){
-//                                    groupList.add(categoriesList.get(i).getName());
-//                                }
-//                                data.put(groupList.get(categoriesList.size()-1),null);
-//                                //test
-//                                for (int i=0;i<data.size();i++){
-//                                    Log.d(TAG, "onClick: 材料分类列表:"+data.get(categories.getName()));
-//                                }
-//
-//                                //mAdapter.notifyDataSetChanged();
-//                            }
-
-                            //销毁对话框
-                            dialog.dismiss();
-                        }else {
-                            //输入为空的提示，更好的做法是创建自定义异常类，在此处抛出自定义异常类
-                            Toast.makeText(getContext(),"输入不能为空!",Toast.LENGTH_SHORT).show();
-                        }
-                        Log.d(TAG, "onClick: 数据分类表的数据项总共有："+daoSession.getMaterialCategoriesDao().count());
-                    }
-                });
-
-                //给取消按钮注册一个回调函数
-                categoriesCancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });*/
-
-//        //添加材料
-//        btn_material_add_userMaterial.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Material material=new Material();
-//                material=initialMaterialFromDetail(material);
-//                daoSession.getMaterialDao().save(material);
-//                //TODO 更新UI
-//
-//            }
-//        });
-
-
-//        mAdapter=new ExpandableListViewAdapter(mContext,data,groupList);
-
-//        for (String group:groupList){
-//            Log.d(TAG, "onCreateView: "+"groupListName= "+group+", childListName"+data.get(group));
-//        }
     }
 
-    private void initChildFragment() {
-        Log.d(TAG, "initChildFragment: ");
+    private void initChildFragment(View groupView) {
 
-        //注意：1)Fragment的嵌套使用中，操作子Fragment时一定要用getChildFragmentManager()来操作；
-        //      2)而且还要注意父Fragment销毁后，子Fragment不会自动销毁，要在父Fragment中的DestroyView方法中添加
-        //        销毁子Fragment的方法，而且要用commitAllowingStateLoss()
-        materialCategoriesFragment= (MaterialCategoriesFragment) getChildFragmentManager().
-                findFragmentById(R.id.material_categories_fragment);
-        materialDetailFragment= (MaterialDetailFragment) getChildFragmentManager().
-                findFragmentById(R.id.material_detail_fragment);
-        if (materialCategoriesFragment!=null){
-            Log.d(TAG, "initChildFragment: init materialCategoriesFragment success and no null");
-        }
-        if (materialDetailFragment!=null){
-            Log.d(TAG, "initChildFragment: init materialDetailFragment success and no null");
-        }
-        /*materialCategoriesFragment=new MaterialCategoriesFragment();
-        FragmentTransaction transaction=getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.empty_material_fragment_container,materialCategoriesFragment);
-        transaction.commit();*/
-    }
+        //判断groupView中是否能找到子fragment的布局
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (materialCategoriesFragment!=null){
-            Log.d(TAG, "onDestroyView: materialCategoriesFragment no null");
-            FragmentManager fragmentManager=getChildFragmentManager();
-            if (fragmentManager!=null&&!fragmentManager.isDestroyed()){
-                final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                if (fragmentTransaction!=null){
-                    fragmentTransaction.remove(materialCategoriesFragment).commitAllowingStateLoss();
-//                    fragmentTransaction.commitAllowingStateLoss();
-//                    fragmentManager.executePendingTransactions();
-                    Log.d(TAG, "onDestroyView: materialCategoriesFragment destroy");
-                }
+        //如果在布局中找到material_categories_fragment_container,将materialCategoriesFragment动态添加到布局中
+        if (groupView.findViewById(R.id.material_categories_fragment_container)!=null){
+            Fragment fragment=getChildFragmentManager().findFragmentByTag(MATERIAL_CATEGORIES_FRAGMENT_TAG);
+            if (fragment==null){
+                Log.d(TAG, "onCreateView: add new fragment: "+MATERIAL_CATEGORIES_FRAGMENT_TAG);
+                MaterialCategoriesFragment materialCategoriesFragment=new MaterialCategoriesFragment();
+                FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.material_categories_fragment_container, materialCategoriesFragment,MATERIAL_CATEGORIES_FRAGMENT_TAG);
+                fragmentTransaction.commit();
+            }else {
+                Log.d(TAG, "onCreateView: fragment: "+MATERIAL_CATEGORIES_FRAGMENT_TAG+" already existed,no need to add it again.");
             }
         }
-
-        if (materialDetailFragment!=null){
-            Log.d(TAG, "onDestroyView: materialDetailFragment no null");
-            FragmentManager fragmentManager=getChildFragmentManager();
-            if (fragmentManager!=null&&!fragmentManager.isDestroyed()){
-                final FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                if (fragmentTransaction!=null){
-                    fragmentTransaction.remove(materialDetailFragment).commitAllowingStateLoss();
-//                    fragmentTransaction.commitAllowingStateLoss();
-//                    fragmentManager.executePendingTransactions();
-                    Log.d(TAG, "onDestroyView: materialDetailFragment destroy");
-                }
+        //布局中含material_detail_fragment_container，将materialDetailFragment动态添加到布局中，加载的是(layout-sw600dp)fragment_material
+        if (groupView.findViewById(R.id.material_detail_fragment_container)!=null){
+            Fragment fragment=getChildFragmentManager().findFragmentByTag(MATERIAL_DETAIL_FRAGMENT_TAG);
+            if (fragment==null){
+                Log.d(TAG, "onCreateView: add new fragment: "+MATERIAL_DETAIL_FRAGMENT_TAG);
+                MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
+                FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.material_detail_fragment_container,materialDetailFragment,MATERIAL_DETAIL_FRAGMENT_TAG);
+                fragmentTransaction.commit();
+            }else {
+                Log.d(TAG, "onCreateView: fragment: "+MATERIAL_DETAIL_FRAGMENT_TAG+" already existed ,no need to add it again.");
             }
         }
-        /*MaterialCategoriesFragment fragment= (MaterialCategoriesFragment) getChildFragmentManager().
-                findFragmentById(R.id.material_categories_fragment);
-        if (fragment!=null){
-            getFragmentManager().beginTransaction().remove(fragment).commit();
-        }*/
     }
+
 
     private Material initialMaterialFromDetail(Material material){
 
