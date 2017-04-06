@@ -65,6 +65,11 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         this.data=data;
     }*/
 
+    public void updateExpandableListViewData(Map<String,List<String>> data,List<String> groupList){
+        this.data=data;
+        this.groupList=groupList;
+        notifyDataSetChanged();
+    }
     @Override
     public int getGroupCount() {
         return data.size();
@@ -72,7 +77,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-
         return data.get(groupList.get(groupPosition)).size();
     }
 
@@ -111,7 +115,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         convertView.setTag(R.layout.material_expandablelistview_child_item,-1);
         TextView tv= (TextView) convertView.findViewById(R.id.tv_material_parent_title);
         tv.setText(String.valueOf(groupList.get(groupPosition)));
-        Log.d(TAG, "getGroupView: "+"groupPosition: "+groupPosition+"groupName: "+data.get(groupList.get(groupPosition)));
+        Log.d(TAG, "getGroupView: "+"groupPosition: "+groupPosition+
+                " groupName: "+ groupList.get(groupPosition)+
+                " childList: "+data.get(groupList.get(groupPosition)));
         return convertView;
     }
 

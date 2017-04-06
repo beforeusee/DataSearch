@@ -120,19 +120,6 @@ public class MaterialFragment extends Fragment {
     Button btn_material_commit_userMaterial;    //提交用户材料
     Button btn_material_cancel_userMaterial;    //取消用户材料
 
-    //TODO 数据集，后期数据接入数据库的数据
-    private Map<String,List<String>> data=new HashMap<>();
-    List<String> groupList=new ArrayList<>();
-    private List<String> childrenList1=new ArrayList<>();
-    private List<String> childrenList2=new ArrayList<>();
-    private List<String> childrenList3=new ArrayList<>();
-
-    //Test数据
-    public static final String[] parentList=new String[]{"Aluminum","MAL Materials","Copper",
-            "Copper[high-Alloy]", "Iron[Chilled Cast]","Steel[Casting]","Steel[High Alloy]","Titanium",
-            "Wood"};
-
-
     public static MaterialFragment newInstance(String s){
         MaterialFragment materialFragment=new MaterialFragment();
        /* Bundle bundle=new Bundle();
@@ -267,33 +254,5 @@ public class MaterialFragment extends Fragment {
 //        btn_material_cancel_userMaterial= (Button) view.findViewById(R.id.btn_material_cancel_userMaterial);
     }
 
-    private void initialSysData() {
 
-        if (childrenList1.size()==0)
-        {
-            childrenList1.add("Aluminum 6061-T6 [95]");
-            childrenList1.add("Aluminum 6063");
-        }
-
-        if (childrenList2.size()==0){
-            childrenList2.add("Aluminum 7050-T7451 [140]");
-
-        }
-
-        if (childrenList3.size()==0){
-            childrenList3.add("Copper 3021");
-
-        }
-
-        if (data.size()==0){
-            data.put(parentList[0],childrenList1);
-            data.put(parentList[1],childrenList2);
-            data.put(parentList[2],childrenList3);
-
-        }
-
-        for (int i=0;i<parentList.length;i++){
-            groupList.add(parentList[i]);
-        }
-    }
 }

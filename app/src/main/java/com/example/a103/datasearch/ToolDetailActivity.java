@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.Tool;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.DatabaseApplication;
 
 public class ToolDetailActivity extends AppCompatActivity {
@@ -117,11 +118,9 @@ public class ToolDetailActivity extends AppCompatActivity {
                 }
 
                 //发送广播，通知ToolFragment进行刀具列表的刷新
-                Intent intent=new Intent();
-                intent.setAction("action.refreshTool");
-                sendBroadcast(intent);
+                sendToolRefreshBroadcast();
 
-                Toast.makeText(ToolDetailActivity.this,"点击了提交，待完善该功能",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ToolDetailActivity.this,"点击了提交，更新刀具列表",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -135,6 +134,15 @@ public class ToolDetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 发送更新刀具列表UI的广播
+     */
+    private void sendToolRefreshBroadcast(){
+        Intent intent=new Intent();
+        intent.setAction(Constant.ACTION_REFRESH_TOOL);
+        sendBroadcast(intent);
     }
 
     /**

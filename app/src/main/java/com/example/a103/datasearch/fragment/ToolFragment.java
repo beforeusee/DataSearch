@@ -150,35 +150,44 @@ public class ToolFragment extends Fragment {
                 Toast.makeText(view.getContext(),"点击了"+masterPosition,Toast.LENGTH_SHORT).show();
             }
         });
-        //注册广播来进行listView列表的刷新
-        IntentFilter intentFilter=new IntentFilter();
-        intentFilter.addAction("action.refreshTool");
-        //创建广播接收器
-        mRefreshBroadcastReceiver=new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
 
-                //如果接收到广播消息，更新listView列表
-                String action=intent.getAction();
-                if (action.equals("action.refreshTool")){
-                    Log.d(TAG, "onReceive: 接收到刷新刀具列表的广播");;
-
-                    Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
-                    mCursorAdapter.changeCursor(cursor);
-                }
-            }
-        };
-        getActivity().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
-        Log.d(TAG, "onCreateView: 注册刷新刀具列表的广播");
+        //注册更新刀具列表广播接收器，收到广播后更新刀具列表
+        registerRefreshToolListBroadcastReceiver();
         return view;
+    }
+
+    private void registerRefreshToolListBroadcastReceiver(){
+        //注册广播来进行listView列表的刷新
+        //创建消息过滤器
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_REFRESH_TOOL);
+        //创建广播接收器
+        if (mRefreshBroadcastReceiver==null){
+            mRefreshBroadcastReceiver=new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    //如果接收到广播消息，更新listView列表
+                    String action=intent.getAction();
+                    if (action.equals(Constant.ACTION_REFRESH_TOOL)){
+                        Log.d(TAG, "onReceive: 接收到刷新刀具列表的广播");;
+
+                        Cursor cursor=db.query("TOOL",null,null,null,null,null,null);
+                        mCursorAdapter.changeCursor(cursor);
+                    }
+                }
+            };
+        }
+        getActivity().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
+        Log.d(TAG, "registerRefreshToolListBroadcastReceiver: 注册刷新刀具列表的广播");
     }
 
     @Override
     public void onDestroyView() {
         if (mRefreshBroadcastReceiver!=null){
             getActivity().unregisterReceiver(mRefreshBroadcastReceiver);
+            Log.d(TAG, "onDestroyView: 注销刷新刀具列表的广播");
         }
-        Log.d(TAG, "onDestroyView: 注销刷新刀具列表的广播");
         super.onDestroyView();
     }
 

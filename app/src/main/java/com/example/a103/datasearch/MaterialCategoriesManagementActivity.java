@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.MaterialCategories;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.CustomTitleBar;
 import com.example.a103.datasearch.utils.DatabaseApplication;
 
@@ -37,7 +38,6 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
     private DaoSession daoSession= DatabaseApplication.getDaoSession();  //获取应用的全局数据库管理变量daoSession
     private MaterialCategoriesAdapter adapter;
-
     private static final String TAG = "MaterialCategoriesManagementActivity";
 
     @Override
@@ -154,7 +154,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                 //弹出删除的警告对话框
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(MaterialCategoriesManagementActivity.this);
                 alertDialogBuilder.setTitle("提示");
-                alertDialogBuilder.setMessage("确定删除该材料分类吗？");
+                alertDialogBuilder.setMessage("确定删除材料分类:"+materialCategories.getName()+" 吗?");
                 alertDialogBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -187,14 +187,27 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
         mCustomTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2017/3/28 点击,finish该对话框,并负责刷新fragment_material的材料分类列表
-                finish();
+                //2017/4/6 刷新fragment_material中的UI，
+                // 包括MaterialCategoriesFragment中ExpandableListView分类显示的数据更新
+                //和MaterialDetailFragment中材料种类控件Spinner的数据更新
 
-                //TODO 刷新fragment_material的分类列表的业务逻辑
+                //利用广播机制，通知数据进行更新
+                sendMaterialCategoriesRefreshBroadcast();
+                //结束当前Activity
+                finish();
             }
         });
 
         Log.d(TAG, "onCreate: successfully execution!");
+    }
+
+    /**
+     * 发送更新MaterialCategories的广播
+     */
+    private void sendMaterialCategoriesRefreshBroadcast(){
+        Intent intent=new Intent();
+        intent.setAction(Constant.ACTION_REFRESH_MATERIAL_CATEGORIES);
+        sendBroadcast(intent);
     }
 
     private void initialMaterialCategories() {
