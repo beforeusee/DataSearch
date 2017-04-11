@@ -22,72 +22,55 @@ import java.util.Map;
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     //成员变量声明
     private Context context;
-    private Map<String,List<String>> data;
-    private List<String> groupList;
+    private List<String> groupList=new ArrayList<>();
+    private List<List<String>> childList=new ArrayList<>();
     private static final String TAG = "ExpandableListViewAdapter";
 
- /*   public List<String> getGroupList() {
-        for (String key:data.keySet()){
-            groupList.add(key);
-        }
-        return groupList;
-    }*/
-
-    //构造函数
-    public ExpandableListViewAdapter(){
-    }
-
-    //传入数据适配参数的构造函数
-    public ExpandableListViewAdapter(Context context,Map<String,List<String>> data,List<String> groupList){
+    /**
+     * 构造函数，初始化参数context,groupList,childList
+     * @param context
+     * @param groupList
+     * @param childList
+     */
+    public ExpandableListViewAdapter(Context context,List<String> groupList,List<List<String>> childList){
         this.context=context;
-        this.data=data;
         this.groupList=groupList;
+        this.childList=childList;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        context = context;
-    }
-
-    public Map<String, List<String>> getData() {
-        return data;
-    }
-
-    public void setData(Map<String, List<String>> data) {
-        this.data = data;
-    }
-
-/*    public ExpandableListViewAdapter(Context context, Map<String,List<String>> data){
-        this.mContext=context;
-        this.data=data;
-    }*/
-
-    public void updateExpandableListViewData(Map<String,List<String>> data,List<String> groupList){
-        this.data=data;
+    /**
+     * 对外提供刷新ExpandableListView的方法
+     * @param groupList
+     * @param childList
+     */
+    public void updateExpandableListViewData(List<String> groupList,List<List<String>> childList){
         this.groupList=groupList;
+        this.childList=childList;
         notifyDataSetChanged();
+        Log.d(TAG, "updateExpandableListViewData: 更新适配器ExpandableListViewAdapter的数据");
     }
     @Override
     public int getGroupCount() {
-        return data.size();
+        return groupList.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return data.get(groupList.get(groupPosition)).size();
+        int count=0;
+        if (childList.get(groupPosition)!=null){
+            count=childList.get(groupPosition).size();
+        }
+        return count;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return data.get(groupList.get(groupPosition));
+        return groupList.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return data.get(groupList.get(groupPosition)).get(childPosition);
+        return childList.get(groupPosition).get(childPosition);
     }
 
     @Override
@@ -107,42 +90,51 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        GroupHolder groupHolder;
         if (convertView==null){
             LayoutInflater inflater=LayoutInflater.from (context);
             convertView=inflater.inflate(R.layout.material_expandablelistview_group_item,null);
+
+            groupHolder=new GroupHolder();
+            groupHolder.groupName= (TextView) convertView.findViewById(R.id.tv_material_parent_title);
+            convertView.setTag(groupHolder);
+        } else{
+            groupHolder= (GroupHolder) convertView.getTag();
         }
-        convertView.setTag(R.layout.material_expandablelistview_group_item,groupPosition);
-        convertView.setTag(R.layout.material_expandablelistview_child_item,-1);
-        TextView tv= (TextView) convertView.findViewById(R.id.tv_material_parent_title);
-        tv.setText(String.valueOf(groupList.get(groupPosition)));
+        groupHolder.groupName.setText(groupList.get(groupPosition));
         Log.d(TAG, "getGroupView: "+"groupPosition: "+groupPosition+
-                " groupName: "+ groupList.get(groupPosition)+
-                " childList: "+data.get(groupList.get(groupPosition)));
+                " groupName: "+ groupList.get(groupPosition));
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ChildHolder childHolder;
         if (convertView==null){
-            LayoutInflater inflater= (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater= LayoutInflater.from(context);
             convertView=inflater.inflate(R.layout.material_expandablelistview_child_item,null);
-        }
 
-        convertView.setTag(R.layout.material_expandablelistview_group_item,groupPosition);
-        convertView.setTag(R.layout.material_expandablelistview_child_item,childPosition);
-        TextView tv= (TextView) convertView.findViewById(R.id.tv_material_child_title);
-        tv.setText(data.get(groupList.get(groupPosition)).get(childPosition));
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"点击了内置的textView",Toast.LENGTH_SHORT).show();
-            }
-        });
+            childHolder=new ChildHolder();
+            childHolder.childName= (TextView) convertView.findViewById(R.id.tv_material_child_title);
+            convertView.setTag(childHolder);
+        } else{
+            childHolder= (ChildHolder) convertView.getTag();
+        }
+        childHolder.childName.setText(childList.get(groupPosition).get(childPosition));
+        Log.d(TAG, "getChildView: "+childList.get(groupPosition).get(childPosition));
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    private static class GroupHolder{
+        TextView groupName;
+    }
+
+    private static class ChildHolder{
+        TextView childName;
     }
 }

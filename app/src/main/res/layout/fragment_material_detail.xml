@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TableRow
+    <!--<TableRow
         android:paddingBottom="5dp"
         android:paddingTop="10dp"
         android:layout_width="match_parent"
@@ -35,14 +35,14 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"/>
-    </TableRow>
+    </TableRow>-->
 
     <LinearLayout
         android:id="@+id/ll_material_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_above="@id/tr_material_delete_cancel_commit">
+        >
 
         <ScrollView
             android:layout_width="match_parent"
@@ -129,11 +129,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="种类"
+                                android:hint="材料种类"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
                                 android:textSize="20sp"
-                                android:background="@color/white"/>
+                                android:background="@color/white"
+                                />
                         </TableRow>
 
                         <TableRow
@@ -726,8 +727,7 @@
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
-                                android:background="@color/white"
-                                android:entries="@array/coefficientParameterForceModel"/>
+                                android:background="@color/white"/>
                         </TableRow>
 
                         <TableRow

@@ -2,16 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_material_child_title"
+        android:id="@+id/tv_material_detail_sp_getView_categoriesName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="this is child item"
+        android:gravity="end"
+        android:text="the convertView of getView"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent"
-        android:layout_marginStart="40dp"/>
-
+        />
 </LinearLayout>

@@ -12,14 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.MaterialCategories;
@@ -32,7 +29,7 @@ import java.util.List;
 
 public class MaterialCategoriesManagementActivity extends AppCompatActivity {
 
-    CustomTitleBar mCustomTitleBar;
+    CustomTitleBar material_categories_management_customTitleBar;
     RecyclerView mRecyclerView;
     LinearLayout mAddBarLinearLayout;
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
@@ -63,7 +60,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
         mAddBarLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2017/3/28 弹出添加材料分类的对话框
+                // 2017/3/28 弹出添加材料分类的对话框
                 final Dialog dialog=new Dialog(MaterialCategoriesManagementActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.add_material_categories_dialog);
@@ -119,6 +116,8 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                             Log.d(TAG, "categoriesCommitButton:onClick: successfully saved: "+materialCategories.getName());
                             //更新材料分类列表
                             updateMaterialCategories();
+                            //发送广播，通知MaterialFragment中的数据进行更新
+                            sendMaterialCategoriesRefreshBroadcast();
                         }else {
                             Log.d(TAG, "categoriesCommitButton:onClick: failed to save: "+materialCategories.getName()+
                             " in the database table MATERIAL_CATEGORIES");
@@ -165,6 +164,11 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                             daoSession.getMaterialCategoriesDao().delete(materialCategories);
                             updateMaterialCategories();
                             Log.d(TAG, "onItemClick: successfully deleted: "+materialCategories.getName());
+                            //2017/4/7 刷新fragment_material中的UI，
+                            // 包括MaterialCategoriesFragment中ExpandableListView分类显示的数据更新
+                            //和MaterialDetailFragment中材料种类控件Spinner的数据更新
+                            //利用广播机制，通知数据进行更新
+                            sendMaterialCategoriesRefreshBroadcast();
                         }else{
                             Log.d(TAG, "onItemClick: failed to delete: "+materialCategories.getName()+
                                     ",the data does not exist in the database table MATERIAL_CATEGORIES");
@@ -184,21 +188,15 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
         });
 
         //设置右边按钮“完成”的监听函数
-        mCustomTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
+        material_categories_management_customTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //2017/4/6 刷新fragment_material中的UI，
-                // 包括MaterialCategoriesFragment中ExpandableListView分类显示的数据更新
-                //和MaterialDetailFragment中材料种类控件Spinner的数据更新
-
-                //利用广播机制，通知数据进行更新
-                sendMaterialCategoriesRefreshBroadcast();
                 //结束当前Activity
                 finish();
             }
         });
 
-        Log.d(TAG, "onCreate: successfully execution!");
+        Log.d(TAG, "onCreate: successfully execution.");
     }
 
     /**
@@ -210,20 +208,29 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
+    /**
+     * 初始化材料分类列表materialCategoriesList
+     */
     private void initialMaterialCategories() {
         materialCategoriesList=daoSession.getMaterialCategoriesDao().loadAll();
         Log.d(TAG, "initialMaterialCategories: 加载数据库中材料分类列表的数据库");
     }
 
+    /**
+     * 更新材料分类列表
+     */
     private void updateMaterialCategories(){
         materialCategoriesList=daoSession.getMaterialCategoriesDao().loadAll();
         adapter.updateMaterialCategoriesList(materialCategoriesList);
         Log.d(TAG, "updateMaterialCategories: 执行材料分类列表更新");
     }
 
+    /**
+     * 初始化材料分类界面的UI
+     */
     private void initialMaterialCategoriesManagementView() {
         mAddBarLinearLayout= (LinearLayout) findViewById(R.id.ll_add_bar);
-        mCustomTitleBar= (CustomTitleBar) findViewById(R.id.custom_title_bar);
+        material_categories_management_customTitleBar = (CustomTitleBar) findViewById(R.id.material_categories_management_customTitleBar);
         mRecyclerView= (RecyclerView) findViewById(R.id.
                 material_categories_management_recycler_view);
     }

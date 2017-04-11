@@ -105,7 +105,7 @@ public class CustomTitleBar extends RelativeLayout {
 
     public void setTitleBarLeftBtnClickListener(OnClickListener onClickListener){
         if (onClickListener!=null){
-            titleBarRightBtn.setOnClickListener(onClickListener);
+            titleBarLeftBtn.setOnClickListener(onClickListener);
         }
     }
 

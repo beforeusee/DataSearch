@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text="this is parent item"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         />

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -68,6 +69,7 @@ public class ToolDetailActivity extends AppCompatActivity {
     Button btn_tool_commit;      //提交按钮
 
     private boolean isEditOperation; //是否是编辑状态
+    private static final String TAG = "ToolDetailActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +159,7 @@ public class ToolDetailActivity extends AppCompatActivity {
         final boolean isEditOperation=(tool!=null);     //刀具是否已经存在处于编辑状态,传入tool不为null表示已经存在
         intent.putExtra("tool_isEditOperation",isEditOperation);
         context.startActivity(intent);
+        Log.d(TAG, "actionStart: "+"启动ToolDetailActivity.");
     }
 
     /**
