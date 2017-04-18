@@ -1,41 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <!--<TableRow
-        android:paddingBottom="5dp"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tr_material_delete_cancel_commit"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/btn_material_delete_material"
-            android:text="删除"
-            android:textSize="20sp"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn_material_cancel_material"
-            android:text="取消"
-            android:textSize="20sp"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn_material_commit_material"
-            android:text="完成"
-            android:textSize="20sp"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-    </TableRow>-->
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/ll_material_detail"
@@ -753,7 +721,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
@@ -783,7 +751,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
@@ -813,7 +781,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
@@ -843,7 +811,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm²"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
@@ -873,7 +841,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm²"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"
@@ -903,7 +871,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:hint="0"
+                                android:hint="0 N/mm²"
                                 android:textSize="20sp"
                                 android:padding="0dp"
                                 android:layout_margin="0.5dp"

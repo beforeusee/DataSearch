@@ -1,22 +1,19 @@
 package com.example.a103.datasearch.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,101 +21,42 @@ import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.a103.datasearch.MaterialSimpleCursorTreeAdapter;
+import com.example.a103.datasearch.MaterialCategoriesManagementActivity;
+import com.example.a103.datasearch.MaterialDetailActivity;
+import com.example.a103.datasearch.MessageEvent;
 import com.example.a103.datasearch.dao.DaoSession;
-import com.example.a103.datasearch.dao.MaterialCategoriesDao;
+import com.example.a103.datasearch.data.CoefficientParameters;
 import com.example.a103.datasearch.data.Material;
-import com.example.a103.datasearch.data.MaterialCategories;
-import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.ExpandableListViewAdapter;
 import com.example.a103.datasearch.R;
+import com.example.a103.datasearch.data.MaterialCategories;
+import com.example.a103.datasearch.data.MaterialCuttingLimits;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.DatabaseApplication;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import static com.example.a103.datasearch.utils.Constant.MATERIAL_CATEGORIES_FRAGMENT_TAG;
+import static com.example.a103.datasearch.utils.Constant.MATERIAL_DETAIL_FRAGMENT_TAG;
 
 /**
  * Created by A103 on 2017/2/10.
  * 材料页面的fragment
  */
 
-public class MaterialFragment extends Fragment {
+public class MaterialFragment extends Fragment implements MaterialCategoriesFragment.ExpandableListViewChildSelectListener{
     //声明与二级目录了相关的成员变量
-    ExpandableListView mExpandableListView;             //材料种类分类二级目录
-    private ExpandableListViewAdapter mAdapter;                   //二级目录适配器
-    private Context mContext;
     private static final String TAG = "MaterialFragment";
-    private SQLiteDatabase db;
-    private DaoSession daoSession;
     private View groupView;
-    private static final String MATERIAL_CATEGORIES_FRAGMENT_TAG="materialCategoriesFragment";
-    private static final String MATERIAL_DETAIL_FRAGMENT_TAG="materialDetailFragment";
+    private Long materialId;
 
-    MaterialCategoriesFragment materialCategoriesFragment=new MaterialCategoriesFragment();
-    MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
+    //分类管理，添加材料，删除材料控件声明
 
-    //材料属性控件声明
-    EditText et_material_properties_name;                                 //材料名称
-    EditText et_material_properties_categories;                          //材料类别
-    EditText et_material_properties_ingredient;                          //成分
-    EditText et_material_properties_hardness;                            //硬度
-    EditText et_material_properties_density;                             //密度
-    EditText et_material_properties_thermalConductivity;               //导热系数
-    EditText et_material_properties_specificHeatCapacity;             //比热容
-    EditText et_material_properties_youngsModulus;                     //杨氏模量
-    EditText et_material_properties_impactStrength;                    //冲击强度
-    EditText et_material_properties_extension;                         //延伸量
-    EditText et_material_properties_areaReduction;                    //面积减少量
-    EditText et_material_properties_conductiveCoefficient;           //导电系数
-    EditText et_material_properties_condition;                        //条件
-    EditText et_material_properties_tensileStrength;                 //拉伸强度
-    EditText et_material_properties_yieldStrength;                   //屈服强度
-    EditText et_material_properties_shearStrength;                   //剪切强度
-    EditText et_material_properties_heatTreatment;                   //热处理
-    EditText et_material_properties_lowMeltingPoint;                //熔点(低)
-    EditText et_material_properties_highMeltingPoint;               //熔点(高)
-    EditText et_material_properties_thermalExpansionCoefficient;  //热膨胀系数
-
-    //材料切削力系数参数控件声明
-    Spinner sp_material_coefficientParameters_forceModel;     //力模型
-    EditText et_material_coefficientParameters_Kte;            //切向刃口力系数
-    EditText et_material_coefficientParameters_Kre;            //径向刃口力系数
-    EditText et_material_coefficientParameters_Kae;            //轴向刃口力系数
-    EditText et_material_coefficientParameters_Ktc;            //切向铣削力系数
-    EditText et_material_coefficientParameters_Krc;            //径向铣削力系数
-    EditText et_material_coefficientParameters_Kac;            //轴向铣削力系数
-
-    //材料限制条件控件声明
-    EditText et_material_limits_minChipThickness;               //切屑厚度(最小)
-    EditText et_material_limits_maxChipThickness;               //切屑厚度(最大)
-    EditText et_material_limits_minCuttingSpeed;                //切削速度(最小)
-    EditText et_material_limits_maxCuttingSpeed;                //切削速度(最大)
-    EditText et_material_limits_minRakeAngle;                    //前角(最小)
-    EditText et_material_limits_maxRakeAngle;                    //前角(最大)
-
-    //材料标准控件声明
-    CheckBox cb_material_standards_AFNOR;
-    CheckBox cb_material_standards_AISI;                          //材料标准-美国钢铁学会标准
-    CheckBox cb_material_standards_BS;
-    CheckBox cb_material_standards_CMC;
-    CheckBox cb_material_standards_DIN_nr;
-    CheckBox cb_material_standards_EN;
-    CheckBox cb_material_standards_JIS;
-    CheckBox cb_material_standards_SAE;
-    CheckBox cb_material_standards_SS;
-    CheckBox cb_material_standards_UNF;
-    CheckBox cb_material_standards_UNI;
-    CheckBox cb_material_standards_W_nr;
-
-    //新建类，删除类，新建，删除，应用，取消等按钮控件声明
-    Button btn_material_add_userCategories;     //新建用户材料分类
-    Button btn_material_delete_userCategories;  //删除用户材料分类
-    Button btn_material_add_userMaterial;       //新建用户材料
-    Button btn_material_delete_userMaterial;    //删除用户材料
-    Button btn_material_commit_userMaterial;    //提交用户材料
-    Button btn_material_cancel_userMaterial;    //取消用户材料
+    Button btn_material_categories_management;         //分类管理
+    Button btn_material_categories_addMaterial;        //添加材料
+    Button btn_material_delete_material;   //删除材料
 
     public static MaterialFragment newInstance(String s){
         MaterialFragment materialFragment=new MaterialFragment();
@@ -132,22 +70,151 @@ public class MaterialFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         groupView = inflater.inflate(R.layout.fragment_material, container, false);
-        initChildFragment(groupView);
+        initialView(groupView);
+        initialChildFragment(groupView);
+
+        /**
+         * 设置"材料管理"的点击监听事件，启动{@link MaterialCategoriesManagementActivity}
+         */
+        btn_material_categories_management.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialCategoriesManagementActivity.actionStart(getContext());
+            }
+        });
+
+        /**
+         * 设置"添加材料"的点击监听事件，启动{@link MaterialDetailActivity}
+         */
+        btn_material_categories_addMaterial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDetailActivity.actionStart(getContext());
+            }
+        });
+
+        /**
+         * 删除材料的监听回调
+         */
+        btn_material_delete_material.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 2017/4/18 删除所选的材料
+                Toast.makeText(getContext(),"删除所选材料",Toast.LENGTH_SHORT).show();
+                Long materialId=getMaterialId();
+                final DaoSession daoSession= DatabaseApplication.getDaoSession();
+
+                final Material material=daoSession.getMaterialDao().load(materialId);
+                final MaterialCategories materialCategories=daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId());
+                final MaterialCuttingLimits materialCuttingLimits=material.getMaterialCuttingLimits();
+                final CoefficientParameters coefficientParameters=material.getCoefficientParameters();
+
+                //弹出删除的警告对话框
+                AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setTitle("提示");
+                alertDialogBuilder.setMessage("确定删除材料:"+material.getName()+" 吗?");
+                alertDialogBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (daoSession.getMaterialDao().hasKey(material)&&
+                                daoSession.getMaterialCuttingLimitsDao().hasKey(materialCuttingLimits)&&
+                                daoSession.getCoefficientParametersDao().hasKey(coefficientParameters)){
+                            //删除material及其关联的materialCuttingLimits和coefficientParameters
+                            daoSession.getMaterialDao().delete(material);
+                            daoSession.getMaterialCuttingLimitsDao().delete(materialCuttingLimits);
+                            daoSession.getCoefficientParametersDao().delete(coefficientParameters);
+
+                            materialCategories.resetMaterials();
+                            Log.d(TAG, "onItemClick: successfully deleted: "+material.getName());
+                            //发送广播通知
+                            sendRefreshExpandableListViewBroadcast();
+
+                            //设置删除按钮Button：btn_material_delete_material为不可点击
+                            btn_material_delete_material.setEnabled(false);
+
+                        }else{
+                            Log.d(TAG, "onItemClick: failed to delete: "+material.getName()+
+                                    ",does not exist");
+                        }
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog=alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
         return groupView;
     }
 
-    private void initChildFragment(View groupView) {
+    /**
+     * 发送更新ExpandableListView列表的广播
+     */
+    private void sendRefreshExpandableListViewBroadcast(){
+        Intent intent=new Intent();
+        intent.setAction(Constant.ACTION_REFRESH_MATERIAL_CATEGORIES);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        Log.d(TAG, "sendRefreshExpandableListViewBroadcast: "+"发送更新expandableListView的广播");
+    }
+
+    /**
+     *注册EventBus事件
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    /**
+     * 注销EventBus事件
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 初始化MaterialFragment的界面
+     * @param view fragment_material的布局
+     */
+    private void initialView(View view) {
+        btn_material_categories_management= (Button) view.findViewById(R.id.btn_material_categories_management);
+        btn_material_categories_addMaterial= (Button) view.findViewById(R.id.btn_material_categories_addMaterial);
+        btn_material_delete_material= (Button) view.findViewById(R.id.btn_material_delete_material);
+        btn_material_delete_material.setEnabled(false);
+    }
+
+    /**
+     * 获取根布局
+     * @return 返回子fragment的根布局，也就是MaterialFragment的布局
+     */
+    private View getGroupView(){
+        return groupView;
+    }
+
+    /**
+     * 初始化子Fragment
+     * @param groupView 传入的参数为父Fragment的布局
+     */
+    private void initialChildFragment(View groupView) {
 
         //判断groupView中是否能找到子fragment的布局
 
         //如果在布局中找到material_categories_fragment_container,将materialCategoriesFragment动态添加到布局中
-        if (groupView.findViewById(R.id.material_categories_fragment_container)!=null){
+        if (groupView.findViewById(R.id.empty_material_fragment_container)!=null){
             Fragment fragment=getChildFragmentManager().findFragmentByTag(MATERIAL_CATEGORIES_FRAGMENT_TAG);
             if (fragment==null){
                 Log.d(TAG, "onCreateView: add new fragment: "+MATERIAL_CATEGORIES_FRAGMENT_TAG);
                 MaterialCategoriesFragment materialCategoriesFragment=new MaterialCategoriesFragment();
                 FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.material_categories_fragment_container, materialCategoriesFragment,MATERIAL_CATEGORIES_FRAGMENT_TAG);
+                fragmentTransaction.add(R.id.empty_material_fragment_container, materialCategoriesFragment,MATERIAL_CATEGORIES_FRAGMENT_TAG);
                 fragmentTransaction.commit();
             }else {
                 Log.d(TAG, "onCreateView: fragment: "+MATERIAL_CATEGORIES_FRAGMENT_TAG+" already existed,no need to add it again.");
@@ -157,102 +224,68 @@ public class MaterialFragment extends Fragment {
         if (groupView.findViewById(R.id.material_detail_fragment_container)!=null){
             Fragment fragment=getChildFragmentManager().findFragmentByTag(MATERIAL_DETAIL_FRAGMENT_TAG);
             if (fragment==null){
+
                 Log.d(TAG, "onCreateView: add new fragment: "+MATERIAL_DETAIL_FRAGMENT_TAG);
                 MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
+
                 FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
                 fragmentTransaction.add(R.id.material_detail_fragment_container,materialDetailFragment,MATERIAL_DETAIL_FRAGMENT_TAG);
                 fragmentTransaction.commit();
+
             }else {
                 Log.d(TAG, "onCreateView: fragment: "+MATERIAL_DETAIL_FRAGMENT_TAG+" already existed ,no need to add it again.");
             }
         }
     }
 
-
-    private Material initialMaterialFromDetail(Material material){
-
-        //material.setMaterialCategoriesId(et_material_properties_categories.getText().toString());
-        material.setName(et_material_properties_name.getText().toString());
-        material.setIngredient(et_material_properties_ingredient.getText().toString());
-        material.setHardness(et_material_properties_hardness.getText().toString());
-        material.setDensity(et_material_properties_density.getText().toString());
-        material.setThermalConductivity(et_material_properties_thermalConductivity.getText().toString());
-        material.setSpecificHeatCapacity(et_material_properties_specificHeatCapacity.getText().toString());
-        material.setYoungsModulus(et_material_properties_youngsModulus.getText().toString());
-        material.setImpactStrength(et_material_properties_impactStrength.getText().toString());
-        material.setExtension(et_material_properties_extension.getText().toString());
-        material.setAreaReduction(et_material_properties_areaReduction.getText().toString());
-        material.setConductiveCoefficient(et_material_properties_conductiveCoefficient.getText().toString());
-        material.setCondition(et_material_properties_condition.getText().toString());
-        material.setTensileStrength(et_material_properties_tensileStrength.getText().toString());
-        material.setYieldStrength(et_material_properties_yieldStrength.getText().toString());
-        material.setShearStrength(et_material_properties_shearStrength.getText().toString());
-        material.setHeatTreatment(et_material_properties_heatTreatment.getText().toString());
-        material.setLowMeltingPoint(et_material_properties_lowMeltingPoint.getText().toString());
-        material.setHighMeltingPoint(et_material_properties_highMeltingPoint.getText().toString());
-        material.setThermalExpansionCoefficient(et_material_properties_thermalExpansionCoefficient.getText().toString());
-        material.setStandard(cb_material_standards_AISI.getText().toString());
-        return material;
-    }
-    private void initialMaterialDetailView(View view) {
-
-        mExpandableListView= (ExpandableListView)view.findViewById(R.id.elv_material_categories);
-        et_material_properties_name= (EditText) view.findViewById(R.id.et_material_detail_properties_name);
-//        et_material_properties_categories= (EditText) view.findViewById(R.id.et_material_detail_properties_categories);
-        et_material_properties_ingredient= (EditText) view.findViewById(R.id.et_material_detail_properties_ingredient);
-        et_material_properties_hardness= (EditText) view.findViewById(R.id.et_material_detail_properties_hardness);
-        et_material_properties_density= (EditText) view.findViewById(R.id.et_material_detail_properties_density);
-        et_material_properties_thermalConductivity= (EditText) view.findViewById(R.id.et_material_detail_properties_thermalConductivity);
-        et_material_properties_specificHeatCapacity= (EditText) view.findViewById(R.id.et_material_detail_properties_specificHeatCapacity);
-        et_material_properties_youngsModulus= (EditText) view.findViewById(R.id.et_material_detail_properties_youngsModulus);
-        et_material_properties_impactStrength= (EditText) view.findViewById(R.id.et_material_detail_properties_impactStrength);
-        et_material_properties_extension= (EditText) view.findViewById(R.id.et_material_detail_properties_extension);
-        et_material_properties_areaReduction= (EditText) view.findViewById(R.id.et_material_detail_properties_areaReduction);
-        et_material_properties_conductiveCoefficient= (EditText) view.findViewById(R.id.et_material_detail_properties_conductiveCoefficient);
-        et_material_properties_condition= (EditText) view.findViewById(R.id.et_material_detail_properties_condition);
-        et_material_properties_tensileStrength= (EditText) view.findViewById(R.id.et_material_detail_properties_tensileStrength);
-        et_material_properties_yieldStrength= (EditText) view.findViewById(R.id.et_material_detail_properties_yieldStrength);
-        et_material_properties_shearStrength= (EditText) view.findViewById(R.id.et_material_detail_properties_shearStrength);
-        et_material_properties_heatTreatment= (EditText) view.findViewById(R.id.et_material_detail_properties_heatTreatment);
-        et_material_properties_lowMeltingPoint= (EditText) view.findViewById(R.id.et_material_detail_properties_lowMeltingPoint);
-        et_material_properties_highMeltingPoint= (EditText) view.findViewById(R.id.et_material_detail_properties_highMeltingPoint);
-        et_material_properties_thermalExpansionCoefficient= (EditText) view.findViewById(R.id.et_material_detail_properties_thermalExpansionCoefficient);
-
-        sp_material_coefficientParameters_forceModel= (Spinner) view.findViewById(R.id.sp_material_detail_coefficientParameters_forceModel);
-        et_material_coefficientParameters_Kte= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Kte);
-        et_material_coefficientParameters_Kre= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Kre);
-        et_material_coefficientParameters_Kae= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Kae);
-        et_material_coefficientParameters_Ktc= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Ktc);
-        et_material_coefficientParameters_Krc= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Krc);
-        et_material_coefficientParameters_Kac= (EditText) view.findViewById(R.id.et_material_detail_coefficientParameters_Kac);
-
-        et_material_limits_minChipThickness= (EditText) view.findViewById(R.id.et_material_detail_limits_minChipThickness);
-        et_material_limits_maxChipThickness= (EditText) view.findViewById(R.id.et_material_detail_limits_maxChipThickness);
-        et_material_limits_minCuttingSpeed= (EditText) view.findViewById(R.id.et_material_detail_limits_minCuttingSpeed);
-        et_material_limits_maxCuttingSpeed= (EditText) view.findViewById(R.id.et_material_detail_limits_maxCuttingSpeed);
-        et_material_limits_minRakeAngle= (EditText) view.findViewById(R.id.et_material_detail_limits_minRakeAngle);
-        et_material_limits_maxRakeAngle= (EditText) view.findViewById(R.id.et_material_detail_limits_maxRakeAngle);
-
-        cb_material_standards_AFNOR= (CheckBox) view.findViewById(R.id.cb_material_standards_AFNOR);
-        cb_material_standards_AISI= (CheckBox) view.findViewById(R.id.cb_material_standards_AISI);
-        cb_material_standards_BS= (CheckBox) view.findViewById(R.id.cb_material_standards_BS);
-        cb_material_standards_CMC= (CheckBox) view.findViewById(R.id.cb_material_standards_CMC);
-        cb_material_standards_DIN_nr= (CheckBox) view.findViewById(R.id.cb_material_standards_DIN_nr);
-        cb_material_standards_EN= (CheckBox) view.findViewById(R.id.cb_material_standards_EN);
-        cb_material_standards_JIS= (CheckBox) view.findViewById(R.id.cb_material_standards_JIS);
-        cb_material_standards_SAE= (CheckBox) view.findViewById(R.id.cb_material_standards_SAE);
-        cb_material_standards_SS= (CheckBox) view.findViewById(R.id.cb_material_standards_SS);
-        cb_material_standards_UNF= (CheckBox) view.findViewById(R.id.cb_material_standards_UNF);
-        cb_material_standards_UNI= (CheckBox) view.findViewById(R.id.cb_material_standards_UNI);
-        cb_material_standards_W_nr= (CheckBox) view.findViewById(R.id.cb_material_standards_W_nr);
-
-//        btn_material_add_userCategories= (Button) view.findViewById(R.id.btn_material_add_categories);
-//        btn_material_delete_userCategories= (Button) view.findViewById(R.id.btn_material_delete_categories);
-//        btn_material_add_userMaterial= (Button) view.findViewById(R.id.btn_material_add_userMaterial);
-//        btn_material_delete_userMaterial= (Button) view.findViewById(R.id.btn_material_delete_userMaterial);
-//        btn_material_commit_userMaterial= (Button) view.findViewById(R.id.btn_material_commit_userMaterial);
-//        btn_material_cancel_userMaterial= (Button) view.findViewById(R.id.btn_material_cancel_userMaterial);
+    /**
+     * ExpandableListView的子节点被选中时的函数
+     * @param materialId 所选中材料的Id
+     */
+    @Override
+    public void onExpandableListViewChildSelect(Long materialId) {
+        View rootView=getGroupView();
+        MaterialDetailFragment materialDetailFragment= (MaterialDetailFragment) getChildFragmentManager().findFragmentByTag(MATERIAL_DETAIL_FRAGMENT_TAG);
+        if (rootView.findViewById(R.id.material_detail_fragment_container)!=null){
+            if (materialDetailFragment==null){
+                materialDetailFragment=new MaterialDetailFragment();
+                FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.material_detail_fragment_container,materialDetailFragment,MATERIAL_DETAIL_FRAGMENT_TAG);
+                fragmentTransaction.commit();
+            }
+        }else {
+            if (materialDetailFragment==null){
+                materialDetailFragment=new MaterialDetailFragment();
+                FragmentTransaction fragmentTransaction=getChildFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.empty_material_fragment_container,materialDetailFragment,MATERIAL_DETAIL_FRAGMENT_TAG);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        }
+        materialDetailFragment.setMaterialDetailData(materialId);
     }
 
+    /**
+     * 定义接受消息MessageVent后的执行方法，在顶部用注释@Subscribe(threadMode = ThreadMode.POSTING)来表示
+     * @param event 接受到的消息事件对象，其中含有数据
+     */
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(MessageEvent event){
+        //获取对象event的materialId
+        Long materialId=event.materialId;
+        //本类成员变量赋值
+        this.materialId=materialId;
+        //MaterialDetailFragment中显示
+        onExpandableListViewChildSelect(materialId);
+        //设置btn_material_delete_material可点击
+        btn_material_delete_material.setEnabled(true);
+    }
 
+    /**
+     * 获取材料的materialId
+     * @return materialId
+     */
+    public Long getMaterialId() {
+        return materialId;
+    }
 }

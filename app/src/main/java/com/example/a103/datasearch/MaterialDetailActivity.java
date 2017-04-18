@@ -6,9 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,6 +21,7 @@ import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.CustomTitleBar;
 import com.example.a103.datasearch.utils.DatabaseApplication;
 
+
 /**
  * 该Activity类用于添加具体的材料
  */
@@ -31,13 +30,15 @@ public class MaterialDetailActivity extends AppCompatActivity {
     CustomTitleBar material_detail_customTitleBar;       //标题栏
     LinearLayout ll_material_detail_fragment_container; //MaterialDetailFragment的容器
     private static final String TAG = "MaterialDetailActivity";
-//    private DaoSession daoSession = DatabaseApplication.getDaoSession();
-    MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
+    MaterialDetailFragment materialDetailFragment=MaterialDetailFragment.getNewInstance(null);
 
-    //创建Material,MaterialCuttingLimits,CoefficientParameters实例
-    Material material = new Material();
-    MaterialCuttingLimits mMaterialCuttingLimits=new MaterialCuttingLimits();
-    CoefficientParameters mCoefficientParameters=new CoefficientParameters();
+    /**
+     * 创建Material的材料切削力系数外键coefficientParametersId,材料切削限制外键materialCuttingLimitsId
+     * 创建MaterialCuttingLimits，CoefficientParameters所属的材料的外键materialId
+     */
+    Long materialId;
+    Long materialCuttingLimitsId;
+    Long coefficientParametersId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,8 @@ public class MaterialDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_material_detail);
 
         initialView();
-        addFragmentToActivity();
-        setCustomTitleBarClickListener();
+        addFragmentToActivity(materialDetailFragment);
+        setOnCustomTitleBarClickListener();
         Log.d(TAG, "onCreate: "+"successfully execution.");
     }
 
@@ -61,7 +62,10 @@ public class MaterialDetailActivity extends AppCompatActivity {
     /**
      * 加载MaterialDetailFragment到MaterialDetailActivity.
      */
-    private void addFragmentToActivity() {
+    private void addFragmentToActivity(MaterialDetailFragment materialDetailFragment) {
+        if (materialDetailFragment==null){
+            throw new IllegalArgumentException("参数materialDetailFragment为null.");
+        }
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction transaction=fragmentManager.beginTransaction();
 
@@ -73,7 +77,7 @@ public class MaterialDetailActivity extends AppCompatActivity {
     /**
      * 设置标题栏左边按钮和右边按钮的点击监听函数
      */
-    private void setCustomTitleBarClickListener() {
+    private void setOnCustomTitleBarClickListener() {
         //设置左边按钮"取消"的监听函数
         material_detail_customTitleBar.setTitleBarLeftBtnClickListener(new View.OnClickListener() {
             //点击，结束当前活动
@@ -91,16 +95,8 @@ public class MaterialDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MaterialDetailActivity.this,"点击了'完成'按钮.",Toast.LENGTH_SHORT).show();
-                // TODO: 2017/4/9 添加材料到数据的逻辑，并更新MaterialCategoriesFragment中ExpandableListView列表
-
-                Log.d(TAG, "setCustomTitleBarClickListener: "+"onClick: "+"name:"+
-                        materialDetailFragment.getEt_material_properties_name().getText().toString());
+                //添加材料到数据的逻辑，并更新MaterialCategoriesFragment中ExpandableListView列表
                 createMaterialDetail();
-                DaoSession daoSession=DatabaseApplication.getDaoSession();
-                Log.d(TAG, "onClick: "+"material categories "+
-                        daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId()).getName()+
-                        " related material list size: "+
-                        daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId()).getMaterials().size());
 
                 //发送更新ExpandableListView的广播
                 sendRefreshExpandableListViewBroadcast();
@@ -124,18 +120,45 @@ public class MaterialDetailActivity extends AppCompatActivity {
      * 创建材料细节的函数，函数内部调用了createMaterial(),createMaterialCuttingLimits(),createCoefficientParameters()
      */
     private void createMaterialDetail() {
-        createMaterial();
-        createMaterialCuttingLimits();
-        createCoefficientParameters();
+        //创建一个新的材料对象,新的切削力系数对象，新的切削极限对象
+        Material material = new Material();
+        CoefficientParameters mCoefficientParameters=new CoefficientParameters();
+        MaterialCuttingLimits mMaterialCuttingLimits=new MaterialCuttingLimits();
+
+        createMaterial(material);
+        createMaterialCuttingLimits(mMaterialCuttingLimits);
+        createCoefficientParameters(mCoefficientParameters);
+
+        //将material自动生成的默认外键改为如下对应的coefficientParametersId和materialCuttingLimitsId
+        Log.d(TAG, "createMaterialDetail: coeffId="+material.getCoefficientParametersId());
+        Log.d(TAG, "createMaterialDetail: cuttingId="+material.getMaterialCuttingLimitsId());
+        material.setCoefficientParametersId(coefficientParametersId);
+        Log.d(TAG, "createMaterialDetail: coefficientParametersId="+coefficientParametersId);
+        material.setMaterialCuttingLimitsId(materialCuttingLimitsId);
+        Log.d(TAG, "createMaterialDetail: materialCuttingLimitsId="+materialCuttingLimitsId);
+
         DaoSession daoSession=DatabaseApplication.getDaoSession();
-        MaterialCategories materialCategoriesList=daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId());
-        Log.d(TAG, "createMaterialDetail: materialCategoriesList: "+materialCategoriesList.getMaterials());
+        //重新设置material的外键id后，需要更新material，需要再次调用save(material)方法，(主键key已存在的情况)在save内部调用update()更新
+        daoSession.getMaterialDao().save(material);
+
+        Log.d(TAG, "createMaterialDetail: "+"create material: "+daoSession.getMaterialDao().load(materialId).getName());
+        MaterialCategories materialCategories=daoSession.getMaterialCategoriesDao().load(
+                daoSession.getMaterialDao().load(materialId).getMaterialCategoriesId());
+        //注意，创建了新的material后，在调用materialCategories的getMaterials():List<MaterialCategories>之前一定要调用resetMaterials();
+        //才能在下一次查询时得到更新的结果
+        materialCategories.resetMaterials();
+
+        //输出日志：与新建的材料相关联的materialCategory,coefficientParameters,materialCuttingLimits
+        Log.d(TAG, "createMaterialDetail: "+"create material: "+material.getName()+
+                ", related materialCategory: "+ materialCategories.getName()+
+                ", related coefficientParameters: "+ material.getCoefficientParameters().getForceModel()+
+                ", materialCuttingLimits: "+ "minChipThickness: "+material.getMaterialCuttingLimits().getMinChipThickness());
     }
 
     /**
      * 创建coefficientParameter并向数据库中添加
      */
-    private void createCoefficientParameters() {
+    private void createCoefficientParameters(CoefficientParameters mCoefficientParameters) {
         String forceModel=materialDetailFragment.getSp_material_coefficientParameters_forceModel().getSelectedItem().toString();
         String Kte=materialDetailFragment.getEt_material_coefficientParameters_Kte().getText().toString();
         String Kre=materialDetailFragment.getEt_material_coefficientParameters_Kre().getText().toString();
@@ -143,7 +166,6 @@ public class MaterialDetailActivity extends AppCompatActivity {
         String Ktc=materialDetailFragment.getEt_material_coefficientParameters_Ktc().getText().toString();
         String Krc=materialDetailFragment.getEt_material_coefficientParameters_Krc().getText().toString();
         String Kac=materialDetailFragment.getEt_material_coefficientParameters_Kac().getText().toString();
-        Long materialId=material.getId();
 
         //设置CoefficientParameters的成员属性
         mCoefficientParameters.setMaterialId(materialId);
@@ -157,25 +179,30 @@ public class MaterialDetailActivity extends AppCompatActivity {
 
         DaoSession daoSession=DatabaseApplication.getDaoSession();
         daoSession.getCoefficientParametersDao().save(mCoefficientParameters);
+        coefficientParametersId=mCoefficientParameters.getId();
+
         if (daoSession.getCoefficientParametersDao().hasKey(mCoefficientParameters)){
-            Log.d(TAG, "createCoefficientParameters: "+
+            Log.d(TAG, "createCoefficientParameters: forceModel: "+
                     mCoefficientParameters.getForceModel()+" successful.");
+
+            Log.d(TAG, "createCoefficientParameters: related material: "+
+                    mCoefficientParameters.getMaterial().getName());
+        }else {
+            Log.d(TAG, "createCoefficientParameters: failed to save"+"forceModel: "+
+                    mCoefficientParameters.getForceModel());
         }
-        Log.d(TAG, "createCoefficientParameters: related material: "+
-        mCoefficientParameters.getMaterial().getName());
     }
 
     /**
      * 创建材料切削限制MaterialCuttingLimits，并存入数据库表MATERIAL_CUTTING_LIMITS中
      */
-    private void createMaterialCuttingLimits() {
+    private void createMaterialCuttingLimits(MaterialCuttingLimits mMaterialCuttingLimits) {
         String minChipThickness=materialDetailFragment.getEt_material_limits_minChipThickness().getText().toString();
         String maxChipThickness=materialDetailFragment.getEt_material_limits_maxChipThickness().getText().toString();
         String minCuttingSpeed=materialDetailFragment.getEt_material_limits_minCuttingSpeed().getText().toString();
         String maxCuttingSpeed=materialDetailFragment.getEt_material_limits_maxCuttingSpeed().getText().toString();
         String minRakeAngle=materialDetailFragment.getEt_material_limits_minRakeAngle().getText().toString();
         String maxRakeAngle=materialDetailFragment.getEt_material_limits_maxRakeAngle().getText().toString();
-        Long materialId=material.getId();
 
         //设置MaterialCuttingLimits的属性
         mMaterialCuttingLimits.setMaterialId(materialId);
@@ -188,14 +215,27 @@ public class MaterialDetailActivity extends AppCompatActivity {
 
         DaoSession daoSession=DatabaseApplication.getDaoSession();
         daoSession.getMaterialCuttingLimitsDao().save(mMaterialCuttingLimits);
-        Log.d(TAG, "createMaterialCuttingLimits: "+mMaterialCuttingLimits.getId().toString()+" successful.");
-        Log.d(TAG, "createMaterialCuttingLimits: related material: "+mMaterialCuttingLimits.getMaterial().getName());
+        materialCuttingLimitsId=mMaterialCuttingLimits.getId();
+
+        if (daoSession.getMaterialCuttingLimitsDao().hasKey(mMaterialCuttingLimits)){
+            Log.d(TAG, "createMaterialCuttingLimits: "+
+                    "create MaterialCuttingLimits minChipThickness: "+
+                    mMaterialCuttingLimits.getMinChipThickness()+" successful.");
+            Log.d(TAG, "createMaterialCuttingLimits: related material: "+
+                    mMaterialCuttingLimits.getMaterial().getName());
+        }else {
+            Log.d(TAG, "createMaterialCuttingLimits: "+
+                    "failed to save MaterialCuttingLimits minChipThickness: "+
+                    mMaterialCuttingLimits.getMinChipThickness());
+        }
+
     }
 
     /**
      * 创建一个新材料，并存入数据库表MATERIAL中
      */
-    private void createMaterial() {
+    private void createMaterial(Material material) {
+
         String name=materialDetailFragment.getEt_material_properties_name().getText().toString();
         //根据Spinner选择的材料分类，设置该材料的外键materialCategoriesId为分类的Id
         Long materialCategoriesListId=materialDetailFragment.getSp_material_properties_categories().getSelectedItemId();
@@ -222,8 +262,6 @@ public class MaterialDetailActivity extends AppCompatActivity {
         //默认设置材料标准为AISI,后期可设置为一系列的标准集合List<String>
         String standard=materialDetailFragment.getCb_material_standards_AISI().getText().toString();
 
-        //创建一个新的材料
-
         material.setName(name); //设置名称
         material.setMaterialCategoriesId(materialCategoriesId);  //设置外键Id(MaterialCategoriesId)
         material.setIngredient(ingredient);
@@ -249,15 +287,18 @@ public class MaterialDetailActivity extends AppCompatActivity {
         DaoSession daoSession=DatabaseApplication.getDaoSession();
         //将新创建的材料存入材料属性表 MATERIAL中
         daoSession.getMaterialDao().save(material);
-        Log.d(TAG, "createMaterial: "+material.getName()+" successful.");
-        Log.d(TAG, "createMaterial: related material categories: "+
-                daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId()).getName());
-    }
 
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: execution successful.");
-        super.onDestroy();
+        //只有在存入数据库之后，才会生成默认的id值，这时才能获取
+        materialId=material.getId();
+
+        if (daoSession.getMaterialDao().hasKey(material)){
+            Log.d(TAG, "createMaterial: create material: "+material.getName()+" successful.");
+            Log.d(TAG, "createMaterial: related materialCategory: "+
+                    daoSession.getMaterialCategoriesDao().load(material.getMaterialCategoriesId()).getName());
+        }else {
+            Log.d(TAG, "createMaterial: "+"failed to save material: "+material.getName());
+        }
+
     }
 
     /**

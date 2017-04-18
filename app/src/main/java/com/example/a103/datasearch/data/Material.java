@@ -4,6 +4,11 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.dao.CoefficientParametersDao;
+import com.example.a103.datasearch.dao.MaterialCuttingLimitsDao;
+import com.example.a103.datasearch.dao.MaterialDao;
 
 /**
  * Created by zhengxiaohu on 2017/3/10.
@@ -14,7 +19,15 @@ public class Material {
     //材料属性
     @Id(autoincrement = true)
     private Long id;                                  //主键:本材料的id
-    private Long materialCategoriesId;              //外键:所属的材料分类的外键id
+    private Long materialCategoriesId;              //外键:所属的材料分类的外键id,设置为材料分类类别的主键
+
+    private Long materialCuttingLimitsId;           //材料的切削极限的外键id,应该设置为materialCuttingLimits的主键
+    @ToOne(joinProperty = "materialCuttingLimitsId")
+    private MaterialCuttingLimits materialCuttingLimits;
+
+    private Long coefficientParametersId;           //材料的切削力系数的外键id，应该设置为coefficientParametersId的主键
+    @ToOne(joinProperty = "coefficientParametersId")
+    private CoefficientParameters coefficientParameters;
 
     private String name;                              //材料名称
     private String ingredient;                       //成分
@@ -36,17 +49,28 @@ public class Material {
     private String highMeltingPoint;               //熔点(高)
     private String thermalExpansionCoefficient;  //热膨胀系数
     private String standard;                        //材料的标准
-    @Generated(hash = 757852714)
-    public Material(Long id, Long materialCategoriesId, String name,
-            String ingredient, String hardness, String density,
-            String thermalConductivity, String specificHeatCapacity,
-            String youngsModulus, String impactStrength, String extension,
-            String areaReduction, String conductiveCoefficient, String condition,
-            String tensileStrength, String yieldStrength, String shearStrength,
-            String heatTreatment, String lowMeltingPoint, String highMeltingPoint,
-            String thermalExpansionCoefficient, String standard) {
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 1051523183)
+    private transient MaterialDao myDao;
+    @Generated(hash = 453127503)
+    private transient Long materialCuttingLimits__resolvedKey;
+    @Generated(hash = 1771705392)
+    private transient Long coefficientParameters__resolvedKey;
+    @Generated(hash = 1579302597)
+    public Material(Long id, Long materialCategoriesId, Long materialCuttingLimitsId,
+            Long coefficientParametersId, String name, String ingredient, String hardness,
+            String density, String thermalConductivity, String specificHeatCapacity,
+            String youngsModulus, String impactStrength, String extension, String areaReduction,
+            String conductiveCoefficient, String condition, String tensileStrength,
+            String yieldStrength, String shearStrength, String heatTreatment, String lowMeltingPoint,
+            String highMeltingPoint, String thermalExpansionCoefficient, String standard) {
         this.id = id;
         this.materialCategoriesId = materialCategoriesId;
+        this.materialCuttingLimitsId = materialCuttingLimitsId;
+        this.coefficientParametersId = coefficientParametersId;
         this.name = name;
         this.ingredient = ingredient;
         this.hardness = hardness;
@@ -202,6 +226,115 @@ public class Material {
     }
     public void setStandard(String standard) {
         this.standard = standard;
+    }
+    public Long getMaterialCuttingLimitsId() {
+        return this.materialCuttingLimitsId;
+    }
+    public void setMaterialCuttingLimitsId(Long materialCuttingLimitsId) {
+        this.materialCuttingLimitsId = materialCuttingLimitsId;
+    }
+    public Long getCoefficientParametersId() {
+        return this.coefficientParametersId;
+    }
+    public void setCoefficientParametersId(Long coefficientParametersId) {
+        this.coefficientParametersId = coefficientParametersId;
+    }
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1873089014)
+    public MaterialCuttingLimits getMaterialCuttingLimits() {
+        Long __key = this.materialCuttingLimitsId;
+        if (materialCuttingLimits__resolvedKey == null
+                || !materialCuttingLimits__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            MaterialCuttingLimitsDao targetDao = daoSession.getMaterialCuttingLimitsDao();
+            MaterialCuttingLimits materialCuttingLimitsNew = targetDao.load(__key);
+            synchronized (this) {
+                materialCuttingLimits = materialCuttingLimitsNew;
+                materialCuttingLimits__resolvedKey = __key;
+            }
+        }
+        return materialCuttingLimits;
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1049771851)
+    public void setMaterialCuttingLimits(MaterialCuttingLimits materialCuttingLimits) {
+        synchronized (this) {
+            this.materialCuttingLimits = materialCuttingLimits;
+            materialCuttingLimitsId = materialCuttingLimits == null ? null
+                    : materialCuttingLimits.getId();
+            materialCuttingLimits__resolvedKey = materialCuttingLimitsId;
+        }
+    }
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 934103011)
+    public CoefficientParameters getCoefficientParameters() {
+        Long __key = this.coefficientParametersId;
+        if (coefficientParameters__resolvedKey == null
+                || !coefficientParameters__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            CoefficientParametersDao targetDao = daoSession.getCoefficientParametersDao();
+            CoefficientParameters coefficientParametersNew = targetDao.load(__key);
+            synchronized (this) {
+                coefficientParameters = coefficientParametersNew;
+                coefficientParameters__resolvedKey = __key;
+            }
+        }
+        return coefficientParameters;
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1385885029)
+    public void setCoefficientParameters(CoefficientParameters coefficientParameters) {
+        synchronized (this) {
+            this.coefficientParameters = coefficientParameters;
+            coefficientParametersId = coefficientParameters == null ? null
+                    : coefficientParameters.getId();
+            coefficientParameters__resolvedKey = coefficientParametersId;
+        }
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 76160504)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getMaterialDao() : null;
     }
 
 }

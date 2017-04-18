@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.a103.datasearch.fragment.MaterialDetailFragment;
 
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  */
 
 public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
+
 
     private Context mContext;
     private List<String> mList;
@@ -41,7 +45,7 @@ public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
         }
         TextView tv_material_detail_sp_getDropDownView_categoriesName= (TextView) convertView.
                 findViewById(R.id.tv_material_detail_sp_getDropDownView_categoriesName);
-        tv_material_detail_sp_getDropDownView_categoriesName.setText(getItem(position).toString());
+        tv_material_detail_sp_getDropDownView_categoriesName.setText(getItem(position));
         return convertView;
     }
 
@@ -51,7 +55,7 @@ public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public String getItem(int position) {
         return mList.get(position);
     }
 
@@ -73,7 +77,7 @@ public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
         }
         TextView tv_material_detail_sp_getView_categoriesName= (TextView) convertView.
                 findViewById(R.id.tv_material_detail_sp_getView_categoriesName);
-        tv_material_detail_sp_getView_categoriesName.setText(getItem(position).toString());
+        tv_material_detail_sp_getView_categoriesName.setText(getItem(position));
         return convertView;
     }
 
@@ -91,4 +95,5 @@ public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
     public boolean isEmpty() {
         return (getCount()==0);
     }
+
 }

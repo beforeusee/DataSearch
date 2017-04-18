@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -13,26 +13,59 @@
         android:gravity="center"
         android:id="@+id/tv_material_title"/>
 
+    <TableRow
+        android:paddingBottom="5dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tr_material_categoriesManagement_add"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_material_categories_management"
+            android:text="分类管理"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_material_categories_addMaterial"
+            android:text="添加材料"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_material_delete_material"
+            android:text="删除"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    </TableRow>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="10dp"
         android:orientation="horizontal"
-        android:id="@+id/ll_material_management">
+        android:id="@+id/ll_material_management"
+        android:layout_above="@id/tr_material_categoriesManagement_add"
+        android:layout_below="@id/tv_material_title">
 
         <FrameLayout
-            android:id="@+id/material_categories_fragment_container"
+            android:id="@+id/empty_material_fragment_container"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="match_parent">
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/material_detail_fragment_container"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_height="match_parent">
         </FrameLayout>
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -46,38 +46,11 @@
         android:text="分类"
         android:textSize="20sp"/>
 
-    <TableRow
-        android:paddingBottom="5dp"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tr_material_categoriesManagement_add"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/btn_material_categories_management"
-            android:text="分类管理"
-            android:textSize="20sp"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn_material_categories_addMaterial"
-            android:text="添加材料"
-            android:textSize="20sp"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-    </TableRow>
-
     <ExpandableListView
         android:id="@+id/elv_material_categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_material_categories"
-        android:layout_above="@id/tr_material_categoriesManagement_add"
         android:layout_margin="5dp"
         android:scrollbars="horizontal|vertical"
         android:touchscreenBlocksFocus="true">
