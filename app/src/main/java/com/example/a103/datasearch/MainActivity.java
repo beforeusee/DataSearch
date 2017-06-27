@@ -47,15 +47,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mTabLayout= (TabLayout) findViewById(R.id.tab_main);
 
         initData();
-        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,MainActivity.this,mFragments,mTabIcons);
+        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,mFragments);
         mViewPager.setAdapter(mAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
         //initViews();
-
-        Log.d(TAG, "onCreate: 执行mAdapter创建");
-
 
         //必须在mTabLayout与mViewPager绑定后，这样才知道mTabLayout中Tab的数量，mTabLayout相当于容器
         for (int i=0;i<mTabLayout.getTabCount();i++){
@@ -64,12 +61,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mViewPager.setCurrentItem(0);
         mTabLayout.addOnTabSelectedListener(this);  //添加tab标签页选择侦听事件
 
+        Log.d(TAG, "onCreate: 执行mAdapter创建");
     }
 
     private void initViews() {
         //使用适配器mAdapter将ViewPager与Fragment绑定在一起
         mViewPager= (ViewPager) findViewById(R.id.vp_main);
-        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,MainActivity.this,mFragments,mTabIcons);
+        mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,mFragments);
         mViewPager.setAdapter(mAdapter);
 
 

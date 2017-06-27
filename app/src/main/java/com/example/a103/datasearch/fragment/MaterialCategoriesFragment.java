@@ -1,6 +1,5 @@
 package com.example.a103.datasearch.fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,21 +7,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.a103.datasearch.ExpandableListViewAdapter;
-import com.example.a103.datasearch.MainActivity;
-import com.example.a103.datasearch.MaterialCategoriesManagementActivity;
 import com.example.a103.datasearch.MaterialDetailActivity;
 import com.example.a103.datasearch.MessageEvent;
 import com.example.a103.datasearch.R;
@@ -35,9 +29,7 @@ import com.example.a103.datasearch.utils.DatabaseApplication;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhengxiaohu on 2017/3/26.
@@ -143,7 +135,8 @@ public class MaterialCategoriesFragment extends Fragment {
                 Material material=materialCategories.getMaterials().get(childPosition);
                 Long materialId=material.getId();
 
-                EventBus.getDefault().post(new MessageEvent(materialId));
+//                EventBus.getDefault().post(new MessageEvent(materialId));
+                MaterialDetailActivity.actionStart(getContext(),materialId);
                 return true;
             }
         });

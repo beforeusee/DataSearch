@@ -1,9 +1,7 @@
 package com.example.a103.datasearch.fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,19 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.a103.datasearch.MaterialAddActivity;
 import com.example.a103.datasearch.MaterialCategoriesManagementActivity;
 import com.example.a103.datasearch.MaterialDetailActivity;
 import com.example.a103.datasearch.MessageEvent;
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.CoefficientParameters;
 import com.example.a103.datasearch.data.Material;
-import com.example.a103.datasearch.ExpandableListViewAdapter;
 import com.example.a103.datasearch.R;
 import com.example.a103.datasearch.data.MaterialCategories;
 import com.example.a103.datasearch.data.MaterialCuttingLimits;
@@ -55,7 +49,7 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
     //分类管理，添加材料，删除材料控件声明
 
     Button btn_material_categories_management;         //分类管理
-    Button btn_material_categories_addMaterial;        //添加材料
+    Button btn_material_add_material;        //添加材料
     Button btn_material_delete_material;   //删除材料
 
     public static MaterialFragment newInstance(String s){
@@ -84,12 +78,13 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
         });
 
         /**
-         * 设置"添加材料"的点击监听事件，启动{@link MaterialDetailActivity}
+         * 设置"添加材料"的点击监听事件，启动{@link MaterialAddActivity}
          */
-        btn_material_categories_addMaterial.setOnClickListener(new View.OnClickListener() {
+        btn_material_add_material.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MaterialDetailActivity.actionStart(getContext());
+                Log.d(TAG, "onClick: addMaterial executed");
+                MaterialAddActivity.actionStart(getContext());
             }
         });
 
@@ -186,7 +181,7 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
      */
     private void initialView(View view) {
         btn_material_categories_management= (Button) view.findViewById(R.id.btn_material_categories_management);
-        btn_material_categories_addMaterial= (Button) view.findViewById(R.id.btn_material_categories_addMaterial);
+        btn_material_add_material = (Button) view.findViewById(R.id.btn_material_add_material);
         btn_material_delete_material= (Button) view.findViewById(R.id.btn_material_delete_material);
         btn_material_delete_material.setEnabled(false);
     }
@@ -220,6 +215,7 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
                 Log.d(TAG, "onCreateView: fragment: "+MATERIAL_CATEGORIES_FRAGMENT_TAG+" already existed,no need to add it again.");
             }
         }
+        /*
         //布局中含material_detail_fragment_container，将materialDetailFragment动态添加到布局中，加载的是(layout-sw600dp)fragment_material
         if (groupView.findViewById(R.id.material_detail_fragment_container)!=null){
             Fragment fragment=getChildFragmentManager().findFragmentByTag(MATERIAL_DETAIL_FRAGMENT_TAG);
@@ -235,7 +231,7 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
             }else {
                 Log.d(TAG, "onCreateView: fragment: "+MATERIAL_DETAIL_FRAGMENT_TAG+" already existed ,no need to add it again.");
             }
-        }
+        }*/
     }
 
     /**
@@ -244,7 +240,7 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
      */
     @Override
     public void onExpandableListViewChildSelect(Long materialId) {
-        View rootView=getGroupView();
+        /*View rootView=getGroupView();
         MaterialDetailFragment materialDetailFragment= (MaterialDetailFragment) getChildFragmentManager().findFragmentByTag(MATERIAL_DETAIL_FRAGMENT_TAG);
         if (rootView.findViewById(R.id.material_detail_fragment_container)!=null){
             if (materialDetailFragment==null){
@@ -261,8 +257,13 @@ public class MaterialFragment extends Fragment implements MaterialCategoriesFrag
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
-        }
+        }*/
+        /*
+        MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
         materialDetailFragment.setMaterialDetailData(materialId);
+        MaterialDetailActivity.actionStart(getContext());
+        */
+        Log.d(TAG, "onExpandableListViewChildSelect: executed");
     }
 
     /**

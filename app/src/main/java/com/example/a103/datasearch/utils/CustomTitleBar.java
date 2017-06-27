@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -75,6 +76,9 @@ public class CustomTitleBar extends RelativeLayout {
                 //获取标题显示颜色
                 int titleTextColor=attributes.getColor(R.styleable.CustomTitleBar_left_button_text_color,Color.WHITE);
                 titleBarTitle.setTextColor(titleTextColor);
+                //获取标题文字大小
+                int titleTextSize=attributes.getDimensionPixelSize(R.styleable.CustomTitleBar_title_size,20);
+                titleBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize);
             }
 
             //处理右边按钮

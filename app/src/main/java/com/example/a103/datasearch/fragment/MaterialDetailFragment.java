@@ -25,6 +25,7 @@ import com.example.a103.datasearch.data.CoefficientParameters;
 import com.example.a103.datasearch.data.Material;
 import com.example.a103.datasearch.data.MaterialCategories;
 import com.example.a103.datasearch.data.MaterialCuttingLimits;
+import com.example.a103.datasearch.data.MaterialDetail;
 import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.CustomTitleBar;
 import com.example.a103.datasearch.utils.DatabaseApplication;
@@ -100,6 +101,7 @@ public class MaterialDetailFragment extends Fragment {
     private DaoSession daoSession= DatabaseApplication.getDaoSession();
     private BroadcastReceiver mRefreshMaterialCategoriesSpinnerBroadcastReceiver;
     private Long materialId;
+    private MaterialDetail mMaterialDetail;
 
     /**
      * 获取{@link MaterialDetailFragment 实例}
@@ -120,6 +122,10 @@ public class MaterialDetailFragment extends Fragment {
         return materialDetailFragment;
     }
 
+    public MaterialDetailFragment(){
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,6 +142,16 @@ public class MaterialDetailFragment extends Fragment {
         sp_material_coefficientParameters_forceModel.setAdapter(forceModelSpannerAdapter);
 
         refreshMaterialCategoriesSpinnerBroadcastReceiver();
+
+        //如果有materialId，则显示该材料的具体属性
+        Bundle bundle=getArguments();
+        if (bundle!=null){
+            Long materialId=bundle.getLong(Constant.MATERIAL_ID);
+            Log.d(TAG, "onCreateView: materialId="+materialId);
+            setMaterialDetailData(materialId);
+        }
+
+        Log.d(TAG, "onCreateView: executed");
         return view;
     }
 
@@ -679,7 +695,7 @@ public class MaterialDetailFragment extends Fragment {
         Log.d(TAG, "setMaterialDetailData: materialCuttingLimits related material: "+materialCuttingLimits.getMaterial().getName());
         CoefficientParameters coefficientParameters=material.getCoefficientParameters();
         Log.d(TAG, "setMaterialDetailData: coefficientParameters related material: "+coefficientParameters.getMaterial().getName());
-
+        Log.d(TAG, "setMaterialDetailData: et_material_properties_name=null?"+(et_material_properties_name==null));
         et_material_properties_name.setText(material.getName());
 
         int categoriesIndex=getMaterialCategoriesNameList().indexOf(materialCategories.getName());
@@ -807,370 +823,68 @@ public class MaterialDetailFragment extends Fragment {
     }
 
 
+    public MaterialDetail getMaterialDetail() {
+        mMaterialDetail=new MaterialDetail();
+        initMaterialDetail(mMaterialDetail);
+        return mMaterialDetail;
+    }
+/*
+    public void setMaterialDetail(MaterialDetail materialDetail) {
+        mMaterialDetail = materialDetail;
+    }*/
 
     /**
      * 由于{@link MaterialDetailFragment}要被复用，因此对外提供访问和设置成员变量的方法
      *
      */
 
-    public EditText getEt_material_properties_name() {
-        return et_material_properties_name;
+    private void initMaterialDetail(MaterialDetail materialDetail){
+        Material material=new Material();
+        CoefficientParameters coefficientParameters=new CoefficientParameters();
+        MaterialCuttingLimits materialCuttingLimits=new MaterialCuttingLimits();
+        //Material
+        material.setName(et_material_properties_name.getText().toString());
+        Long materialCategoriesListId=sp_material_properties_categories.getSelectedItemId();
+        Long materialCategoriesId=getMaterialCategoriesList().get(Integer.parseInt(materialCategoriesListId.toString())).getId();
+        material.setMaterialCategoriesId(materialCategoriesId);
+        material.setIngredient(et_material_properties_ingredient.getText().toString());
+        material.setHardness(et_material_properties_hardness.getText().toString());
+        material.setDensity(et_material_properties_density.getText().toString());
+        material.setThermalConductivity(et_material_properties_thermalConductivity.getText().toString());
+        material.setSpecificHeatCapacity(et_material_properties_specificHeatCapacity.getText().toString());
+        material.setSpecificHeatCapacity(et_material_properties_specificHeatCapacity.getText().toString());
+        material.setYoungsModulus(et_material_properties_youngsModulus.getText().toString());
+        material.setImpactStrength(et_material_properties_impactStrength.getText().toString());
+        material.setExtension(et_material_properties_extension.getText().toString());
+        material.setAreaReduction(et_material_properties_areaReduction.getText().toString());
+        material.setConductiveCoefficient(et_material_properties_conductiveCoefficient.getText().toString());
+        material.setCondition(et_material_properties_condition.getText().toString());
+        material.setTensileStrength(et_material_properties_tensileStrength.getText().toString());
+        material.setYieldStrength(et_material_properties_yieldStrength.getText().toString());
+        material.setShearStrength(et_material_properties_shearStrength.getText().toString());
+        material.setHeatTreatment(et_material_properties_heatTreatment.getText().toString());
+        material.setLowMeltingPoint(et_material_properties_lowMeltingPoint.getText().toString());
+        material.setHighMeltingPoint(et_material_properties_highMeltingPoint.getText().toString());
+        material.setThermalExpansionCoefficient(et_material_properties_thermalExpansionCoefficient.getText().toString());
+        material.setStandard(cb_material_standards_AISI.getText().toString());
+
+        coefficientParameters.setForceModel(sp_material_coefficientParameters_forceModel.getSelectedItem().toString());
+        coefficientParameters.setKte(et_material_coefficientParameters_Kte.getText().toString());
+        coefficientParameters.setKre(et_material_coefficientParameters_Kre.getText().toString());
+        coefficientParameters.setKae(et_material_coefficientParameters_Kae.getText().toString());
+        coefficientParameters.setKtc(et_material_coefficientParameters_Ktc.getText().toString());
+        coefficientParameters.setKac(et_material_coefficientParameters_Kac.getText().toString());
+
+        materialCuttingLimits.setMinChipThickness(et_material_limits_minChipThickness.getText().toString());
+        materialCuttingLimits.setMaxChipThickness(et_material_limits_maxChipThickness.getText().toString());
+        materialCuttingLimits.setMinCuttingSpeed(et_material_limits_minCuttingSpeed.getText().toString());
+        materialCuttingLimits.setMaxCuttingSpeed(et_material_limits_maxCuttingSpeed.getText().toString());
+        materialCuttingLimits.setMinRakeAngle(et_material_limits_minRakeAngle.getText().toString());
+        materialCuttingLimits.setMaxRakeAngle(et_material_limits_maxRakeAngle.getText().toString());
+
+        //materialDetail
+        materialDetail.setMaterial(material);
+        materialDetail.setCoefficientParameters(coefficientParameters);
+        materialDetail.setMaterialCuttingLimits(materialCuttingLimits);
     }
-
-    public void setEt_material_properties_name(EditText et_material_properties_name) {
-        this.et_material_properties_name = et_material_properties_name;
-    }
-
-    public Spinner getSp_material_properties_categories() {
-        return sp_material_properties_categories;
-    }
-
-    public void setSp_material_properties_categories(Spinner sp_material_properties_categories) {
-        this.sp_material_properties_categories = sp_material_properties_categories;
-    }
-
-    public EditText getEt_material_properties_ingredient() {
-        return et_material_properties_ingredient;
-    }
-
-    public void setEt_material_properties_ingredient(EditText et_material_properties_ingredient) {
-        this.et_material_properties_ingredient = et_material_properties_ingredient;
-    }
-
-    public EditText getEt_material_properties_hardness() {
-        return et_material_properties_hardness;
-    }
-
-    public void setEt_material_properties_hardness(EditText et_material_properties_hardness) {
-        this.et_material_properties_hardness = et_material_properties_hardness;
-    }
-
-    public EditText getEt_material_properties_density() {
-        return et_material_properties_density;
-    }
-
-    public void setEt_material_properties_density(EditText et_material_properties_density) {
-        this.et_material_properties_density = et_material_properties_density;
-    }
-
-    public EditText getEt_material_properties_thermalConductivity() {
-        return et_material_properties_thermalConductivity;
-    }
-
-    public void setEt_material_properties_thermalConductivity(EditText et_material_properties_thermalConductivity) {
-        this.et_material_properties_thermalConductivity = et_material_properties_thermalConductivity;
-    }
-
-    public EditText getEt_material_properties_specificHeatCapacity() {
-        return et_material_properties_specificHeatCapacity;
-    }
-
-    public void setEt_material_properties_specificHeatCapacity(EditText et_material_properties_specificHeatCapacity) {
-        this.et_material_properties_specificHeatCapacity = et_material_properties_specificHeatCapacity;
-    }
-
-    public EditText getEt_material_properties_youngsModulus() {
-        return et_material_properties_youngsModulus;
-    }
-
-    public void setEt_material_properties_youngsModulus(EditText et_material_properties_youngsModulus) {
-        this.et_material_properties_youngsModulus = et_material_properties_youngsModulus;
-    }
-
-    public EditText getEt_material_properties_impactStrength() {
-        return et_material_properties_impactStrength;
-    }
-
-    public void setEt_material_properties_impactStrength(EditText et_material_properties_impactStrength) {
-        this.et_material_properties_impactStrength = et_material_properties_impactStrength;
-    }
-
-    public EditText getEt_material_properties_extension() {
-        return et_material_properties_extension;
-    }
-
-    public void setEt_material_properties_extension(EditText et_material_properties_extension) {
-        this.et_material_properties_extension = et_material_properties_extension;
-    }
-
-    public EditText getEt_material_properties_areaReduction() {
-        return et_material_properties_areaReduction;
-    }
-
-    public void setEt_material_properties_areaReduction(EditText et_material_properties_areaReduction) {
-        this.et_material_properties_areaReduction = et_material_properties_areaReduction;
-    }
-
-    public EditText getEt_material_properties_conductiveCoefficient() {
-        return et_material_properties_conductiveCoefficient;
-    }
-
-    public void setEt_material_properties_conductiveCoefficient(EditText et_material_properties_conductiveCoefficient) {
-        this.et_material_properties_conductiveCoefficient = et_material_properties_conductiveCoefficient;
-    }
-
-    public EditText getEt_material_properties_condition() {
-        return et_material_properties_condition;
-    }
-
-    public void setEt_material_properties_condition(EditText et_material_properties_condition) {
-        this.et_material_properties_condition = et_material_properties_condition;
-    }
-
-    public EditText getEt_material_properties_tensileStrength() {
-        return et_material_properties_tensileStrength;
-    }
-
-    public void setEt_material_properties_tensileStrength(EditText et_material_properties_tensileStrength) {
-        this.et_material_properties_tensileStrength = et_material_properties_tensileStrength;
-    }
-
-    public EditText getEt_material_properties_yieldStrength() {
-        return et_material_properties_yieldStrength;
-    }
-
-    public void setEt_material_properties_yieldStrength(EditText et_material_properties_yieldStrength) {
-        this.et_material_properties_yieldStrength = et_material_properties_yieldStrength;
-    }
-
-    public EditText getEt_material_properties_shearStrength() {
-        return et_material_properties_shearStrength;
-    }
-
-    public void setEt_material_properties_shearStrength(EditText et_material_properties_shearStrength) {
-        this.et_material_properties_shearStrength = et_material_properties_shearStrength;
-    }
-
-    public EditText getEt_material_properties_heatTreatment() {
-        return et_material_properties_heatTreatment;
-    }
-
-    public void setEt_material_properties_heatTreatment(EditText et_material_properties_heatTreatment) {
-        this.et_material_properties_heatTreatment = et_material_properties_heatTreatment;
-    }
-
-    public EditText getEt_material_properties_lowMeltingPoint() {
-        return et_material_properties_lowMeltingPoint;
-    }
-
-    public void setEt_material_properties_lowMeltingPoint(EditText et_material_properties_lowMeltingPoint) {
-        this.et_material_properties_lowMeltingPoint = et_material_properties_lowMeltingPoint;
-    }
-
-    public EditText getEt_material_properties_highMeltingPoint() {
-        return et_material_properties_highMeltingPoint;
-    }
-
-    public void setEt_material_properties_highMeltingPoint(EditText et_material_properties_highMeltingPoint) {
-        this.et_material_properties_highMeltingPoint = et_material_properties_highMeltingPoint;
-    }
-
-    public EditText getEt_material_properties_thermalExpansionCoefficient() {
-        return et_material_properties_thermalExpansionCoefficient;
-    }
-
-    public void setEt_material_properties_thermalExpansionCoefficient(EditText et_material_properties_thermalExpansionCoefficient) {
-        this.et_material_properties_thermalExpansionCoefficient = et_material_properties_thermalExpansionCoefficient;
-    }
-
-    public Spinner getSp_material_coefficientParameters_forceModel() {
-        return sp_material_coefficientParameters_forceModel;
-    }
-
-    public void setSp_material_coefficientParameters_forceModel(Spinner sp_material_coefficientParameters_forceModel) {
-        this.sp_material_coefficientParameters_forceModel = sp_material_coefficientParameters_forceModel;
-    }
-
-    public EditText getEt_material_coefficientParameters_Kte() {
-        return et_material_coefficientParameters_Kte;
-    }
-
-    public void setEt_material_coefficientParameters_Kte(EditText et_material_coefficientParameters_Kte) {
-        this.et_material_coefficientParameters_Kte = et_material_coefficientParameters_Kte;
-    }
-
-    public EditText getEt_material_coefficientParameters_Kre() {
-        return et_material_coefficientParameters_Kre;
-    }
-
-    public void setEt_material_coefficientParameters_Kre(EditText et_material_coefficientParameters_Kre) {
-        this.et_material_coefficientParameters_Kre = et_material_coefficientParameters_Kre;
-    }
-
-    public EditText getEt_material_coefficientParameters_Kae() {
-        return et_material_coefficientParameters_Kae;
-    }
-
-    public void setEt_material_coefficientParameters_Kae(EditText et_material_coefficientParameters_Kae) {
-        this.et_material_coefficientParameters_Kae = et_material_coefficientParameters_Kae;
-    }
-
-    public EditText getEt_material_coefficientParameters_Ktc() {
-        return et_material_coefficientParameters_Ktc;
-    }
-
-    public void setEt_material_coefficientParameters_Ktc(EditText et_material_coefficientParameters_Ktc) {
-        this.et_material_coefficientParameters_Ktc = et_material_coefficientParameters_Ktc;
-    }
-
-    public EditText getEt_material_coefficientParameters_Krc() {
-        return et_material_coefficientParameters_Krc;
-    }
-
-    public void setEt_material_coefficientParameters_Krc(EditText et_material_coefficientParameters_Krc) {
-        this.et_material_coefficientParameters_Krc = et_material_coefficientParameters_Krc;
-    }
-
-    public EditText getEt_material_coefficientParameters_Kac() {
-        return et_material_coefficientParameters_Kac;
-    }
-
-    public void setEt_material_coefficientParameters_Kac(EditText et_material_coefficientParameters_Kac) {
-        this.et_material_coefficientParameters_Kac = et_material_coefficientParameters_Kac;
-    }
-
-    public EditText getEt_material_limits_minChipThickness() {
-        return et_material_limits_minChipThickness;
-    }
-
-    public void setEt_material_limits_minChipThickness(EditText et_material_limits_minChipThickness) {
-        this.et_material_limits_minChipThickness = et_material_limits_minChipThickness;
-    }
-
-    public EditText getEt_material_limits_maxChipThickness() {
-        return et_material_limits_maxChipThickness;
-    }
-
-    public void setEt_material_limits_maxChipThickness(EditText et_material_limits_maxChipThickness) {
-        this.et_material_limits_maxChipThickness = et_material_limits_maxChipThickness;
-    }
-
-    public EditText getEt_material_limits_minCuttingSpeed() {
-        return et_material_limits_minCuttingSpeed;
-    }
-
-    public void setEt_material_limits_minCuttingSpeed(EditText et_material_limits_minCuttingSpeed) {
-        this.et_material_limits_minCuttingSpeed = et_material_limits_minCuttingSpeed;
-    }
-
-    public EditText getEt_material_limits_maxCuttingSpeed() {
-        return et_material_limits_maxCuttingSpeed;
-    }
-
-    public void setEt_material_limits_maxCuttingSpeed(EditText et_material_limits_maxCuttingSpeed) {
-        this.et_material_limits_maxCuttingSpeed = et_material_limits_maxCuttingSpeed;
-    }
-
-    public EditText getEt_material_limits_minRakeAngle() {
-        return et_material_limits_minRakeAngle;
-    }
-
-    public void setEt_material_limits_minRakeAngle(EditText et_material_limits_minRakeAngle) {
-        this.et_material_limits_minRakeAngle = et_material_limits_minRakeAngle;
-    }
-
-    public EditText getEt_material_limits_maxRakeAngle() {
-        return et_material_limits_maxRakeAngle;
-    }
-
-    public void setEt_material_limits_maxRakeAngle(EditText et_material_limits_maxRakeAngle) {
-        this.et_material_limits_maxRakeAngle = et_material_limits_maxRakeAngle;
-    }
-
-    public CheckBox getCb_material_standards_AFNOR() {
-        return cb_material_standards_AFNOR;
-    }
-
-    public void setCb_material_standards_AFNOR(CheckBox cb_material_standards_AFNOR) {
-        this.cb_material_standards_AFNOR = cb_material_standards_AFNOR;
-    }
-
-    public CheckBox getCb_material_standards_AISI() {
-        return cb_material_standards_AISI;
-    }
-
-    public void setCb_material_standards_AISI(CheckBox cb_material_standards_AISI) {
-        this.cb_material_standards_AISI = cb_material_standards_AISI;
-    }
-
-    public CheckBox getCb_material_standards_BS() {
-        return cb_material_standards_BS;
-    }
-
-    public void setCb_material_standards_BS(CheckBox cb_material_standards_BS) {
-        this.cb_material_standards_BS = cb_material_standards_BS;
-    }
-
-    public CheckBox getCb_material_standards_CMC() {
-        return cb_material_standards_CMC;
-    }
-
-    public void setCb_material_standards_CMC(CheckBox cb_material_standards_CMC) {
-        this.cb_material_standards_CMC = cb_material_standards_CMC;
-    }
-
-    public CheckBox getCb_material_standards_DIN_nr() {
-        return cb_material_standards_DIN_nr;
-    }
-
-    public void setCb_material_standards_DIN_nr(CheckBox cb_material_standards_DIN_nr) {
-        this.cb_material_standards_DIN_nr = cb_material_standards_DIN_nr;
-    }
-
-    public CheckBox getCb_material_standards_EN() {
-        return cb_material_standards_EN;
-    }
-
-    public void setCb_material_standards_EN(CheckBox cb_material_standards_EN) {
-        this.cb_material_standards_EN = cb_material_standards_EN;
-    }
-
-    public CheckBox getCb_material_standards_JIS() {
-        return cb_material_standards_JIS;
-    }
-
-    public void setCb_material_standards_JIS(CheckBox cb_material_standards_JIS) {
-        this.cb_material_standards_JIS = cb_material_standards_JIS;
-    }
-
-    public CheckBox getCb_material_standards_SAE() {
-        return cb_material_standards_SAE;
-    }
-
-    public void setCb_material_standards_SAE(CheckBox cb_material_standards_SAE) {
-        this.cb_material_standards_SAE = cb_material_standards_SAE;
-    }
-
-    public CheckBox getCb_material_standards_SS() {
-        return cb_material_standards_SS;
-    }
-
-    public void setCb_material_standards_SS(CheckBox cb_material_standards_SS) {
-        this.cb_material_standards_SS = cb_material_standards_SS;
-    }
-
-    public CheckBox getCb_material_standards_UNF() {
-        return cb_material_standards_UNF;
-    }
-
-    public void setCb_material_standards_UNF(CheckBox cb_material_standards_UNF) {
-        this.cb_material_standards_UNF = cb_material_standards_UNF;
-    }
-
-    public CheckBox getCb_material_standards_UNI() {
-        return cb_material_standards_UNI;
-    }
-
-    public void setCb_material_standards_UNI(CheckBox cb_material_standards_UNI) {
-        this.cb_material_standards_UNI = cb_material_standards_UNI;
-    }
-
-    public CheckBox getCb_material_standards_W_nr() {
-        return cb_material_standards_W_nr;
-    }
-
-    public void setCb_material_standards_W_nr(CheckBox cb_material_standards_W_nr) {
-        this.cb_material_standards_W_nr = cb_material_standards_W_nr;
-    }
-
 }

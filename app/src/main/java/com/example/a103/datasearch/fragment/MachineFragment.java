@@ -95,6 +95,16 @@ public class MachineFragment extends Fragment {
 //        String s=bundle.getString(Constant.ARGS);
 //        TextView textView= (TextView) view.findViewById(R.id.title_machine);
 //        textView.setText(s);
+        initView(view);
+        setMachineInfo();
+        return view;
+    }
+
+    /**
+     * 初始化机床信息控件
+     * @param view 参数view
+     */
+    private void initView(View view) {
         //机床信息控件
         tv_machine_name= (TextView) view.findViewById(R.id.tv_machine_name);
         tv_machine_type= (TextView) view.findViewById(R.id.tv_machine_type);
@@ -150,11 +160,11 @@ public class MachineFragment extends Fragment {
         //机床说明信息控件
         iv_machine_picture= (ImageView) view.findViewById(R.id.iv_machine_picture);
         tv_machine_introduction= (TextView) view.findViewById(R.id.tv_machine_introduction);
-
-        setMachineInfo();
-        return view;
     }
 
+    /**
+     * 设置机床信息
+     */
     private void setMachineInfo(){
         //机床信息设置
         tv_machine_name.setText("XH7132A五轴联动加工中心");
@@ -210,9 +220,9 @@ public class MachineFragment extends Fragment {
 
         //机床说明
         iv_machine_picture.setImageResource(R.drawable.machine_lunan_xh7132a_small);
-        tv_machine_introduction.setText("本机床是在X、Y、Z三轴立式加工中心基础上," +
-                "增加了A、C两个旋转轴而\n组成的五轴立式数控加工中心，其中X轴采用全闭环控制，" +
-                "Y、Z轴采用\n半闭环控制.本机床能适应从粗加工到精加工的加工要求，可完成五轴铣\n削等加工要求，" +
-                "适用于机械加工及模具制造领域.");
+        tv_machine_introduction.setText("本机床是在X、Y、Z三轴立式加工中心基础上增加了" +
+                "A、C两个旋转轴而组成的五轴立式数控加工中心，其中X轴采用全闭环控制,Y、Z" +
+                "轴采用半闭环控制.本机床能适应从粗加工到精加工的加工要求，可完成五轴铣削等" +
+                "加工要求适用于机械加工及模具制造领域.");
     }
 }

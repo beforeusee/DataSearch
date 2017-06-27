@@ -18,7 +18,7 @@
         android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tr_material_categoriesManagement_add"
+        android:id="@+id/tr_material_categories_management_add"
         android:layout_alignParentBottom="true">
 
         <Button
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"/>
 
         <Button
-            android:id="@+id/btn_material_categories_addMaterial"
+            android:id="@+id/btn_material_add_material"
             android:text="添加材料"
             android:textSize="20sp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
         android:paddingTop="10dp"
         android:orientation="horizontal"
         android:id="@+id/ll_material_management"
-        android:layout_above="@id/tr_material_categoriesManagement_add"
+        android:layout_above="@id/tr_material_categories_management_add"
         android:layout_below="@id/tv_material_title">
 
         <FrameLayout

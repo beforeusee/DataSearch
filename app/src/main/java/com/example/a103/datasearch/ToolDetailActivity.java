@@ -67,7 +67,6 @@ public class ToolDetailActivity extends AppCompatActivity {
     Button btn_tool_cancel;      //取消按钮
     Button btn_tool_edit;        //编辑按钮
     Button btn_tool_commit;      //提交按钮
-
     private boolean isEditOperation; //是否是编辑状态
     private static final String TAG = "ToolDetailActivity";
 

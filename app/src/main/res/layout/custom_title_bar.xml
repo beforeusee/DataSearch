@@ -13,7 +13,7 @@
         android:background="@null"
         android:minHeight="0dp"
         android:minWidth="25dp"
-        android:textSize="25sp"/>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/title_bar_title"
@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:minHeight="0dp"
         android:maxLines="1"
-        android:textSize="25sp"/>
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/title_bar_right"
@@ -34,5 +34,5 @@
         android:background="@null"
         android:minHeight="0dp"
         android:maxWidth="25dp"
-        android:textSize="25sp"/>
+        android:textSize="20sp"/>
 </merge>

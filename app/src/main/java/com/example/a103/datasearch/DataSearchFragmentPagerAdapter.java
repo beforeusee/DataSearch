@@ -27,9 +27,7 @@ import java.util.List;
 public class DataSearchFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> mTabList;
-    private Context mContext;
     private List<Fragment> mFragments;
-    private int[] mTabImgs;
 
     private ImageView mTabIcon;
     private TextView mTabText;
@@ -38,12 +36,10 @@ public class DataSearchFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fragmentManager);
     }
 
-    public DataSearchFragmentPagerAdapter(FragmentManager fragmentManager,List<String> tabList,Context context,List<Fragment> fragments,int[] TabImgs){
+    public DataSearchFragmentPagerAdapter(FragmentManager fragmentManager,List<String> tabList,List<Fragment> fragments){
         super(fragmentManager);
         mTabList=tabList;
-        mContext=context;
         mFragments=fragments;
-        mTabImgs=TabImgs;
     }
 
     @Override
