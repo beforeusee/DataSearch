@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mViewPager= (ViewPager) findViewById(R.id.vp_main);
         mAdapter=new DataSearchFragmentPagerAdapter(getSupportFragmentManager(),mTabList,mFragments);
         mViewPager.setAdapter(mAdapter);
-
 
         //将TabLayout与ViewPager绑定
         mTabLayout= (TabLayout) findViewById(R.id.tab_main);

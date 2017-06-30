@@ -7,7 +7,8 @@ import com.example.a103.datasearch.dao.DaoMaster;
 import com.example.a103.datasearch.dao.DaoSession;
 
 /**
- * Created by zhengxiaohu on 2017/3/15.
+ * Created by zhengXiaoHu on 2017/3/15.
+ * the utils method of get database
  */
 
 public class DatabaseApplication extends Application {

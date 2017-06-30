@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,15 +26,14 @@ import com.example.a103.datasearch.data.MaterialCategories;
 import com.example.a103.datasearch.data.MaterialCuttingLimits;
 import com.example.a103.datasearch.data.MaterialDetail;
 import com.example.a103.datasearch.utils.Constant;
-import com.example.a103.datasearch.utils.CustomTitleBar;
 import com.example.a103.datasearch.utils.DatabaseApplication;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by zhengxiaohu on 2017/3/26.
+ * Fragment of the MaterialDetail
  */
 
 public class MaterialDetailFragment extends Fragment {
@@ -94,6 +92,7 @@ public class MaterialDetailFragment extends Fragment {
     CheckBox cb_material_standards_W_nr;
 
     private static final String TAG = "MaterialDetailFragment";
+    private static final String MATERIAL_ID="materialId";
     private MaterialDetailCategoriesSpinnerAdapter mCategoriesSpinnerAdapter;
     private List<String> materialCategoriesNameList=new ArrayList<>();
     private List<String> forceModelList=new ArrayList<>();
@@ -101,22 +100,20 @@ public class MaterialDetailFragment extends Fragment {
     private DaoSession daoSession= DatabaseApplication.getDaoSession();
     private BroadcastReceiver mRefreshMaterialCategoriesSpinnerBroadcastReceiver;
     private Long materialId;
-    private MaterialDetail mMaterialDetail;
 
     /**
      * 获取{@link MaterialDetailFragment 实例}
      * 参数hasDeleteBtn表示获取的materialDetailFragment是否有"删除"按钮，为true表示有"删除"按钮，材料处于
      * 查看状态，为false表示没有"删除"按钮，材料处于创建状态。此处是为了复用MaterialDetailFragment而设置的参数
      * return 返回一个不带参数的构造函数的实例materialDetailFragment
-     * @param materialId
-     * @return
+     * @param materialId id of the material
+     * @return a object of materialDetailFragment with argument materialId
      */
     public static MaterialDetailFragment getNewInstance(Long materialId){
         MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
-
         if (materialId!=null){
             Bundle args=new Bundle();
-            args.putLong(Constant.MATERIAL_ID,materialId);
+            args.putLong(MATERIAL_ID,materialId);
             materialDetailFragment.setArguments(args);
         }
         return materialDetailFragment;
@@ -124,6 +121,15 @@ public class MaterialDetailFragment extends Fragment {
 
     public MaterialDetailFragment(){
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //获取材料的id
+        if (getArguments()!=null){
+            materialId=getArguments().getLong(MATERIAL_ID);
+        }
     }
 
     @Nullable
@@ -142,14 +148,7 @@ public class MaterialDetailFragment extends Fragment {
         sp_material_coefficientParameters_forceModel.setAdapter(forceModelSpannerAdapter);
 
         refreshMaterialCategoriesSpinnerBroadcastReceiver();
-
-        //如果有materialId，则显示该材料的具体属性
-        Bundle bundle=getArguments();
-        if (bundle!=null){
-            Long materialId=bundle.getLong(Constant.MATERIAL_ID);
-            Log.d(TAG, "onCreateView: materialId="+materialId);
-            setMaterialDetailData(materialId);
-        }
+        initialMaterialDetailStatus(materialId);
 
         Log.d(TAG, "onCreateView: executed");
         return view;
@@ -209,7 +208,7 @@ public class MaterialDetailFragment extends Fragment {
 
     /**
      * 获取materialCategoriesNameList的方法,返回materialCategoriesNameList
-     * @return
+     * @return the list of material categories name list
      */
     private List<String> getMaterialCategoriesNameList() {
         materialCategoriesList = daoSession.getMaterialCategoriesDao().loadAll();
@@ -222,7 +221,7 @@ public class MaterialDetailFragment extends Fragment {
 
     /**
      * 初始化{@link MaterialDetailFragment}的界面
-     * @param view
+     * @param view view of MaterialDetailFragment
      */
     private void initialMaterialDetailView(View view) {
 
@@ -663,7 +662,7 @@ public class MaterialDetailFragment extends Fragment {
     /**
      * 初始化{@link MaterialDetailFragment}的状态，如果id为null,则表示是edit材料的状态,设置所有输入控件可编辑
      * 如果id不为null，则设置输入控件不可编辑，并此id查询材料的属性及与该材料相关联的分类，切削力系数和切削极限。
-     * @param materialId
+     * @param materialId the materialId
      */
     private void initialMaterialDetailStatus(Long materialId){
         if (materialId!=null){
@@ -749,7 +748,7 @@ public class MaterialDetailFragment extends Fragment {
 
     /**
      * 设置"删除"按钮button的可见性
-     * @param enabled
+     * @param enabled if is enable
      */
     private void setMaterialDetailViewEnabled(boolean enabled){
         et_material_properties_name.setEnabled(enabled);
@@ -816,18 +815,34 @@ public class MaterialDetailFragment extends Fragment {
 
     /**
      * 获取材料分类MaterialCategories的实例列表
-     * @return
+     * @return the list of material categories
      */
     public List<MaterialCategories> getMaterialCategoriesList() {
         return materialCategoriesList;
     }
 
 
+    /**
+     * get the materialDetail
+     * @return materialDetail
+     */
     public MaterialDetail getMaterialDetail() {
-        mMaterialDetail=new MaterialDetail();
-        initMaterialDetail(mMaterialDetail);
-        return mMaterialDetail;
+        MaterialDetail materialDetail = new MaterialDetail();
+        //if material exists ,return
+        if (materialId!=null){
+            Material material=daoSession.getMaterialDao().load(materialId);
+            MaterialCuttingLimits materialCuttingLimits=material.getMaterialCuttingLimits();
+            CoefficientParameters coefficientParameters=material.getCoefficientParameters();
+            materialDetail.setMaterial(material);
+            materialDetail.setCoefficientParameters(coefficientParameters);
+            materialDetail.setMaterialCuttingLimits(materialCuttingLimits);
+            return materialDetail;
+        }
+        //if material does not exist,create and return
+        initMaterialDetail(materialDetail);
+        return materialDetail;
     }
+
 /*
     public void setMaterialDetail(MaterialDetail materialDetail) {
         mMaterialDetail = materialDetail;

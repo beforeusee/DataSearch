@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_machine"
+        android:orderInCategory="10"
+        android:title="@string/add_machine"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/edit_machine"
+        android:orderInCategory="50"
+        android:title="@string/edit_machine"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/delete_machine"
+        android:orderInCategory="60"
+        android:title="@string/delete_machine"
+        app:showAsAction="never"/>
+</menu>

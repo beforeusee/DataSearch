@@ -33,6 +33,7 @@ import java.util.List;
 
 /**
  * Created by zhengxiaohu on 2017/3/26.
+ * 材料分类的Fragment
  */
 
 public class MaterialCategoriesFragment extends Fragment {
@@ -45,7 +46,6 @@ public class MaterialCategoriesFragment extends Fragment {
     private DaoSession daoSession= DatabaseApplication.getDaoSession();
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
     private BroadcastReceiver mRefreshExpandableListViewBroadcastReceiver;
-    private ExpandableListViewChildSelectListener mExpandableListViewChildSelectListener;
 
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mReceiver;
@@ -88,14 +88,8 @@ public class MaterialCategoriesFragment extends Fragment {
     }
 
     /**
-     * 点击onChildClick的回调接口
-     */
-    public interface ExpandableListViewChildSelectListener{
-        void onExpandableListViewChildSelect(Long materialId);
-    }
-    /**
      * 传入mExpandableListView并为其设置group和child的点击监听函数
-     * @param mExpandableListView
+     * @param mExpandableListView 二级列表
      */
     private void setOnExpandableListViewClickListener(ExpandableListView mExpandableListView) {
         if (mExpandableListView==null){

@@ -8,7 +8,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBarFullScreen">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,6 +26,16 @@
             android:name=".MaterialDetailActivity"
             android:label="@string/label_activity_material_detail"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".ToolAddActivity">
+        </activity>
+        <activity android:name=".MachineAddActivity">
+        </activity>
+        <activity android:name=".MachineEditActivity">
+        </activity>
+        <activity android:name=".ToolEditActivity">
+        </activity>
+        <activity android:name=".MaterialEditActivity">
         </activity>
     </application>
 

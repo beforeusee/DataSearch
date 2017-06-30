@@ -27,10 +27,10 @@ import com.example.a103.datasearch.utils.DatabaseApplication;
  */
 public class MaterialAddActivity extends AppCompatActivity {
 
-    CustomTitleBar material_detail_customTitleBar;       //标题栏
+    CustomTitleBar material_add_customTitleBar;       //标题栏
     LinearLayout ll_material_add_detail_fragment_container; //MaterialDetailFragment的容器
     private static final String TAG = "MaterialAddActivity";
-    MaterialDetailFragment materialDetailFragment;
+    MaterialDetailFragment mMaterialDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MaterialAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_material_add);
 
         initialView();
-        addFragmentToActivity(materialDetailFragment);
+        addFragmentToActivity();
         setOnCustomTitleBarClickListener();
         Log.d(TAG, "onCreate: "+"successfully execution.");
     }
@@ -47,24 +47,24 @@ public class MaterialAddActivity extends AppCompatActivity {
      * 初始化界面
      */
     private void initialView() {
-        materialDetailFragment=new MaterialDetailFragment();
-        material_detail_customTitleBar= (CustomTitleBar) findViewById(R.id.material_detail_customTitleBar);
+        material_add_customTitleBar = (CustomTitleBar) findViewById(R.id.material_add_customTitleBar);
         ll_material_add_detail_fragment_container= (LinearLayout) findViewById(R.id.ll_material_add_detail_fragment_container);
     }
 
     /**
      * 加载MaterialDetailFragment到MaterialDetailActivity.
      */
-    private void addFragmentToActivity(MaterialDetailFragment materialDetailFragment) {
-        if (materialDetailFragment==null){
-            throw new IllegalArgumentException("参数materialDetailFragment为null.");
-        }
+    private void addFragmentToActivity() {
         FragmentManager fragmentManager=getSupportFragmentManager();
-        FragmentTransaction transaction=fragmentManager.beginTransaction();
-
-        transaction.add(R.id.ll_material_add_detail_fragment_container,materialDetailFragment);
-        transaction.commit();
-        Log.d(TAG, "addFragmentToActivity: "+"加载MaterialDetailFragment到MaterialDetailActivity.");
+        mMaterialDetailFragment= (MaterialDetailFragment) fragmentManager.
+                findFragmentById(R.id.ll_material_add_detail_fragment_container);
+        if (mMaterialDetailFragment==null){
+            mMaterialDetailFragment=new MaterialDetailFragment();
+            FragmentTransaction transaction=fragmentManager.beginTransaction();
+            transaction.add(R.id.ll_material_add_detail_fragment_container,mMaterialDetailFragment);
+            transaction.commit();
+        }
+        Log.d(TAG, "addFragmentToActivity: "+"load MaterialDetailFragment to MaterialDetailActivity.");
     }
 
     /**
@@ -72,7 +72,7 @@ public class MaterialAddActivity extends AppCompatActivity {
      */
     private void setOnCustomTitleBarClickListener() {
         //设置左边按钮"取消"的监听函数
-        material_detail_customTitleBar.setTitleBarLeftBtnClickListener(new View.OnClickListener() {
+        material_add_customTitleBar.setTitleBarLeftBtnClickListener(new View.OnClickListener() {
             //点击，结束当前活动
             @Override
             public void onClick(View v) {
@@ -83,14 +83,14 @@ public class MaterialAddActivity extends AppCompatActivity {
         });
 
         //设置右边按钮"完成"的监听函数
-        material_detail_customTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
+        material_add_customTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
             //点击保存添加的材料，并结束当前活动
             @Override
             public void onClick(View v) {
                 Toast.makeText(MaterialAddActivity.this,"点击了'完成'按钮.",Toast.LENGTH_SHORT).show();
                 //添加材料到数据的逻辑，并更新MaterialCategoriesFragment中ExpandableListView列表
                 createMaterialDetail();
-                Log.d(TAG, "onClick: materialDetailFragment.getMaterialDetail()==null? "+(materialDetailFragment.getMaterialDetail()==null));
+                Log.d(TAG, "onClick: mMaterialDetailFragment.getMaterialDetail()==null? "+(mMaterialDetailFragment.getMaterialDetail()==null));
                 //发送更新ExpandableListView的广播
                 sendRefreshExpandableListViewBroadcast();
 
@@ -114,9 +114,9 @@ public class MaterialAddActivity extends AppCompatActivity {
      */
     private void createMaterialDetail() {
         //创建一个新的材料对象,新的切削力系数对象，新的切削极限对象
-        Material material =materialDetailFragment.getMaterialDetail().getMaterial();
-        CoefficientParameters coefficientParameters=materialDetailFragment.getMaterialDetail().getCoefficientParameters();
-        MaterialCuttingLimits materialCuttingLimits=materialDetailFragment.getMaterialDetail().getMaterialCuttingLimits();
+        Material material = mMaterialDetailFragment.getMaterialDetail().getMaterial();
+        CoefficientParameters coefficientParameters= mMaterialDetailFragment.getMaterialDetail().getCoefficientParameters();
+        MaterialCuttingLimits materialCuttingLimits= mMaterialDetailFragment.getMaterialDetail().getMaterialCuttingLimits();
 
         Long materialId=createMaterial(material);
         Long materialCuttingLimitsId=createMaterialCuttingLimits(materialCuttingLimits,materialId);

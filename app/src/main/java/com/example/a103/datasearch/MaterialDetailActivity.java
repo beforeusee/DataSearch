@@ -1,6 +1,7 @@
 package com.example.a103.datasearch;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,16 +9,24 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.CoefficientParameters;
+import com.example.a103.datasearch.data.Material;
+import com.example.a103.datasearch.data.MaterialCategories;
+import com.example.a103.datasearch.data.MaterialCuttingLimits;
 import com.example.a103.datasearch.fragment.MaterialDetailFragment;
+import com.example.a103.datasearch.utils.Constant;
+import com.example.a103.datasearch.utils.DatabaseApplication;
 
 public class MaterialDetailActivity extends AppCompatActivity {
 
@@ -25,6 +34,7 @@ public class MaterialDetailActivity extends AppCompatActivity {
     public static final String MATERIAL_ID="materialId";
     LinearLayout ll_material_show_detail_fragment_container;
     MaterialDetailFragment mMaterialDetailFragment;
+    Long materialId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,37 +58,109 @@ public class MaterialDetailActivity extends AppCompatActivity {
         });
 
         initView();
+        //get the materialId
         Intent intent=getIntent();
-        Long materialId=intent.getLongExtra(MATERIAL_ID,0);
-        mMaterialDetailFragment=MaterialDetailFragment.getNewInstance(materialId);
-        addFragmentToActivity(mMaterialDetailFragment,materialId);
+        materialId=intent.getLongExtra(MATERIAL_ID,0);
+        addFragmentToActivity(materialId);
     }
 
-    private void addFragmentToActivity(MaterialDetailFragment materialDetailFragment,Long materialId) {
-        if (materialDetailFragment==null){
-            throw new IllegalArgumentException("materialDetailFragment is null");
-        }
+    /**
+     * load mMaterialDetailFragment to activity
+     * @param materialId the id of the material
+     */
+    private void addFragmentToActivity(Long materialId) {
         FragmentManager fragmentManager=getSupportFragmentManager();
-        FragmentTransaction transaction=fragmentManager.beginTransaction();
-//        materialDetailFragment.setMaterialDetailData(materialId);
-        transaction.add(R.id.ll_material_show_detail_fragment_container,materialDetailFragment);
-        transaction.commit();
+        mMaterialDetailFragment= (MaterialDetailFragment) fragmentManager.
+                findFragmentById(R.id.ll_material_show_detail_fragment_container);
+        if (mMaterialDetailFragment==null){
+            //create MaterialDetailFragment(with argument materialId)
+            mMaterialDetailFragment=MaterialDetailFragment.getNewInstance(materialId);
+            FragmentTransaction transaction=fragmentManager.beginTransaction();
+            transaction.add(R.id.ll_material_show_detail_fragment_container,mMaterialDetailFragment);
+            transaction.commit();
+        }
+        Log.d(TAG, "addFragmentToActivity: load mMaterialDetailFragment to MaterialDetailActivity");
     }
 
+    /**
+     * initial view
+     */
     private void initView() {
         ll_material_show_detail_fragment_container = (LinearLayout) findViewById(R.id.ll_material_show_detail_fragment_container);
-
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_material_detail,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * item of the MenuItem being selected
+     * @param item the item of the menu
+     * @return the item being selected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
                 return true;
-
+            case R.id.edit_material:
+                finish();
+                Toast.makeText(this,"edit material",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.delete_material:
+                onMenuItemDeleteSelected();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 点击Delete的操作的函数
+     */
+    private void onMenuItemDeleteSelected(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("确定删除刀具吗？");
+        builder.setPositiveButton("删除刀具", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //获取数据库管理对象
+                DaoSession daoSession= DatabaseApplication.getDaoSession();
+                //删除材料，切削力系数和极限限制，并更新数据库中materialCategories关联的材料
+                Material material=daoSession.getMaterialDao().load(materialId);
+                CoefficientParameters coefficientParameters=material.getCoefficientParameters();
+                MaterialCuttingLimits materialCuttingLimits=material.getMaterialCuttingLimits();
+                daoSession.getMaterialDao().delete(material);
+                daoSession.getCoefficientParametersDao().delete(coefficientParameters);
+                daoSession.getMaterialCuttingLimitsDao().delete(materialCuttingLimits);
+                MaterialCategories materialCategories=daoSession.getMaterialCategoriesDao().
+                        load(material.getMaterialCategoriesId());
+                materialCategories.resetMaterials();
+                //删除完毕后结束当前Activity并发送消息更新MaterialCategories中的列表
+                sendRefreshExpandableListViewBroadcast();
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+    /**
+     * 发送更新ExpandableListView列表的广播
+     */
+    private void sendRefreshExpandableListViewBroadcast(){
+        Intent intent=new Intent();
+        intent.setAction(Constant.ACTION_REFRESH_MATERIAL_CATEGORIES);
+        sendBroadcast(intent);
+        Log.d(TAG, "sendRefreshExpandableListViewBroadcast: "+"发送更新expandableListView的广播");
     }
 
     /**
