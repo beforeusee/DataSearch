@@ -93,14 +93,16 @@ public class MaterialDetailFragment extends Fragment {
 
     private static final String TAG = "MaterialDetailFragment";
     private static final String MATERIAL_ID="materialId";
+    public static final String MODE="mode";
     private MaterialDetailCategoriesSpinnerAdapter mCategoriesSpinnerAdapter;
     private List<String> materialCategoriesNameList=new ArrayList<>();
     private List<String> forceModelList=new ArrayList<>();
     private List<MaterialCategories> materialCategoriesList;
     private DaoSession daoSession= DatabaseApplication.getDaoSession();
     private BroadcastReceiver mRefreshMaterialCategoriesSpinnerBroadcastReceiver;
-    private Long materialId;
 
+    private Long materialId;
+    private String mode;
     /**
      * 获取{@link MaterialDetailFragment 实例}
      * 参数hasDeleteBtn表示获取的materialDetailFragment是否有"删除"按钮，为true表示有"删除"按钮，材料处于
@@ -109,11 +111,12 @@ public class MaterialDetailFragment extends Fragment {
      * @param materialId id of the material
      * @return a object of materialDetailFragment with argument materialId
      */
-    public static MaterialDetailFragment getNewInstance(Long materialId){
+    public static MaterialDetailFragment getNewInstance(Long materialId,String mode){
         MaterialDetailFragment materialDetailFragment=new MaterialDetailFragment();
         if (materialId!=null){
             Bundle args=new Bundle();
             args.putLong(MATERIAL_ID,materialId);
+            args.putString(MODE,mode);
             materialDetailFragment.setArguments(args);
         }
         return materialDetailFragment;
@@ -129,6 +132,7 @@ public class MaterialDetailFragment extends Fragment {
         //获取材料的id
         if (getArguments()!=null){
             materialId=getArguments().getLong(MATERIAL_ID);
+            mode=getArguments().getString(MODE);
         }
     }
 
@@ -148,7 +152,7 @@ public class MaterialDetailFragment extends Fragment {
         sp_material_coefficientParameters_forceModel.setAdapter(forceModelSpannerAdapter);
 
         refreshMaterialCategoriesSpinnerBroadcastReceiver();
-        initialMaterialDetailStatus(materialId);
+        initialMaterialDetailStatus(materialId,mode);
 
         Log.d(TAG, "onCreateView: executed");
         return view;
@@ -664,10 +668,16 @@ public class MaterialDetailFragment extends Fragment {
      * 如果id不为null，则设置输入控件不可编辑，并此id查询材料的属性及与该材料相关联的分类，切削力系数和切削极限。
      * @param materialId the materialId
      */
-    private void initialMaterialDetailStatus(Long materialId){
+    private void initialMaterialDetailStatus(Long materialId,String mode){
         if (materialId!=null){
             setMaterialDetailData(materialId);
-            setMaterialDetailViewEnabled(false);
+            if (mode.equals(Constant.SHOW_MODE)){
+                setMaterialDetailViewEnabled(false);
+            }
+            if (mode.equals(Constant.EDIT_MODE)){
+                setMaterialDetailViewEnabled(true);
+                Log.d(TAG, "initialMaterialDetailStatus: EDIT_MODE");
+            }
         }else {
             setMaterialDetailViewEnabled(true);
         }
@@ -831,32 +841,28 @@ public class MaterialDetailFragment extends Fragment {
         //if material exists ,return
         if (materialId!=null){
             Material material=daoSession.getMaterialDao().load(materialId);
-            MaterialCuttingLimits materialCuttingLimits=material.getMaterialCuttingLimits();
             CoefficientParameters coefficientParameters=material.getCoefficientParameters();
-            materialDetail.setMaterial(material);
-            materialDetail.setCoefficientParameters(coefficientParameters);
-            materialDetail.setMaterialCuttingLimits(materialCuttingLimits);
+            MaterialCuttingLimits materialCuttingLimits=material.getMaterialCuttingLimits();
+
+            setMaterialDetail(materialDetail,material,coefficientParameters,materialCuttingLimits);
             return materialDetail;
         }
         //if material does not exist,create and return
-        initMaterialDetail(materialDetail);
+        Material material=new Material();
+        CoefficientParameters coefficientParameters=new CoefficientParameters();
+        MaterialCuttingLimits materialCuttingLimits=new MaterialCuttingLimits();
+        setMaterialDetail(materialDetail,material,coefficientParameters,materialCuttingLimits);
         return materialDetail;
     }
-
-/*
-    public void setMaterialDetail(MaterialDetail materialDetail) {
-        mMaterialDetail = materialDetail;
-    }*/
 
     /**
      * 由于{@link MaterialDetailFragment}要被复用，因此对外提供访问和设置成员变量的方法
      *
      */
 
-    private void initMaterialDetail(MaterialDetail materialDetail){
-        Material material=new Material();
-        CoefficientParameters coefficientParameters=new CoefficientParameters();
-        MaterialCuttingLimits materialCuttingLimits=new MaterialCuttingLimits();
+    private void setMaterialDetail(MaterialDetail materialDetail,Material material,
+                                   CoefficientParameters coefficientParameters,
+                                   MaterialCuttingLimits materialCuttingLimits){
         //Material
         material.setName(et_material_properties_name.getText().toString());
         Long materialCategoriesListId=sp_material_properties_categories.getSelectedItemId();
@@ -888,6 +894,7 @@ public class MaterialDetailFragment extends Fragment {
         coefficientParameters.setKre(et_material_coefficientParameters_Kre.getText().toString());
         coefficientParameters.setKae(et_material_coefficientParameters_Kae.getText().toString());
         coefficientParameters.setKtc(et_material_coefficientParameters_Ktc.getText().toString());
+        coefficientParameters.setKrc(et_material_coefficientParameters_Krc.getText().toString());
         coefficientParameters.setKac(et_material_coefficientParameters_Kac.getText().toString());
 
         materialCuttingLimits.setMinChipThickness(et_material_limits_minChipThickness.getText().toString());

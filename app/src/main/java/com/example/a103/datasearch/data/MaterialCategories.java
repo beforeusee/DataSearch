@@ -12,7 +12,7 @@ import com.example.a103.datasearch.dao.MaterialDao;
 import com.example.a103.datasearch.dao.MaterialCategoriesDao;
 
 /**
- * Created by zhengxiaohu on 2017/3/17.
+ * Created by XiaoHu Zheng on 2017/3/17.
  */
 
 @Entity

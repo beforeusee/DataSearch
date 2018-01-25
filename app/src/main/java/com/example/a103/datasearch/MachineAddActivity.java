@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.example.a103.datasearch.data.Machine;
 import com.example.a103.datasearch.fragment.MachineDetailFragment;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.CustomTitleBar;
+import com.example.a103.datasearch.utils.DatabaseApplication;
 
 public class MachineAddActivity extends AppCompatActivity {
 
@@ -42,9 +45,22 @@ public class MachineAddActivity extends AppCompatActivity {
         machine_add_customTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2017/7/1 create a new machine and save to the database
+                //create a new machine and save to the database
+                Machine machine=mMachineDetailFragment.getMachine();
+                DatabaseApplication.getDaoSession().getMachineDao().save(machine);
+                sendMachineRefreshBroadcast();
+                //finish current activity
+                finish();
             }
         });
+    }
+
+    /**
+     * send the broadcast to refresh machine list
+     */
+    private void sendMachineRefreshBroadcast() {
+        Intent intent=new Intent(Constant.ACTION_REFRESH_MACHINE);
+        sendBroadcast(intent);
     }
 
     /**

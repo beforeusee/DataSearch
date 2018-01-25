@@ -33,7 +33,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     LinearLayout mAddBarLinearLayout;
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
-    private DaoSession daoSession= DatabaseApplication.getDaoSession();  //获取应用的全局数据库管理变量daoSession
+    private DaoSession daoSession;  //获取应用的全局数据库管理变量daoSession
     private MaterialCategoriesAdapter adapter;
     private static final String TAG = "MaterialCategoriesManagementActivity";
 
@@ -144,11 +144,11 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
 
         //RecyclerView的点击事件：采用了设计模式的中的观察者模式
         //利用adapter设置列表单击事件，监听接口自定义设置在MaterialCategoriesAdapter中
-        adapter.setOnItemClickListener(new MaterialCategoriesAdapter.OnRecyclerViewItemClickListener() {
+        adapter.setOnItemDeleteViewClickListener(new MaterialCategoriesAdapter.OnRecyclerViewItemDeleteViewClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemDeleteViewClick(View view, int position) {
                 final MaterialCategories materialCategories=materialCategoriesList.get(position);
-                Log.d(TAG, "onItemClick: click materialCategories: "+materialCategories.getName());
+                Log.d(TAG, "onItemDeleteViewClick: click materialCategories: "+materialCategories.getName());
 
                 //弹出删除的警告对话框
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(MaterialCategoriesManagementActivity.this);
@@ -163,14 +163,14 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                         if (daoSession.getMaterialCategoriesDao().hasKey(materialCategories)){
                             daoSession.getMaterialCategoriesDao().delete(materialCategories);
                             updateMaterialCategories();
-                            Log.d(TAG, "onItemClick: successfully deleted: "+materialCategories.getName());
+                            Log.d(TAG, "onItemDeleteViewClick: successfully deleted: "+materialCategories.getName());
                             //2017/4/7 刷新fragment_material中的UI，
                             // 包括MaterialCategoriesFragment中ExpandableListView分类显示的数据更新
                             //和MaterialDetailFragment中材料种类控件Spinner的数据更新
                             //利用广播机制，通知数据进行更新
                             sendMaterialCategoriesRefreshBroadcast();
                         }else{
-                            Log.d(TAG, "onItemClick: failed to delete: "+materialCategories.getName()+
+                            Log.d(TAG, "onItemDeleteViewClick: failed to delete: "+materialCategories.getName()+
                                     ",the data does not exist in the database table MATERIAL_CATEGORIES");
                         }
                     }
@@ -187,11 +187,104 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
             }
         });
 
+        adapter.setOnItemTextViewClickViewListener(new MaterialCategoriesAdapter.OnRecyclerViewItemTextViewClickListener() {
+            @Override
+            public void onItemTextViewClick(View view, int position) {
+                final MaterialCategories materialCategories=materialCategoriesList.get(position);
+                final Dialog dialog=new Dialog(MaterialCategoriesManagementActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.edit_material_categories_dialog);
+
+                //添加材料分类对话框的控件
+                final EditText editMaterialCategories= (EditText) dialog.findViewById(R.id.et_edit_material_categories);
+                final Button categoriesCommitButton= (Button) dialog.findViewById(R.id.edit_material_categories_button_commit);
+                final Button categoriesCancelButton= (Button) dialog.findViewById(R.id.edit_material_categories_button_cancel);
+
+                //初始化categoriesCommitButton可用
+                editMaterialCategories.setText(materialCategories.getName());
+                categoriesCommitButton.setEnabled(true);
+
+                //设置EditText的监听器，根据用户是否输入有效字符串来判断categoriesCommitButton是否可点击，
+                // 禁止用户不做任何输入，从而在数据库中创建空名称的(无意义)材料分类数据
+                editMaterialCategories.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    /**
+                     * @param s
+                     * tag s为变化后的所有字符
+                     */
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if ("".equals(s.toString().trim())){
+                            categoriesCommitButton.setEnabled(false); //如果去掉所有空白字符的s为空，则设置commit按钮不可点击
+                        }else {
+                            categoriesCommitButton.setEnabled(true);  //s不为空，可点击
+                        }
+                    }
+                });
+
+                //设置commitButton的监听器
+                categoriesCommitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //创建MaterialCategories对象
+                        materialCategories.setName(editMaterialCategories.getText().toString());
+
+                        //存入数据库
+                        daoSession.getMaterialCategoriesDao().save(materialCategories);
+
+                        //如果数据库中存在刚保存的数据则创建成功并更新材料列表
+                        if (daoSession.getMaterialCategoriesDao().hasKey(materialCategories)){
+                            Log.d(TAG, "categoriesCommitButton:onClick: successfully updated: "+materialCategories.getName());
+                            //更新材料分类列表
+                            updateMaterialCategories();
+                            //发送广播，通知MaterialFragment中的数据进行更新
+                            sendMaterialCategoriesRefreshBroadcast();
+                        }else {
+                            Log.d(TAG, "categoriesCommitButton:onClick: failed to save: "+materialCategories.getName()+
+                                    " in the database table MATERIAL_CATEGORIES");
+                        }
+
+                        //销毁对话框
+                        dialog.dismiss();
+                    }
+                });
+
+                //设置categoriesCancelButton的监听器
+                categoriesCancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();  //销毁添加材料的对话框
+                    }
+                });
+
+                //显示添加材料的对话框
+                dialog.show();
+            }
+        });
+
         //设置右边按钮“完成”的监听函数
         material_categories_management_customTitleBar.setTitleBarRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //结束当前Activity
+                finish();
+            }
+        });
+
+        //set the left button of customTitleBar
+        material_categories_management_customTitleBar.setTitleBarLeftBtnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //finish current activity
                 finish();
             }
         });
@@ -212,6 +305,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
      * 初始化材料分类列表materialCategoriesList
      */
     private void initialMaterialCategories() {
+        daoSession= DatabaseApplication.getDaoSession();
         materialCategoriesList=daoSession.getMaterialCategoriesDao().loadAll();
         Log.d(TAG, "initialMaterialCategories: 加载数据库中材料分类列表的数据库");
     }
@@ -237,7 +331,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
 
     /**
      * 该activity类为外界提供了启动本activity的方法和需要传入的参数，有时可能利用intent传入参数
-     * @param context
+     * @param context context of start MaterialCategoriesManagementActivity
      */
     public static void actionStart(Context context){
         Intent intent=new Intent(context,MaterialCategoriesManagementActivity.class);

@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:text="刀具型号(ST)"
                     android:textSize="23sp"
-                    android:gravity="left"/>
+                    android:gravity="start"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -109,7 +109,7 @@
                     android:id="@+id/et_tool_serial"
                     android:text="R215.H4-12050DAK08P 1620"
                     android:textSize="20sp"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:enabled="false"/>
 
                 <EditText

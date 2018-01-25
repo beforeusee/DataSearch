@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.example.a103.datasearch.R;
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.Tool;
+import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.DatabaseApplication;
 
 /**
@@ -21,6 +22,7 @@ import com.example.a103.datasearch.utils.DatabaseApplication;
 public class ToolDetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TOOL_ID = "toolId";
+    public static final String MODE="mode";
 
     //刀具信息控件声明
 //    ImageView iv_tool_picture;               //刀具图片
@@ -65,6 +67,7 @@ public class ToolDetailFragment extends Fragment {
     EditText et_tool_todo;                       //待定项
 
     private Long mToolId;
+    private String mode;
 
     public ToolDetailFragment() {
         // Required empty public constructor
@@ -77,10 +80,11 @@ public class ToolDetailFragment extends Fragment {
      * @param toolId Parameter.
      * @return A new instance of fragment ToolDetailFragment.
      */
-    public static ToolDetailFragment newInstance(Long toolId) {
+    public static ToolDetailFragment newInstance(Long toolId,String mode) {
         ToolDetailFragment fragment = new ToolDetailFragment();
         Bundle args = new Bundle();
         args.putLong(TOOL_ID,toolId);
+        args.putString(MODE,mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,6 +94,7 @@ public class ToolDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mToolId = getArguments().getLong(TOOL_ID);
+            mode=getArguments().getString(MODE);
         }
     }
 
@@ -99,7 +104,7 @@ public class ToolDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_tool_detail, container, false);
         initView(view);
-        initToolDetailStatus(mToolId);
+        initToolDetailStatus(mToolId,mode);
         return view;
     }
 
@@ -107,10 +112,15 @@ public class ToolDetailFragment extends Fragment {
      * initial the tool detail status of the fragment,if toolId is null,means create the tool,or query the tool
      * @param toolId the id of the tool
      */
-    private void initToolDetailStatus(Long toolId) {
+    private void initToolDetailStatus(Long toolId,String mode) {
         if (toolId!=null){
             setToolDetail(toolId);
-            setToolDetailViewEnabled(false);
+            if (mode.equals(Constant.SHOW_MODE)){
+                setToolDetailViewEnabled(false);
+            }
+            if (mode.equals(Constant.EDIT_MODE)){
+                setToolDetailViewEnabled(true);
+            }
         }else {
             setToolDetailViewEnabled(true);
         }
@@ -257,10 +267,21 @@ public class ToolDetailFragment extends Fragment {
     public Tool getTool(){
         //if tool exist,return
         if (mToolId!=null){
-            return DatabaseApplication.getDaoSession().getToolDao().load(mToolId);
+            Tool tool=DatabaseApplication.getDaoSession().getToolDao().load(mToolId);
+            setToolData(tool);
+            return tool;
         }
         //if tool does not exist,create a new tool and return
         Tool tool=new Tool();
+        setToolData(tool);
+        return tool;
+    }
+
+    /**
+     * set the data of tool
+     * @param tool tool
+     */
+    private void setToolData(Tool tool) {
         tool.setName(et_tool_name.getText().toString());
         tool.setType(et_tool_type.getText().toString());
         tool.setSerial(et_tool_serial.getText().toString());
@@ -299,7 +320,6 @@ public class ToolDetailFragment extends Fragment {
         tool.setSuitableForMaterial(et_tool_suitableForMaterial.getText().toString());
         tool.setApplication(et_tool_application.getText().toString());
         tool.setUsed(cb_tool_used.isChecked()?1:0);
-        return tool;
     }
 
 }

@@ -9,6 +9,11 @@ import android.widget.ImageView;
 import android.widget.EditText;
 
 import com.example.a103.datasearch.R;
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.Machine;
+import com.example.a103.datasearch.utils.Constant;
+import com.example.a103.datasearch.utils.DatabaseApplication;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +23,7 @@ import com.example.a103.datasearch.R;
 public class MachineDetailFragment extends Fragment {
     // the fragment initialization parameters
     private static final String MACHINE_ID = "machineId";
+    private static final String MODE="mode";
 
     //控件声明
     //机床信息控件
@@ -28,44 +34,37 @@ public class MachineDetailFragment extends Fragment {
     EditText et_machine_brand;
     EditText et_machine_axis_num;
     EditText et_machine_CSYS;
-    EditText et_machine_autoToolChange;
     EditText et_machine_machineTable_size;
-    EditText et_machine_rotaryTable_size;
-    EditText et_machine_machineTable_maxLoad;
-    EditText et_machine_rotaryTable_maxLoad;
+    EditText et_machine_maxWorkpieceWeight;
+    EditText et_machine_autoToolChange;
+    EditText et_machine_rotary_table;
     EditText et_machine_size;
     EditText et_machine_weight;
     EditText et_machine_layout;
 
     //主轴单元控件
     EditText et_machine_spindle_type;
-    EditText et_machine_spindle_speed;
-    EditText et_machine_spindle_toolAdopter;
+    EditText et_machine_spindle_num;
+    EditText et_machine_spindle_max_rpm;
+    EditText et_machine_spindle_min_rpm;
     EditText et_machine_spindle_power;
     EditText et_machine_spindle_maxTorque;
+    EditText et_machine_spindle_travel;
     EditText et_machine_spindle_distanceToMachineTable;
-    EditText et_machine_spindle_distanceToRotaryTable;
-    EditText et_machine_spindle_distanceToColumn;
+    EditText et_machine_spindle_toolAdopter;
 
     //进给单元控件
-    EditText et_machine_feedAxis_distance_xyz; //行程
-    EditText et_machine_feedAxis_distance_ac;
-    EditText et_machine_feedAxis_accuracy_xyz; //定位精度
-    EditText et_machine_feedAxis_accuracy_ac;
-    EditText et_machine_feedAxis_repeatablity_xyz; //重复定位精度
-    EditText et_machine_feedAxis_repeatablity_ac;
-    EditText et_machine_feedAxis_fastSpeed_xyz;
-    EditText et_machine_feedAxis_fastSpeed_ac;
-    EditText et_machine_feedAxis_cuttingSpeed;
-    EditText et_machine_feedAxis_maxAcceleration;
-    EditText et_machine_feedAxis_maxAngularAcceleration;
-    EditText et_machine_feedAxis_power_xyz;
-    EditText et_machine_feedAxis_power_ac;
-    EditText et_machine_feedAxis_torque_xyz;
-    EditText et_machine_feedAxis_torque_ac;
-    EditText et_machine_feedAxis_maxTorque_xyz;
-    EditText et_machine_feedAxis_maxTorque_ac;
-    EditText et_machine_feedAxis_slideway;
+    EditText et_machine_feed_axis_num;//进给轴数
+    EditText et_machine_axis_direction; //进给轴方向
+    EditText et_machine_feedAxis_travel; //行程
+    EditText et_machine_feedAxis_accuracy; //定位精度
+    EditText et_machine_feedAxis_repeatability; //重复定位精度
+    EditText et_machine_feedAxis_fastSpeed;  //快速进给速度
+    EditText et_machine_feedAxis_cuttingSpeed; //切削速度
+    EditText et_machine_feedAxis_maxAcceleration;  //最大加速度
+    EditText et_machine_feedAxis_power;   //伺服电机功率
+    EditText et_machine_feedAxis_torque;  //伺服电机扭矩
+    EditText et_machine_feedAxis_maxTorque;  //伺服电机最大扭矩
 
     //刀库信息说明
     EditText et_machine_toolLibrary_toolNum;
@@ -77,6 +76,7 @@ public class MachineDetailFragment extends Fragment {
     EditText et_machine_introduction;
 
     private Long machineId;
+    private String mode;
 
     /**
      * required empty public constructor
@@ -92,10 +92,11 @@ public class MachineDetailFragment extends Fragment {
      * @param machineId Parameter machineId.
      * @return A new instance of fragment MachineDetailFragment.
      */
-    public static MachineDetailFragment newInstance(Long machineId) {
+    public static MachineDetailFragment newInstance(Long machineId,String mode) {
         MachineDetailFragment fragment = new MachineDetailFragment();
         Bundle args = new Bundle();
         args.putLong(MACHINE_ID, machineId);
+        args.putString(MODE,mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,6 +106,7 @@ public class MachineDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             machineId = getArguments().getLong(MACHINE_ID);
+            mode=getArguments().getString(MODE);
         }
     }
 
@@ -114,7 +116,183 @@ public class MachineDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_machine_detail, container, false);
         initView(view);
+        initMachineDetailStatus(machineId,mode);
         return view;
+    }
+
+    private void initMachineDetailStatus(Long machineId,String mode) {
+        if (machineId!=null){
+            setMachineDetailData(machineId);
+            if (mode.equals(Constant.SHOW_MODE)){
+                setMachineDetailViewEnabled(false);
+            }
+            if (mode.equals(Constant.EDIT_MODE)){
+                setMachineDetailViewEnabled(true);
+            }
+        }else {
+            setMachineDetailViewEnabled(true);
+        }
+    }
+
+    public void setMachineDetailViewEnabled(boolean enabled) {
+        //机床信息控件
+        iv_machine_picture.setEnabled(enabled);
+        et_machine_name.setEnabled(enabled);
+        et_machine_type.setEnabled(enabled);
+        et_machine_brand.setEnabled(enabled);
+        et_machine_series.setEnabled(enabled);
+        et_machine_axis_num.setEnabled(enabled);
+        et_machine_CSYS.setEnabled(enabled);
+        et_machine_machineTable_size.setEnabled(enabled);
+        et_machine_maxWorkpieceWeight.setEnabled(enabled);
+        et_machine_autoToolChange.setEnabled(enabled);
+        et_machine_rotary_table.setEnabled(enabled);
+        et_machine_size.setEnabled(enabled);
+        et_machine_weight.setEnabled(enabled);
+        et_machine_layout.setEnabled(enabled);
+
+        //主轴信息控件
+        et_machine_spindle_type.setEnabled(enabled);
+        et_machine_spindle_num.setEnabled(enabled);
+        et_machine_spindle_max_rpm.setEnabled(enabled);
+        et_machine_spindle_min_rpm.setEnabled(enabled);
+        et_machine_spindle_power.setEnabled(enabled);
+        et_machine_spindle_maxTorque.setEnabled(enabled);
+        et_machine_spindle_travel.setEnabled(enabled);
+        et_machine_spindle_distanceToMachineTable.setEnabled(enabled);
+        et_machine_spindle_toolAdopter.setEnabled(enabled);
+
+        //进给轴信息控件
+        et_machine_feed_axis_num.setEnabled(enabled);
+        et_machine_axis_direction.setEnabled(enabled);
+        et_machine_feedAxis_travel.setEnabled(enabled);
+        et_machine_feedAxis_accuracy.setEnabled(enabled);
+        et_machine_feedAxis_repeatability.setEnabled(enabled);
+        et_machine_feedAxis_fastSpeed.setEnabled(enabled);
+        et_machine_feedAxis_cuttingSpeed.setEnabled(enabled);
+        et_machine_feedAxis_maxAcceleration.setEnabled(enabled);
+        et_machine_feedAxis_power.setEnabled(enabled);
+        et_machine_feedAxis_torque.setEnabled(enabled);
+        et_machine_feedAxis_maxTorque.setEnabled(enabled);
+        et_machine_toolLibrary_toolNum.setEnabled(enabled);
+        et_machine_toolLibrary_maxToolDiameter.setEnabled(enabled);
+        et_machine_toolLibrary_maxToolLength.setEnabled(enabled);
+        et_machine_toolLibrary_maxToolWeight.setEnabled(enabled);
+        //机床说明信息控件
+        et_machine_introduction.setEnabled(enabled);
+    }
+
+    private void setMachineDetailData(Long machineId) {
+        DaoSession daoSession= DatabaseApplication.getDaoSession();
+        Machine machine=daoSession.getMachineDao().load(machineId);
+
+        et_machine_name.setText(machine.getName());
+        et_machine_type.setText(machine.getType());
+        et_machine_brand.setText(machine.getBrand());
+        et_machine_series.setText(machine.getSeries());
+        et_machine_axis_num.setText(machine.getAxisNum());
+        et_machine_CSYS.setText(machine.getControlSYS());
+        et_machine_machineTable_size.setText(machine.getMachineTableSize());
+        et_machine_maxWorkpieceWeight.setText(machine.getMaxWorkpieceWeight());
+        et_machine_autoToolChange.setText(machine.getAutoToolChange());
+        et_machine_rotary_table.setText(machine.getRotaryTable());
+        et_machine_size.setText(machine.getSize());
+        et_machine_weight.setText(machine.getWeight());
+        et_machine_layout.setText(machine.getLayout());
+
+        //主轴信息控件
+        et_machine_spindle_type.setText(machine.getSpindleType());
+        et_machine_spindle_num.setText(machine.getSpindleNum());
+        et_machine_spindle_max_rpm.setText(machine.getMaxSpindleRpm());
+        et_machine_spindle_min_rpm.setText(machine.getMinSpindleRpm());
+        et_machine_spindle_power.setText(machine.getSpindlePower());
+        et_machine_spindle_maxTorque.setText(machine.getMaxSpindleTorque());
+        et_machine_spindle_travel.setText(machine.getSpindleTravel());
+        et_machine_spindle_distanceToMachineTable.setText(machine.getSpindleDistanceToTable());
+        et_machine_spindle_toolAdopter.setText(machine.getSpindleToolAdopter());
+
+        //进给轴信息控件
+        et_machine_feed_axis_num.setText(machine.getFeedAxisNum());
+        et_machine_axis_direction.setText(machine.getFeedAxisDirection());
+        et_machine_feedAxis_travel.setText(machine.getFeedAxisTravel());
+        et_machine_feedAxis_accuracy.setText(machine.getFeedAxisAccuracy());
+        et_machine_feedAxis_repeatability.setText(machine.getFeedAxisRepeatability());
+        et_machine_feedAxis_fastSpeed.setText(machine.getFeedAxisFastSpeed());
+        et_machine_feedAxis_cuttingSpeed.setText(machine.getFeedAxisCuttingSpeed());
+        et_machine_feedAxis_maxAcceleration.setText(machine.getFeedAxisMaxAcceleration());
+        et_machine_feedAxis_power.setText(machine.getFeedAxisPower());
+        et_machine_feedAxis_torque.setText(machine.getFeedAxisTorque());
+        et_machine_feedAxis_maxTorque.setText(machine.getFeedAxisMaxTorque());
+        et_machine_toolLibrary_toolNum.setText(machine.getToolLibraryToolNum());
+        et_machine_toolLibrary_maxToolDiameter.setText(machine.getToolLibraryMaxToolDiameter());
+        et_machine_toolLibrary_maxToolLength.setText(machine.getToolLibraryMaxToolLength());
+        et_machine_toolLibrary_maxToolWeight.setText(machine.getToolLibraryMaxToolWeight());
+        //机床说明信息控件
+        et_machine_introduction.setText(machine.getMachineIntroduction());
+    }
+
+    public Machine getMachine(){
+        //if machine exists,return
+        if (machineId!=null){
+            Machine machine=DatabaseApplication.getDaoSession().getMachineDao().load(machineId);
+            setMachineData(machine);
+            return machine;
+        }
+        //if machine doesn't exist,create and return
+        Machine machine=new Machine();
+        //basic information of machine
+        setMachineData(machine);
+        return machine;
+    }
+
+    /**
+     * set the machine data
+     * @param machine machine
+     */
+    private void setMachineData(Machine machine) {
+        //basic information of machine
+        machine.setName(et_machine_name.getText().toString());
+        machine.setType(et_machine_type.getText().toString());
+        machine.setBrand(et_machine_brand.getText().toString());
+        machine.setSeries(et_machine_series.getText().toString());
+        machine.setAxisNum(et_machine_axis_num.getText().toString());
+        machine.setControlSYS(et_machine_CSYS.getText().toString());
+        machine.setMachineTableSize(et_machine_machineTable_size.getText().toString());
+        machine.setMaxWorkpieceWeight(et_machine_maxWorkpieceWeight.getText().toString());
+        machine.setAutoToolChange(et_machine_autoToolChange.getText().toString());
+        machine.setRotaryTable(et_machine_rotary_table.getText().toString());
+        machine.setSize(et_machine_size.getText().toString());
+        machine.setWeight(et_machine_weight.getText().toString());
+        machine.setLayout(et_machine_layout.getText().toString());
+        //spindle information of machine
+        machine.setSpindleType(et_machine_spindle_type.getText().toString());
+        machine.setSpindleNum(et_machine_spindle_num.getText().toString());
+        machine.setMaxSpindleRpm(et_machine_spindle_max_rpm.getText().toString());
+        machine.setMinSpindleRpm(et_machine_spindle_min_rpm.getText().toString());
+        machine.setSpindlePower(et_machine_spindle_power.getText().toString());
+        machine.setMaxSpindleTorque(et_machine_spindle_maxTorque.getText().toString());
+        machine.setSpindleTravel(et_machine_spindle_travel.getText().toString());
+        machine.setSpindleDistanceToTable(et_machine_spindle_distanceToMachineTable.getText().toString());
+        machine.setSpindleToolAdopter(et_machine_spindle_toolAdopter.getText().toString());
+        //feed axis information of machine
+        machine.setFeedAxisNum(et_machine_feed_axis_num.getText().toString());
+        machine.setFeedAxisDirection(et_machine_axis_direction.getText().toString());
+        machine.setFeedAxisTravel(et_machine_feedAxis_travel.getText().toString());
+        machine.setFeedAxisAccuracy(et_machine_feedAxis_accuracy.getText().toString());
+        machine.setFeedAxisRepeatability(et_machine_feedAxis_repeatability.getText().toString());
+        machine.setFeedAxisFastSpeed(et_machine_feedAxis_fastSpeed.getText().toString());
+        machine.setFeedAxisCuttingSpeed(et_machine_feedAxis_cuttingSpeed.getText().toString());
+        machine.setFeedAxisMaxAcceleration(et_machine_feedAxis_maxAcceleration.getText().toString());
+        machine.setFeedAxisPower(et_machine_feedAxis_power.getText().toString());
+        machine.setFeedAxisTorque(et_machine_feedAxis_torque.getText().toString());
+        machine.setFeedAxisMaxTorque(et_machine_feedAxis_maxTorque.getText().toString());
+        //tool library information of machine
+        machine.setToolLibraryToolNum(et_machine_toolLibrary_toolNum.getText().toString());
+        machine.setToolLibraryMaxToolDiameter(et_machine_toolLibrary_maxToolDiameter.getText().toString());
+        machine.setToolLibraryMaxToolLength(et_machine_toolLibrary_maxToolLength.getText().toString());
+        machine.setToolLibraryMaxToolWeight(et_machine_toolLibrary_maxToolWeight.getText().toString());
+        //introduction of machine
+        machine.setMachineIntroduction(et_machine_introduction.getText().toString());
     }
 
     /**
@@ -123,51 +301,44 @@ public class MachineDetailFragment extends Fragment {
      */
     private void initView(View view) {
         //机床信息控件
+        iv_machine_picture= (ImageView) view.findViewById(R.id.iv_machine_picture);
         et_machine_name = (EditText) view.findViewById(R.id.et_machine_name);
         et_machine_type = (EditText) view.findViewById(R.id.et_machine_type);
         et_machine_brand = (EditText) view.findViewById(R.id.et_machine_brand);
         et_machine_series = (EditText) view.findViewById(R.id.et_machine_series);
         et_machine_axis_num = (EditText) view.findViewById(R.id.et_machine_axis_num);
         et_machine_CSYS = (EditText) view.findViewById(R.id.et_machine_CSYS);
-        et_machine_autoToolChange = (EditText) view.findViewById(R.id.et_machine_autoToolChange);
         et_machine_machineTable_size = (EditText) view.findViewById(R.id.et_machine_machineTable_size);
-        et_machine_rotaryTable_size = (EditText) view.findViewById(R.id.et_machine_rotaryTable_size);
-        et_machine_machineTable_maxLoad = (EditText) view.findViewById(R.id.et_machine_machineTable_maxLoad);
-        et_machine_rotaryTable_maxLoad = (EditText) view.findViewById(R.id.et_machine_rotaryTable_maxLoad);
+        et_machine_maxWorkpieceWeight= (EditText) view.findViewById(R.id.et_machine_maxWorkpieceWeight);
+        et_machine_autoToolChange = (EditText) view.findViewById(R.id.et_machine_autoToolChange);
+        et_machine_rotary_table= (EditText) view.findViewById(R.id.et_machine_rotary_table);
         et_machine_size = (EditText) view.findViewById(R.id.et_machine_size);
         et_machine_weight = (EditText) view.findViewById(R.id.et_machine_weight);
         et_machine_layout = (EditText) view.findViewById(R.id.et_machine_layout);
 
         //主轴信息控件
         et_machine_spindle_type = (EditText) view.findViewById(R.id.et_machine_spindle_type);
-        et_machine_spindle_speed = (EditText) view.findViewById(R.id.et_machine_spindle_speed);
-        et_machine_spindle_toolAdopter = (EditText) view.findViewById(R.id.et_machine_spindle_toolAdopter);
-        et_machine_spindle_maxTorque = (EditText) view.findViewById(R.id.et_machine_spindle_maxTorque);
-        et_machine_spindle_distanceToMachineTable = (EditText) view.findViewById(R.id.et_machine_spindle_distanceToMachineTable);
-        et_machine_spindle_distanceToRotaryTable = (EditText) view.findViewById(R.id.et_machine_spindle_distanceToRotaryTable);
-        et_machine_spindle_distanceToColumn = (EditText) view.findViewById(R.id.et_machine_spindle_distanceToColumn);
+        et_machine_spindle_num= (EditText) view.findViewById(R.id.et_machine_spindle_num);
+        et_machine_spindle_max_rpm= (EditText) view.findViewById(R.id.et_machine_spindle_max_rpm);
+        et_machine_spindle_min_rpm= (EditText) view.findViewById(R.id.et_machine_spindle_min_rpm);
         et_machine_spindle_power = (EditText) view.findViewById(R.id.et_machine_spindle_power);
+        et_machine_spindle_maxTorque = (EditText) view.findViewById(R.id.et_machine_spindle_maxTorque);
+        et_machine_spindle_travel= (EditText) view.findViewById(R.id.et_machine_spindle_travel);
+        et_machine_spindle_distanceToMachineTable = (EditText) view.findViewById(R.id.et_machine_spindle_distanceToMachineTable);
+        et_machine_spindle_toolAdopter = (EditText) view.findViewById(R.id.et_machine_spindle_toolAdopter);
 
         //进给轴信息控件
-        et_machine_feedAxis_distance_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_distance_xyz);
-        et_machine_feedAxis_distance_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_distance_ac);
-        et_machine_feedAxis_accuracy_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_accuracy_xyz);
-        et_machine_feedAxis_accuracy_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_accuracy_ac);
-        et_machine_feedAxis_repeatablity_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_repeatablity_xyz);
-        et_machine_feedAxis_repeatablity_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_repeatablity_ac);
-        et_machine_feedAxis_fastSpeed_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_fastSpeed_xyz);
-        et_machine_feedAxis_fastSpeed_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_fastSpeed_ac);
+        et_machine_feed_axis_num= (EditText) view.findViewById(R.id.et_machine_feed_axis_num);
+        et_machine_axis_direction= (EditText) view.findViewById(R.id.et_machine_axis_direction);
+        et_machine_feedAxis_travel= (EditText) view.findViewById(R.id.et_machine_feedAxis_travel);
+        et_machine_feedAxis_accuracy= (EditText) view.findViewById(R.id.et_machine_feedAxis_accuracy);
+        et_machine_feedAxis_repeatability= (EditText) view.findViewById(R.id.et_machine_feedAxis_repeatability);
+        et_machine_feedAxis_fastSpeed= (EditText) view.findViewById(R.id.et_machine_feedAxis_fastSpeed);
         et_machine_feedAxis_cuttingSpeed = (EditText) view.findViewById(R.id.et_machine_feedAxis_cuttingSpeed);
         et_machine_feedAxis_maxAcceleration = (EditText) view.findViewById(R.id.et_machine_feedAxis_maxAcceleration);
-        et_machine_feedAxis_maxAngularAcceleration = (EditText) view.findViewById(R.id.et_machine_feedAxis_maxAngularAcceleration);
-        et_machine_feedAxis_power_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_power_xyz);
-        et_machine_feedAxis_power_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_power_ac);
-        et_machine_feedAxis_torque_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_torque_xyz);
-        et_machine_feedAxis_torque_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_torque_ac);
-        et_machine_feedAxis_maxTorque_xyz = (EditText) view.findViewById(R.id.et_machine_feedAxis_maxTorque_xyz);
-        et_machine_feedAxis_maxTorque_ac = (EditText) view.findViewById(R.id.et_machine_feedAxis_maxTorque_ac);
-        et_machine_feedAxis_slideway = (EditText) view.findViewById(R.id.et_machine_feedAxis_slideway);
-
+        et_machine_feedAxis_power= (EditText) view.findViewById(R.id.et_machine_feedAxis_power);
+        et_machine_feedAxis_torque= (EditText) view.findViewById(R.id.et_machine_feedAxis_torque);
+        et_machine_feedAxis_maxTorque= (EditText) view.findViewById(R.id.et_machine_feedAxis_maxTorque);
         //刀库信息控件
         et_machine_toolLibrary_toolNum = (EditText) view.findViewById(R.id.et_machine_toolLibrary_toolNum);
         et_machine_toolLibrary_maxToolDiameter = (EditText) view.findViewById(R.id.et_machine_toolLibrary_maxToolDiameter);
@@ -175,7 +346,6 @@ public class MachineDetailFragment extends Fragment {
         et_machine_toolLibrary_maxToolWeight = (EditText) view.findViewById(R.id.et_machine_toolLibrary_maxToolWeight);
 
         //机床说明信息控件
-        iv_machine_picture= (ImageView) view.findViewById(R.id.iv_machine_picture);
         et_machine_introduction = (EditText) view.findViewById(R.id.et_machine_introduction);
     }
 
@@ -192,42 +362,24 @@ public class MachineDetailFragment extends Fragment {
         et_machine_CSYS.setText("Siemens 840D");
         et_machine_autoToolChange.setText("支持");
         et_machine_machineTable_size.setText("800×320");
-        et_machine_rotaryTable_size.setText("φ210");
-        et_machine_machineTable_maxLoad.setText("300");
-        et_machine_rotaryTable_maxLoad.setText("35");
+
         et_machine_size.setText("1600x1840x2110");
         et_machine_weight.setText("3000");
         et_machine_layout.setText("摇篮式五轴联动加工中心");
 
         //主轴信息设置
         et_machine_spindle_type.setText("电主轴");
-        et_machine_spindle_speed.setText("100-10000");
         et_machine_spindle_toolAdopter.setText("BT30");
         et_machine_spindle_maxTorque.setText("30");
         et_machine_spindle_distanceToMachineTable.setText("355-755");
-        et_machine_spindle_distanceToRotaryTable.setText("75-475");
-        et_machine_spindle_distanceToColumn.setText("360");
+
         et_machine_spindle_power.setText("3.7");
 
         //进给轴信息设置
-        et_machine_feedAxis_distance_xyz.setText("500/320/400");
-        et_machine_feedAxis_distance_ac.setText("±90/360");
-        et_machine_feedAxis_accuracy_xyz.setText("0.01/0.01/0.01");
-        et_machine_feedAxis_accuracy_ac.setText("20/20");
-        et_machine_feedAxis_repeatablity_xyz.setText("0.006/0.006/0.006");
-        et_machine_feedAxis_repeatablity_ac.setText("4/4");
-        et_machine_feedAxis_fastSpeed_xyz.setText("18/18/18");
-        et_machine_feedAxis_fastSpeed_ac.setText("250/250");
+
         et_machine_feedAxis_cuttingSpeed.setText("1-5000");
         et_machine_feedAxis_maxAcceleration.setText("20");
-        et_machine_feedAxis_maxAngularAcceleration.setText("");
-        et_machine_feedAxis_power_xyz.setText("1.57/1.57/1.57");
-        et_machine_feedAxis_power_ac.setText("1.69/1.69");
-        et_machine_feedAxis_torque_xyz.setText("7.5/7.5/7.5");
-        et_machine_feedAxis_torque_ac.setText("4.6/4.6");
-        et_machine_feedAxis_maxTorque_xyz.setText("35/35/35");
-        et_machine_feedAxis_maxTorque_ac.setText("17.2/17.2");
-        et_machine_feedAxis_slideway.setText("台湾滚动直线导轨");
+
 
         //刀库信息设置
         et_machine_toolLibrary_toolNum.setText("10");

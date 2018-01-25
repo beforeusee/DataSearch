@@ -37,6 +37,8 @@
         </activity>
         <activity android:name=".MaterialEditActivity">
         </activity>
+        <activity android:name=".MachineDetailActivity">
+        </activity>
     </application>
 
 </manifest>

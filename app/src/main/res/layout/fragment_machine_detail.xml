@@ -15,8 +15,8 @@
 
             <ImageView
                 android:id="@+id/iv_machine_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
@@ -41,6 +41,8 @@
                 <TableRow
                     android:paddingBottom="15dp"
                     android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -94,7 +96,6 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:inputType="text"
                         android:textSize="20sp" />
                 </TableRow>
 
@@ -155,25 +156,6 @@
                         android:textSize="20sp" />
                 </TableRow>
 
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_tool_change_auto"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_autoToolChange"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:gravity="start"
-                        android:textSize="20sp" />
-                </TableRow>
-
                 <TableRow
                     android:paddingBottom="15dp"
                     android:paddingTop="10dp" >
@@ -181,7 +163,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_table_size"
                         android:textSize="20sp" />
 
@@ -201,16 +183,15 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="@string/machine_rotary_table_size"
+                        android:text="@string/machine_max_workpiece_weight"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_rotaryTable_size"
+                        android:id="@+id/et_machine_maxWorkpieceWeight"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:gravity="start"
-                        android:inputType="text"
                         android:textSize="20sp" />
                 </TableRow>
 
@@ -220,16 +201,16 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="@string/machine_table_max_load"
+                        android:text="@string/machine_tool_change_auto"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_machineTable_maxLoad"
+                        android:id="@+id/et_machine_autoToolChange"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
                         android:inputType="text"
+                        android:gravity="start"
                         android:textSize="20sp" />
                 </TableRow>
 
@@ -238,17 +219,17 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:text="@string/rotary_table_max_load"
+                        android:layout_height="wrap_content"
+                        android:text="@string/machine_rotary_table"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_rotaryTable_maxLoad"
+                        android:id="@+id/et_machine_rotary_table"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
                         android:inputType="text"
+                        android:gravity="start"
                         android:textSize="20sp" />
                 </TableRow>
 
@@ -350,17 +331,133 @@
                         android:textSize="20sp" />
                 </TableRow>
 
+                <TableRow
+                    android:paddingBottom="15dp"
+                    android:paddingTop="10dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/machine_spindle_num"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_num"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_speed"
+                        android:text="@string/machine_spindle_max_rpm"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_spindle_speed"
+                        android:id="@+id/et_machine_spindle_max_rpm"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow android:paddingBottom="15dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/machine_spindle_min_rpm"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_min_rpm"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow android:paddingBottom="15dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:text="@string/machine_spindle_power"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_power"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow android:paddingBottom="15dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:text="@string/machine_spindle_max_torque"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_maxTorque"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow android:paddingBottom="15dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/machine_spindle_travel"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_travel"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow android:paddingBottom="15dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:text="@string/machine_spindle_distance_to_machine_table"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_spindle_distanceToMachineTable"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -387,100 +484,6 @@
                         android:textSize="20sp"/>
                 </TableRow>
 
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_power"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_spindle_power"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-                </TableRow>
-
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_max_torque"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_spindle_maxTorque"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-                </TableRow>
-
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_distance_to_machine_table"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_spindle_distanceToMachineTable"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-                </TableRow>
-
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_distance_to_rotary_table"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_spindle_distanceToRotaryTable"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-                </TableRow>
-
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_spindle_distance_to_column"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_spindle_distanceToColumn"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-                </TableRow>
             </TableLayout>
 
             <TextView
@@ -509,39 +512,17 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/machine_axis"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:text="@string/machine_feed_axis_num"
                         android:textSize="20sp" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_machine_feed_axis_num"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/machine_axis_x_y_z"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/unit"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_axis_a_c"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/unit"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow
@@ -551,167 +532,97 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/machine_axis_direction"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_machine_axis_direction"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:paddingBottom="15dp"
+                    android:paddingTop="10dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/machine_axis_travel"
-                        android:layout_weight="2"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_distance_xyz"
+                        android:id="@+id/et_machine_feedAxis_travel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:inputType="text"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/millimeter"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_distance_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/degree"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:text="@string/machine_axis_position_accuracy"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_accuracy_xyz"
+                        android:id="@+id/et_machine_feedAxis_accuracy"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/millimeter"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_accuracy_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/arc_second"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_axis_repeatablity"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:text="@string/machine_axis_repeatability"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_repeatablity_xyz"
+                        android:id="@+id/et_machine_feedAxis_repeatability"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/millimeter"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_repeatablity_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/arc_second"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:text="@string/machine_axis_fast_speed"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_fastSpeed_xyz"
+                        android:id="@+id/et_machine_feedAxis_fastSpeed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/m_min"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_fastSpeed_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/r_min"
-                        android:textSize="20sp"/>
                 </TableRow>
 
 
@@ -721,8 +632,8 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_axis_cutting_speed"
                         android:textSize="20sp" />
 
@@ -730,31 +641,10 @@
                         android:id="@+id/et_machine_feedAxis_cuttingSpeed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mm_min"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/degree_min"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp"
@@ -763,8 +653,8 @@
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:text="@string/machine_axis_max_acceleration"
                         android:textSize="20sp" />
 
@@ -772,33 +662,11 @@
                         android:id="@+id/et_machine_feedAxis_maxAcceleration"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/meter_seconds_square"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_maxAngularAcceleration"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rad_degree_square"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp"
@@ -807,168 +675,58 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_axis_power"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_power_xyz"
+                        android:id="@+id/et_machine_feedAxis_power"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kw"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_power_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kw"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_axis_torque"
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/et_machine_feedAxis_torque_xyz"
+                        android:id="@+id/et_machine_feedAxis_torque"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nm"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_torque_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nm"
-                        android:textSize="20sp"/>
                 </TableRow>
 
                 <TableRow android:paddingBottom="15dp" >
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_axis_max_torque"
                         android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_maxTorque_xyz"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nm"
-                        android:textSize="20sp"/>
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_maxTorque_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/nm"
-                        android:textSize="20sp"/>
-                </TableRow>
-
-                <TableRow android:paddingBottom="15dp" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:text="@string/machine_axis_slideway"
-                        android:textSize="20sp" />
-
-                    <EditText
-                        android:id="@+id/et_machine_feedAxis_slideway"
-                        android:layout_width="0dp"
-                        android:layout_weight="4"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="20sp"/>
 
                     <EditText
                         android:id="@+id/et_machine_feedAxis_maxTorque"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:inputType="text"
                         android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="20sp"/>
                 </TableRow>
 
             </TableLayout>
@@ -997,8 +755,8 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/machine_tool_library_tool_num"
                         android:textSize="20sp" />
 
@@ -1018,7 +776,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_tool_library_max_tool_diameter"
                         android:textSize="20sp" />
 
@@ -1037,7 +795,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_tool_library_max_tool_length"
                         android:textSize="20sp" />
 
@@ -1056,7 +814,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/machine_tool_library_max_tool_weight"
                         android:textSize="20sp" />
 

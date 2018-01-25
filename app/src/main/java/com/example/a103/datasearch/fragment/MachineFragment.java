@@ -1,9 +1,14 @@
 package com.example.a103.datasearch.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +17,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.a103.datasearch.MachineAddActivity;
+import com.example.a103.datasearch.MachineDetailActivity;
+import com.example.a103.datasearch.MachineRecyclerViewAdapter;
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.Machine;
 import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.R;
+import com.example.a103.datasearch.utils.DatabaseApplication;
+
+import java.util.List;
 
 /**
  * Created by A103 on 2017/2/10.
@@ -26,10 +37,14 @@ import com.example.a103.datasearch.R;
 public class MachineFragment extends Fragment {
 
     private static final String TAG = "MachineFragment";
-    MachineDetailFragment mMachineDetailFragment;
     Toolbar mToolbar;
+    RecyclerView mRecyclerView;
+    private DaoSession mDaoSession;
+    private List<Machine> mMachineList;
+    private MachineRecyclerViewAdapter mAdapter;
+    private BroadcastReceiver mRefreshBroadcastReceiver;
 
-    //实例函数
+    //factory method to get a instance
     public static MachineFragment newInstance(String s){
         MachineFragment machineFragment=new MachineFragment();
         Bundle bundle=new Bundle();
@@ -51,6 +66,24 @@ public class MachineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_machine,container,false);
         initView(view);
+        initMachineList();
+
+        //set layout for RecyclerView
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        //create adapter and set adapter for mRecyclerView
+        mAdapter=new MachineRecyclerViewAdapter(mMachineList);
+        mRecyclerView.setAdapter(mAdapter);
+
+        //set the click event of machine list item
+        mAdapter.setOnItemClickListener(new MachineRecyclerViewAdapter.OnMachineRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Long machineId=mMachineList.get(position).getId();
+                MachineDetailActivity.actionStart(getContext(),machineId);
+            }
+        });
+        //set the click event of toolbar
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -58,33 +91,55 @@ public class MachineFragment extends Fragment {
                     case R.id.add_machine:
                         //start MachineAddActivity
                         MachineAddActivity.actionStart(getContext());
-                    case R.id.edit_machine:
-                        Toast.makeText(getContext(),"clicked edit machine",Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.delete_machine:
-                        //delete current machine
-
                 }
                 return MachineFragment.super.onOptionsItemSelected(item);
             }
         });
-        addChildFragment();
+
+        registerRefreshMachineListBroadcastReceiver();
         return view;
     }
 
     /**
-     * add child fragment to the MachineFragment
+     * update machine list of recyclerView
      */
-    private void addChildFragment() {
-        mMachineDetailFragment= (MachineDetailFragment) getChildFragmentManager().
-                findFragmentById(R.id.fl_machine_detail_fragment_container);
-        if (mMachineDetailFragment==null){
-            mMachineDetailFragment=new MachineDetailFragment();
-            FragmentTransaction transaction=getChildFragmentManager().beginTransaction();
-            transaction.add(R.id.fl_machine_detail_fragment_container,mMachineDetailFragment);
-            transaction.commit();
+    private void updateMachines(){
+        mMachineList=mDaoSession.getMachineDao().loadAll();
+        mAdapter.updateMachineList(mMachineList);
+        Log.d(TAG, "updateMachines: update machine list");
+    }
+
+    /**
+     * register BroadcastReceiver to refresh machine list
+     */
+    private void registerRefreshMachineListBroadcastReceiver(){
+        //create intentFilter
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_REFRESH_MACHINE);
+        //create broadcastReceiver
+        if (mRefreshBroadcastReceiver==null){
+            mRefreshBroadcastReceiver=new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    //if action is ACTION_REFRESH_TOOL,refresh machine list
+                    String action=intent.getAction();
+                    if (action.equals(Constant.ACTION_REFRESH_MACHINE)){
+                        updateMachines();
+                    }
+                }
+            };
         }
-        Log.d(TAG, "addChildFragment: load MachineDetailFragment to MachineFragment.");
+        getActivity().registerReceiver(mRefreshBroadcastReceiver,intentFilter);
+        Log.d(TAG, "registerRefreshMachineListBroadcastReceiver: register broadcast receiver of refresh machine list");
+    }
+
+    /**
+     * initial the machine list from SQLite database
+     */
+    private void initMachineList() {
+        mDaoSession= DatabaseApplication.getDaoSession();
+        mMachineList=mDaoSession.getMachineDao().loadAll();
     }
 
     /**
@@ -95,6 +150,7 @@ public class MachineFragment extends Fragment {
         //初始化toolbar
         mToolbar= (Toolbar) view.findViewById(R.id.toolbar_fragment_machine);
         mToolbar.inflateMenu(R.menu.menu_fragment_machine);
+        mRecyclerView= (RecyclerView) view.findViewById(R.id.rv_machine);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class ToolDetailActivity extends AppCompatActivity {
         mToolDetailFragment= (ToolDetailFragment) fragmentManager.
                 findFragmentById(R.id.fl_tool_show_detail_fragment_container);
         if (mToolDetailFragment==null){
-            mToolDetailFragment=ToolDetailFragment.newInstance(toolId);
+            mToolDetailFragment=ToolDetailFragment.newInstance(toolId,Constant.SHOW_MODE);
             fragmentManager.beginTransaction().
                     add(R.id.fl_tool_show_detail_fragment_container,mToolDetailFragment).commit();
         }
@@ -85,6 +85,7 @@ public class ToolDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.edit_tool:
+                ToolEditActivity.actionStart(this,toolId);
                 finish();
                 return true;
             case R.id.delete_tool:

@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Generated;
 
 
 /**
- * Created by zhengxiaohu on 2017/2/22.实现序列化接口Parcelable，以通过intent在activity之间传递Tool对象
+ * Created by XiaoHu Zheng on 2017/2/22.实现序列化接口Parcelable，以通过intent在activity之间传递Tool对象
  * 超类:Tool 描述通用整体立铣刀的数据模型
  */
 
@@ -121,13 +121,11 @@ public class Tool implements Parcelable{
     public Tool() {
     }
 
-
-
     /**
      * 用以intent在activity之间传递对象
-     * @param in
+     * @param in in
      */
-    protected Tool(Parcel in) {
+    private Tool(Parcel in) {
         id = in.readLong();
         name = in.readString();
         type = in.readString();

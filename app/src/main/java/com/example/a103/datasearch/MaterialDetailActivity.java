@@ -74,7 +74,7 @@ public class MaterialDetailActivity extends AppCompatActivity {
                 findFragmentById(R.id.ll_material_show_detail_fragment_container);
         if (mMaterialDetailFragment==null){
             //create MaterialDetailFragment(with argument materialId)
-            mMaterialDetailFragment=MaterialDetailFragment.getNewInstance(materialId);
+            mMaterialDetailFragment=MaterialDetailFragment.getNewInstance(materialId,Constant.SHOW_MODE);
             FragmentTransaction transaction=fragmentManager.beginTransaction();
             transaction.add(R.id.ll_material_show_detail_fragment_container,mMaterialDetailFragment);
             transaction.commit();
@@ -107,8 +107,8 @@ public class MaterialDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.edit_material:
+                MaterialEditActivity.actionStart(this,materialId);
                 finish();
-                Toast.makeText(this,"edit material",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.delete_material:
                 onMenuItemDeleteSelected();
