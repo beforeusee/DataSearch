@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:text="the convertView of getView"
-        android:textSize="20sp"
-        />
+        android:textSize="20sp"/>
+
 </LinearLayout>

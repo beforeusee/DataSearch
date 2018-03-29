@@ -26,6 +26,7 @@ import static com.example.a103.datasearch.utils.Constant.MATERIAL_CATEGORIES_FRA
  */
 
 public class MaterialFragment extends Fragment{
+
     //声明与二级目录了相关的成员变量
     private static final String TAG = "MaterialFragment";
     Toolbar toolbar;
@@ -47,6 +48,7 @@ public class MaterialFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View groupView = inflater.inflate(R.layout.fragment_material, container, false);
         initialView(groupView);
         addChildFragment();

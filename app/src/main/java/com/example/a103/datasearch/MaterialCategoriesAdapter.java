@@ -19,7 +19,7 @@ import java.util.List;
 class MaterialCategoriesAdapter extends
         RecyclerView.Adapter<MaterialCategoriesAdapter.ViewHolder>{
 
-    private static final String TAG = "MaterialCategoriesAdapter";
+    private static final String TAG = "MaterialCategoriesAdapt";
     private List<MaterialCategories> materialCategoriesList;
     private OnRecyclerViewItemDeleteViewClickListener mDeleteViewClickListener;
     private OnRecyclerViewItemTextViewClickListener mTextViewClickListener;

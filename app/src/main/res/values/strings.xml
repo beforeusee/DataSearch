@@ -38,10 +38,15 @@
         <item>High-Order Mech</item>
     </string-array>
     <string name="title_activity_material_detail">MaterialDetailActivity</string>
-    <string name="label_activity_material_detail">MaterialDetail</string>
+    <string name="label_activity_material_detail">材料详情</string>
+    <string name="label_activity_para_detail">切削参数详情</string>
+    <string name="label_activity_machine_detail">机床详情</string>
+    <string name="label_activity_tool_detail">刀具详情</string>
     <string name="action_settings">Settings</string>
     <string name="edit_material">编辑材料</string>
     <string name="delete_material">删除材料</string>
+    <string name="edit_parameter">编辑切削参数</string>
+    <string name="delete_parameter">删除切削参数</string>
     <string name="add_material">添加材料</string>
     <string name="manage_material_categories">分类管理</string>
     <string name="tool_in_use">使用中</string>
@@ -117,6 +122,7 @@
     <string name="rad_degree_square">rad/s^2</string>
     <string name="this_is_for_material_categories_name">this is for material categories name</string>
     <string name="this_is_for_machine_recyclerview_item_name">this is for machine recyclerView item name</string>
+    <string name="cutting_conditions_title">cutting conditions title</string>
     <string name="edit_material_categories">编辑材料分组</string>
     <string name="input_new_material_categories">请输入新名称</string>
     <string name="cancel">取消</string>

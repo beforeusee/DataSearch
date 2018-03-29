@@ -13,6 +13,7 @@ import com.example.a103.datasearch.dao.MaterialCategoriesDao;
 
 /**
  * Created by XiaoHu Zheng on 2017/3/17.
+ * Email: 1050087728@qq.com
  */
 
 @Entity

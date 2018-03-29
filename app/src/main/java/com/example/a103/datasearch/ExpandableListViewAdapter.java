@@ -7,13 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhengxiaohu on 2017/3/9.
@@ -24,7 +20,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> groupList=new ArrayList<>();
     private List<List<String>> childList=new ArrayList<>();
-    private static final String TAG = "ExpandableListViewAdapter";
+    private static final String TAG = "ExpandListViewAdapter";
 
     /**
      * 构造函数，初始化参数context,groupList,childList
@@ -93,10 +89,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         GroupHolder groupHolder;
         if (convertView==null){
             LayoutInflater inflater=LayoutInflater.from (context);
-            convertView=inflater.inflate(R.layout.material_expandablelistview_group_item,null);
+            convertView=inflater.inflate(R.layout.expandablelistview_group_item,null);
 
             groupHolder=new GroupHolder();
-            groupHolder.groupName= (TextView) convertView.findViewById(R.id.tv_material_parent_title);
+            groupHolder.groupName= (TextView) convertView.findViewById(R.id.tv_parent_title);
             convertView.setTag(groupHolder);
         } else{
             groupHolder= (GroupHolder) convertView.getTag();
@@ -112,10 +108,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         ChildHolder childHolder;
         if (convertView==null){
             LayoutInflater inflater= LayoutInflater.from(context);
-            convertView=inflater.inflate(R.layout.material_expandablelistview_child_item,null);
+            convertView=inflater.inflate(R.layout.expandablelistview_child_item,null);
 
             childHolder=new ChildHolder();
-            childHolder.childName= (TextView) convertView.findViewById(R.id.tv_material_child_title);
+            childHolder.childName= (TextView) convertView.findViewById(R.id.tv_child_title);
             convertView.setTag(childHolder);
         } else{
             childHolder= (ChildHolder) convertView.getTag();

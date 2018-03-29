@@ -11,7 +11,8 @@ import com.example.a103.datasearch.dao.MaterialCuttingLimitsDao;
 import com.example.a103.datasearch.dao.MaterialDao;
 
 /**
- * Created by zhengxiaohu on 2017/3/10.
+ * Created by XiaoHu Zheng on 2017/3/10.
+ *
  */
 
 @Entity

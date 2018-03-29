@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/root_ll_cutting_para_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sv_cuttingParaDetails">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:id="@+id/ll_cutting_para_details">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="切削参数详情"
+                    android:textSize="20sp"/>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:background="@color/dark_white"
+                    android:stretchColumns="1">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="切削条件"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <Spinner
+                            android:id="@+id/sp_cutting_conditions"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="主轴转速(r/min)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_spindle_speed"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="进给速度(mm/min)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_feedRate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="径向切宽(mm)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_cutting_width"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="轴向切深(mm)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_cutting_depth"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="每齿进给量(mm/z)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_feed_per_tooth"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="切削线速度(m/min)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_cutting_linear_velocity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="Y向切削力峰值(N)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_max_force_y"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="XY向切削力峰值(N)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_max_force_xy"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="切向力峰值(N)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_max_force_tangential"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="最大转矩(Nm)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_max_torque"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="最大切削功率(W)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_max_cutting_power"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="材料去除率(cm³/min)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_material_removal_rate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="刀具寿命(min)"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_tool_life"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0.5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="数据来源"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/light1_blue"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_data_source"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:textSize="20sp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/dark_white"
+                        android:layout_margin="0.5dp"
+                        >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:text="数据成熟度"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/dark_white"/>
+
+                        <EditText
+                            android:id="@+id/et_cutting_para_data_maturity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="20sp"
+                            android:padding="0dp"
+                            android:layout_margin="0.5dp"
+                            android:background="@color/white"/>
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>

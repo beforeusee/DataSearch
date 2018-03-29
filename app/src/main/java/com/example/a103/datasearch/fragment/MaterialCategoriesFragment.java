@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zhengxiaohu on 2017/3/26.
+ * Created by XiaoHu Zheng on 2017/3/26.
  * 材料分类的Fragment
  */
 
@@ -42,7 +42,7 @@ public class MaterialCategoriesFragment extends Fragment {
     Spinner sp_material_categories_unit;                //材料单位(米制或英制)
     ExpandableListView mExpandableListView;              //材料种类分类二级目录
     private ExpandableListViewAdapter mAdapter;          //二级目录适配器
-    private static final String TAG = "MaterialCategoriesFragment";
+    private static final String TAG = "MaterialCategoriesFrag";
     private DaoSession daoSession= DatabaseApplication.getDaoSession();
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
     private BroadcastReceiver mRefreshExpandableListViewBroadcastReceiver;
@@ -99,7 +99,7 @@ public class MaterialCategoriesFragment extends Fragment {
         mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                Toast.makeText(getContext(),"第"+groupPosition+"组被点击了",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"第"+groupPosition+"组被点击了",Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -107,22 +107,22 @@ public class MaterialCategoriesFragment extends Fragment {
         mExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getContext(),"第"+groupPosition+"组展开",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"第"+groupPosition+"组展开",Toast.LENGTH_SHORT).show();
             }
         });
 
         mExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getContext(),"第"+groupPosition+"组合拢",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),"第"+groupPosition+"组合拢",Toast.LENGTH_SHORT).show();
             }
         });
 
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(getContext(), "第" + groupPosition + "组的第" + childPosition +
-                        "被点击了.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "第" + groupPosition + "组的第" + childPosition +
+//                        "被点击了.", Toast.LENGTH_SHORT).show();
                 //点击后加载MaterialDetailFragment，并在其中显示详细的信息
                 List<MaterialCategories> materialCategoriesList=daoSession.getMaterialCategoriesDao().loadAll();
                 MaterialCategories materialCategories=materialCategoriesList.get(groupPosition);

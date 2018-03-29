@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -15,9 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.CoefficientParameters;
@@ -31,7 +27,7 @@ import com.example.a103.datasearch.utils.DatabaseApplication;
 public class MaterialDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "MaterialDetailActivity";
-    public static final String MATERIAL_ID="materialId";
+    public static final String MATERIAL_ID="mMaterialId";
     LinearLayout ll_material_show_detail_fragment_container;
     MaterialDetailFragment mMaterialDetailFragment;
     Long materialId;
@@ -48,17 +44,8 @@ public class MaterialDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         initView();
-        //get the materialId
+        //get the mMaterialId
         Intent intent=getIntent();
         materialId=intent.getLongExtra(MATERIAL_ID,0);
         addFragmentToActivity(materialId);
@@ -73,7 +60,7 @@ public class MaterialDetailActivity extends AppCompatActivity {
         mMaterialDetailFragment= (MaterialDetailFragment) fragmentManager.
                 findFragmentById(R.id.ll_material_show_detail_fragment_container);
         if (mMaterialDetailFragment==null){
-            //create MaterialDetailFragment(with argument materialId)
+            //create MaterialDetailFragment(with argument mMaterialId)
             mMaterialDetailFragment=MaterialDetailFragment.getNewInstance(materialId,Constant.SHOW_MODE);
             FragmentTransaction transaction=fragmentManager.beginTransaction();
             transaction.add(R.id.ll_material_show_detail_fragment_container,mMaterialDetailFragment);
@@ -122,8 +109,8 @@ public class MaterialDetailActivity extends AppCompatActivity {
      */
     private void onMenuItemDeleteSelected(){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("确定删除刀具吗？");
-        builder.setPositiveButton("删除刀具", new DialogInterface.OnClickListener() {
+        builder.setTitle("确定删除材料吗？");
+        builder.setPositiveButton("删除材料", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //获取数据库管理对象

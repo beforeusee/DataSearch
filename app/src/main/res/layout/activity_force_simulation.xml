@@ -1,0 +1,1078 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_force_simulation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.a103.datasearch.forcesimulation.ForceSimulationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/ll_title">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="22sp"
+            android:text="切削力仿真"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:id="@+id/ll_btn_confirm_run_exit"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btn_para_confirmed"
+            android:text="确定"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="仿真"
+            android:id="@+id/btn_run_simulation"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="退出"
+            android:id="@+id/btn_exit"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_title"
+        android:layout_above="@id/ll_btn_confirm_run_exit"
+        android:id="@+id/sv_force_simulation_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:id="@+id/ll_force_simulation_details">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/light_green"
+                android:text="刀具属性"
+                android:textSize="21sp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="@color/dark_white"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="刀具类型"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <Spinner
+                        android:id="@+id/sp_tool_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="刀具材料"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <Spinner
+                        android:id="@+id/sp_tool_material_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="刀具牌号"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <Spinner
+                        android:id="@+id/sp_tool_num"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"
+                        />
+                </TableRow>
+
+                <ImageView
+                    android:id="@+id/iv_tool_image_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/white"/>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="螺旋角(°)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_tool_helix_angle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="圆角半径(mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_tool_round_radius"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="刀具刃长(mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_tool_length_flute"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="刀具悬长(mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_cutting_conditions_cutting_method"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="齿数"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_tool_teeth_num"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/light_green"
+                android:text="工件属性"
+                android:textSize="21sp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="@color/dark_white"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="材料类型"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <Spinner
+                        android:id="@+id/sp_workpiece_material_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="材料牌号"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <Spinner
+                        android:id="@+id/sp_workpiece_material_grade"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="切向铣削力系数(Ktc)(N/mm²)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_material_ktc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="径向铣削力系数(Krc)/(N/mm²)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_material_krc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="轴向铣削力系数(Kac)(N/mm²)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_material_kac"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="切向刃口力系数(Kte)/(N/mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_material_kte"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="径向刃口力系数(Kre)(N/mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_material_kre"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="轴向刃口力系数(Kae)/(N/mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_material_kae"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="仿真参数"
+                android:background="@color/light_green"
+                android:textSize="21sp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="@color/dark_white"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="主轴转速(r/min)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_cutting_para_spindle_speed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="进给速度(mm/min)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_cutting_para_feedRate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="径向切宽(mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/dark_white"/>
+
+                    <EditText
+                        android:id="@+id/et_cutting_para_cutting_width"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="轴向切深(mm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_cutting_para_cutting_depth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="0.5dp">
+
+                    <RadioGroup
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="顺铣"
+                            android:checked="true"
+                            android:id="@+id/rb_down_mill"/>
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="逆铣"
+                            android:id="@+id/rb_up_mill"/>
+                    </RadioGroup>
+
+                    <ImageView
+
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="80dp"/>
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="仿真结果"
+                android:background="@color/light_green"
+                android:textSize="21sp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="@color/dark_white"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="X向最大铣削力(N)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_fx"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="Y向最大铣削力(N)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_fy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="Z向最大铣削力(N)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_fz"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="XY平面最大铣削力(N)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_fxy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="最大铣削功率(Kw)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_power"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="最大扭矩(Nm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_torque"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dark_white"
+                    android:layout_margin="0.5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="夹持面最大弯矩(Nm)"
+                        android:textSize="20sp"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:background="@color/light1_blue"/>
+
+                    <EditText
+                        android:id="@+id/et_max_tool_bend"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:layout_margin="0.5dp"
+                        android:textSize="20sp"
+                        android:background="@color/white"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="仿真图形"
+                android:background="@color/light_green"
+                android:textSize="21sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/rg_force_image">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_fx_fy_fz"
+                            android:text="Fx/Fy/Fz"/>
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_ft_fr_fa"
+                            android:text="Ft/Fr/Fa"/>
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_fxy_fxyz"
+                            android:text="Fxy/Fxyz"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_torque"
+                            android:text="扭矩"/>
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_power"
+                            android:text="功率"/>
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/rb_bend"
+                            android:text="夹持面弯矩"/>
+                    </LinearLayout>
+
+
+                </RadioGroup>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

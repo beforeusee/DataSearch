@@ -16,7 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ToolDetailActivity">
+        <activity
+            android:name=".ToolDetailActivity"
+            android:label="@string/label_activity_tool_detail"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".MaterialCategoriesManagementActivity">
         </activity>
@@ -37,7 +40,27 @@
         </activity>
         <activity android:name=".MaterialEditActivity">
         </activity>
-        <activity android:name=".MachineDetailActivity">
+        <activity
+            android:name=".MachineDetailActivity"
+            android:label="@string/label_activity_machine_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CuttingParaDetailsAddActivity">
+        </activity>
+        <activity android:name=".CuttingParaDetailsEditActivity">
+        </activity>
+        <activity
+            android:name=".CuttingParaShowDetailsActivity"
+            android:label="@string/label_activity_para_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CuttingConditionsManagementActivity">
+        </activity>
+        <activity android:name=".CuttingConditionsAddActivity">
+        </activity>
+        <activity android:name=".CuttingConditionsEditActivity">
+        </activity>
+        <activity android:name=".forcesimulation.ForceSimulationActivity">
         </activity>
     </application>
 

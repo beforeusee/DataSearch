@@ -15,15 +15,15 @@ import com.example.a103.datasearch.fragment.MaterialDetailFragment;
 import java.util.List;
 
 /**
- * Created by zhengxiaohu on 2017/4/7.
+ * Created by XiaoHu Zheng on 2017/4/7.
+ * 材料详情分类适配器
  */
 
 public class MaterialDetailCategoriesSpinnerAdapter extends BaseAdapter {
 
-
     private Context mContext;
     private List<String> mList;
-    private static final String TAG = "MaterialDetailCategoriesSpinnerAdapter";
+    private static final String TAG = "MaDetailCateSpinAdapter";
 
     public MaterialDetailCategoriesSpinnerAdapter(Context context,List<String> list){
         this.mContext=context;

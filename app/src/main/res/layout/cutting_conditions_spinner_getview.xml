@@ -5,13 +5,11 @@
               android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_material_parent_title"
+        android:id="@+id/tv_cutting_para_details_sp_getView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:text="this is parent item"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
+        android:gravity="end"
+        android:text="the convertView of getView"
+        android:textSize="20sp"
         />
 </LinearLayout>

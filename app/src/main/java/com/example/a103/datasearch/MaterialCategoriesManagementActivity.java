@@ -35,7 +35,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
     private List<MaterialCategories> materialCategoriesList=new ArrayList<>();
     private DaoSession daoSession;  //获取应用的全局数据库管理变量daoSession
     private MaterialCategoriesAdapter adapter;
-    private static final String TAG = "MaterialCategoriesManagementActivity";
+    private static final String TAG = "MaterialCategoriesManag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +153,7 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                 //弹出删除的警告对话框
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(MaterialCategoriesManagementActivity.this);
                 alertDialogBuilder.setTitle("提示");
-                alertDialogBuilder.setMessage("确定删除材料分类:"+materialCategories.getName()+" 吗?");
+                alertDialogBuilder.setMessage("确定删除材料分类:"+materialCategories.getName()+"及其材料列表吗?");
                 alertDialogBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -161,7 +161,19 @@ public class MaterialCategoriesManagementActivity extends AppCompatActivity {
                         //判断数据表中是否有materialCategories类型的数据，有则删除并更新materialCategoriesList列表
                         // 如果没有打印调试信息表示不存在该数据
                         if (daoSession.getMaterialCategoriesDao().hasKey(materialCategories)){
+
+                            //删除该分组对应的所有材料列表
+                            if (materialCategories.getMaterials().size()>0){
+
+                                for (int i=0;i<materialCategories.getMaterials().size();i++){
+
+                                    daoSession.getMaterialDao().delete(materialCategories.getMaterials().get(i));
+                                }
+                            }
+
+                            //删除该材料分组
                             daoSession.getMaterialCategoriesDao().delete(materialCategories);
+
                             updateMaterialCategories();
                             Log.d(TAG, "onItemDeleteViewClick: successfully deleted: "+materialCategories.getName());
                             //2017/4/7 刷新fragment_material中的UI，

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.example.a103.datasearch.dao.DaoSession;
+import com.example.a103.datasearch.data.MaterialCategories;
 import com.example.a103.datasearch.fragment.MaterialDetailFragment;
 import com.example.a103.datasearch.utils.Constant;
 import com.example.a103.datasearch.utils.CustomTitleBar;
@@ -17,12 +19,14 @@ import com.example.a103.datasearch.utils.DatabaseApplication;
 public class MaterialEditActivity extends AppCompatActivity {
 
     private static final String TAG = "MaterialEditActivity";
-    public static final String MATERIAL_ID="materialId";
+    public static final String MATERIAL_ID="mMaterialId";
 
     CustomTitleBar material_edit_customTitleBar;
     FrameLayout fl_material_edit_detail_fragment_container;
     MaterialDetailFragment mMaterialDetailFragment;
-    Long materialId;
+
+    Long mMaterialId;
+    Long mMaterialCategoriesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,10 @@ public class MaterialEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_material_edit);
 
         initView();
-        materialId=getIntent().getLongExtra(MATERIAL_ID,0);
-        addFragmentToActivity(materialId);
+        mMaterialId =getIntent().getLongExtra(MATERIAL_ID,0);
+        mMaterialCategoriesId=DatabaseApplication.getDaoSession().getMaterialDao().load(mMaterialId).getMaterialCategoriesId();
+
+        addFragmentToActivity(mMaterialId);
 
         material_edit_customTitleBar.setTitleBarLeftBtnClickListener(new View.OnClickListener() {
             @Override
@@ -44,12 +50,26 @@ public class MaterialEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 2017/7/14
-                DatabaseApplication.getDaoSession().getMaterialDao().
-                        save(mMaterialDetailFragment.getMaterialDetail().getMaterial());
-                DatabaseApplication.getDaoSession().getCoefficientParametersDao().
-                        save(mMaterialDetailFragment.getMaterialDetail().getCoefficientParameters());
-                DatabaseApplication.getDaoSession().getMaterialCuttingLimitsDao().
-                        save(mMaterialDetailFragment.getMaterialDetail().getMaterialCuttingLimits());
+                DaoSession daoSession=DatabaseApplication.getDaoSession();
+
+                daoSession.getMaterialDao().save(mMaterialDetailFragment.getMaterialDetail().getMaterial());
+                daoSession.getCoefficientParametersDao().save(mMaterialDetailFragment.getMaterialDetail().getCoefficientParameters());
+                daoSession.getMaterialCuttingLimitsDao().save(mMaterialDetailFragment.getMaterialDetail().getMaterialCuttingLimits());
+
+                MaterialCategories materialCategories=daoSession.getMaterialCategoriesDao().
+                        load(mMaterialDetailFragment.getMaterialDetail().getMaterial().getMaterialCategoriesId());
+
+                //判断该材料对应的MaterialCategories的id是否变化
+                if (materialCategories.getId().equals(mMaterialCategoriesId)){
+
+                    materialCategories.resetMaterials();
+                }else {
+
+                    materialCategories.resetMaterials();
+
+                    daoSession.getMaterialCategoriesDao().load(mMaterialCategoriesId).resetMaterials();
+                }
+
                 sendMaterialRefreshBroadcast();
                 finish();
             }
