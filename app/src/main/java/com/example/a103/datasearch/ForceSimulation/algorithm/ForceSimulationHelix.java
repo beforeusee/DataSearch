@@ -251,7 +251,7 @@ public class ForceSimulationHelix {
 
         HashMap<String,Double> angleForce;
 
-        for (int i=0;i<2*PI*simulationPara.getPeriods()/simulationPara.getdPhi();i++){
+        for (int i=0;i<(int)(2*PI*simulationPara.getPeriods()/simulationPara.getdPhi());i++){
 
             angleForce=angleForceHelix(dataToolHelix,simulationPara,cuttingPara,coefficient,i);
 
