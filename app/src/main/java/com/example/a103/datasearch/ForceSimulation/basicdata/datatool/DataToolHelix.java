@@ -11,20 +11,11 @@ import static com.example.a103.datasearch.utils.Constant.PI;
 
 public class DataToolHelix extends DataTool {
 
-    //滞后因子
-    double lagFactor;
+    public DataToolHelix(){
 
-    public DataToolHelix(double radius, double lenFlute, double lenGauge, double helix, double toolTeethNum) {
-        super(radius, lenFlute, lenGauge, helix, toolTeethNum);
-
-        this.lagFactor =Math.tan(helix*PI/180)/radius;
     }
 
-    public double getLagFactor() {
-        return lagFactor;
-    }
-
-    public void setLagFactor(double lagFactor) {
-        this.lagFactor = lagFactor;
+    public DataToolHelix(double radius, double lenFlute, double lenGauge, double helix, double toolTeethNum, double lagFactor, String toolType, String toolMaterial, String toolNum) {
+        super(radius, lenFlute, lenGauge, helix, toolTeethNum, lagFactor, toolType, toolMaterial, toolNum);
     }
 }

@@ -1,7 +1,10 @@
 package com.example.a103.datasearch.forcesimulation.algorithm;
 import com.example.a103.datasearch.utils.Constant;
 
+import static com.example.a103.datasearch.utils.Constant.DOWN_MILL;
 import static com.example.a103.datasearch.utils.Constant.PI;
+import static com.example.a103.datasearch.utils.Constant.UP_MILL;
+
 import java.lang.Math.*;
 import java.util.List;
 
@@ -12,10 +15,6 @@ import java.util.List;
 
 public class SimuBase {
 
-    //顺铣
-    public static final String DOWN_MILL="downCutting";
-    //逆铣
-    public static final String UP_MILL="upCutting";
     /**
      * 计算刀具的弯矩
      * @param force 切削力
@@ -31,12 +30,14 @@ public class SimuBase {
      * 获取切入角
      * @param ae 切宽
      * @param r 刀具半径
-     * @param type 刀具类型
+     * @param type 刀具铣削类型
      * @return 切入角
      */
     public static double getPhiIn(double ae,double r,String type){
 
-        if (type.equals(DOWN_MILL)){
+        if (type.equals(UP_MILL)){
+
+            double phiIn=PI-Math.acos(1-ae/r)+1;
             return (PI-Math.acos(1-ae/r));
         }
 
@@ -52,7 +53,7 @@ public class SimuBase {
      */
     public static double getPhiOut(double ae,double r,String type){
 
-        if (type.equals(UP_MILL)){
+        if (type.equals(DOWN_MILL)){
 
             return Math.acos(1-ae/r);
         }
@@ -77,6 +78,6 @@ public class SimuBase {
 
     public static double mod(double num,double div){
 
-        return num-(int)(num/div)*div;
+        return num-((int)(num/div))*div;
     }
 }

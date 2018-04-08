@@ -15,6 +15,11 @@ public class Constant {
     public static final String CUTTING_CONDITIONS_FRAGMENT_TAG="cuttingConditionsFragment";
     public static final String SHOW_MODE="showMode";
     public static final String EDIT_MODE="editMode";
+    public static final String TOOL_TYPE_HELIX="圆柱螺旋铣刀";
+    public static final String TOOL_TYPE_R="R刀";
+    public static final String TOOL_TYPE_BALL_END="球头铣刀";
+    public static final String DOWN_MILL="downMill";
+    public static final String UP_MILL="upMill";
 
     public static final double PI=3.14159;
 }

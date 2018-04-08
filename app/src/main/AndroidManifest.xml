@@ -60,7 +60,8 @@
         </activity>
         <activity android:name=".CuttingConditionsEditActivity">
         </activity>
-        <activity android:name=".forcesimulation.ForceSimulationActivity">
+        <activity android:name=".forcesimulation.ForceSimulationActivity"
+            android:label="@string/label_activity_force_simulation">
         </activity>
     </application>
 

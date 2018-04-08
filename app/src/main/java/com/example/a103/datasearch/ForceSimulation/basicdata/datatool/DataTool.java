@@ -18,12 +18,31 @@ public class DataTool {
     //齿数
     double toolTeethNum;
 
-    public DataTool(double radius, double lenFlute, double lenGauge, double helix, double toolTeethNum) {
+    //滞后因子,lagFactor=tan(helix)/radius
+    double lagFactor;
+
+    //刀具类型
+    String toolType;
+    //刀具材料
+    String toolMaterial;
+    //刀具牌号
+    String toolNum;
+
+
+    public DataTool(){
+
+    }
+
+    public DataTool(double radius, double lenFlute, double lenGauge, double helix, double toolTeethNum, double lagFactor, String toolType, String toolMaterial, String toolNum) {
         this.radius = radius;
         this.lenFlute = lenFlute;
         this.lenGauge = lenGauge;
         this.helix = helix;
         this.toolTeethNum = toolTeethNum;
+        this.lagFactor = lagFactor;
+        this.toolType = toolType;
+        this.toolMaterial = toolMaterial;
+        this.toolNum = toolNum;
     }
 
     public double getRadius() {
@@ -64,5 +83,38 @@ public class DataTool {
 
     public void setToolTeethNum(double toolTeethNum) {
         this.toolTeethNum = toolTeethNum;
+    }
+
+
+    public double getLagFactor() {
+        return lagFactor;
+    }
+
+    public void setLagFactor(double lagFactor) {
+        this.lagFactor = lagFactor;
+    }
+
+    public String getToolType() {
+        return toolType;
+    }
+
+    public void setToolType(String toolType) {
+        this.toolType = toolType;
+    }
+
+    public String getToolMaterial() {
+        return toolMaterial;
+    }
+
+    public void setToolMaterial(String toolMaterial) {
+        this.toolMaterial = toolMaterial;
+    }
+
+    public String getToolNum() {
+        return toolNum;
+    }
+
+    public void setToolNum(String toolNum) {
+        this.toolNum = toolNum;
     }
 }

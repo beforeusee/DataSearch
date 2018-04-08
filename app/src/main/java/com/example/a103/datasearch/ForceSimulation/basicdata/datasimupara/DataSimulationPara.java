@@ -15,12 +15,16 @@ public class DataSimulationPara {
     //角度仿真步长
     private double dPhi;
     //仿真周期数
-    private int periods=2;
+    private int periods;
 
     //切入角
-    private double phiIn=0;
+    private double phiIn;
     //切出角
-    private double phiOut=PI;
+    private double phiOut;
+
+    public DataSimulationPara(){
+
+    }
 
     public DataSimulationPara(double dz, double dPhi, int periods, double phiIn, double phiOut) {
         this.dz = dz;
