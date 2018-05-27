@@ -21,5 +21,5 @@ public class Constant {
     public static final String DOWN_MILL="downMill";
     public static final String UP_MILL="upMill";
 
-    public static final double PI=3.14159;
+    public static final double PI=3.14159265358979323846;
 }

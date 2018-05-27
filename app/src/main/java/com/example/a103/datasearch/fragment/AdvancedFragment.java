@@ -70,6 +70,6 @@ public class AdvancedFragment extends Fragment {
         mToolbar= (Toolbar) view.findViewById(R.id.toolbar_fragment_advanced);
 
         mForceSimulationModuleButton= (Button) view.findViewById(R.id.btn_force_simulation_module);
-
     }
+
 }

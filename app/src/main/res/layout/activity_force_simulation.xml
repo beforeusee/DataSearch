@@ -50,7 +50,7 @@
                 android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:text="刀具属性"
                 android:textSize="21sp"/>
 
@@ -357,7 +357,7 @@
                 android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:text="工件属性"
                 android:textSize="21sp"/>
 
@@ -611,8 +611,8 @@
                 android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:text="仿真参数"
-                android:background="@color/light_green"
+                android:text="切削参数"
+                android:background="@color/dark_white"
                 android:textSize="21sp"/>
 
             <TableLayout
@@ -843,7 +843,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="仿真结果"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:textSize="21sp"/>
 
             <TableLayout
@@ -1072,7 +1072,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="仿真图形"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:textSize="21sp"/>
 
             <LinearLayout
@@ -1151,12 +1151,44 @@
                     android:layout_height="match_parent"
                     android:background="@color/black"/>
 
-                <com.github.mikephil.charting.charts.LineChart
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="5"
                     android:layout_height="match_parent"
-                    android:id="@+id/lineChart"/>
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="力(N)"
+                        android:textSize="12sp"
+                        android:id="@+id/tv_yAxisName"
+                        android:rotation="-90"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:id="@+id/lineChart"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:id="@+id/tv_xAxisName"
+                            android:textSize="15sp"
+                            android:text="刀具旋转角度(°)"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

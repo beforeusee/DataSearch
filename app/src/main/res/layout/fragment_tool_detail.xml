@@ -3,6 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.example.a103.datasearch.fragment.ToolDetailFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,21 +43,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="刀具名称(NT)"
+                    android:text="刀具名称"
                     android:textSize="23sp"
                     android:gravity="start"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="刀具类型(TT)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -67,6 +56,19 @@
                     android:textSize="20sp"
                     android:gravity="start"
                     android:enabled="false"/>
+
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="刀具类型"
+                    android:textSize="23sp"/>
 
                 <EditText
                     android:layout_width="0dp"
@@ -86,21 +88,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="刀具型号(ST)"
+                    android:text="刀具型号"
                     android:textSize="23sp"
                     android:gravity="start"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="刀具制造商(BT)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -111,6 +101,19 @@
                     android:textSize="20sp"
                     android:gravity="start"
                     android:enabled="false"/>
+
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="刀具制造商"
+                    android:textSize="23sp"/>
 
                 <EditText
                     android:layout_width="0dp"
@@ -130,38 +133,38 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="切削直径(DC)"
+                    android:text="切削直径(mm)"
                     android:textSize="23sp"
                     android:gravity="left"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="切削直径公差上限(DCTOLU)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_cuttingDiameter"
-                    android:text="12 mm"
+                    android:text="12"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="切削直径公差上限(mm)"
+                    android:textSize="23sp"/>
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_cuttingDiameterTOLUpper"
-                    android:text="0 mm"
+                    android:text="0"
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>
@@ -174,31 +177,31 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="切削直径公差下限(DCTOLL)"
+                    android:text="切削直径公差下限(mm)"
                     android:textSize="23sp"
                     android:gravity="left"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="圆角半径(RE)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_cuttingDiameterTOLLower"
-                    android:text="-0.055 mm"
+                    android:text="-0.055"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="圆角半径(mm)"
+                    android:textSize="23sp"/>
 
                 <EditText
                     android:layout_width="0dp"
@@ -206,7 +209,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_filletRadius"
                     android:textSize="20sp"
-                    android:hint="圆角铣刀请输入圆角半径"
                     android:enabled="false"/>
             </TableRow>
 
@@ -218,15 +220,17 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="最大切深(APMX)"
+                    android:text="最大切深(mm)"
                     android:textSize="23sp"/>
-                <TextView
+
+                <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="最大坡走铣角度 (RMPX)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
+                    android:id="@+id/et_tool_depthOfCutMaximum"
+                    android:text="12"
+                    android:textSize="20sp"
+                    android:enabled="false"/>
 
             </TableRow>
 
@@ -234,21 +238,21 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content">
 
-                <EditText
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/et_tool_depthOfCutMaximum"
-                    android:text="12 mm"
-                    android:textSize="20sp"
-                    android:enabled="false"/>
+                    android:text="最大坡走铣角度(deg)"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_maxRampingAngle"
-                    android:text="5 deg"
+                    android:text="5"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
@@ -263,16 +267,17 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="有用长度(LU)"
+                    android:text="有用长度(mm)"
                     android:textSize="23sp"/>
 
-                <TextView
+                <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="周边有效切削刃数(ZEFP)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
+                    android:id="@+id/et_tool_usableLength"
+                    android:text="16"
+                    android:textSize="20sp"
+                    android:enabled="false"/>
 
             </TableRow>
 
@@ -280,14 +285,14 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content">
 
-                <EditText
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/et_tool_usableLength"
-                    android:text="16 mm"
-                    android:textSize="20sp"
-                    android:enabled="false"/>
+                    android:text="周边有效切削刃数(Z)"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -308,22 +313,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="机床侧适配接口(ADINTMS)"
+                    android:text="机床侧适配接口"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="刀柄直径公差(TCDCON)"
-                    android:textSize="23sp"
-                    android:gravity="left"
-                    />
 
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -333,6 +325,23 @@
                     android:text="Cylindrical shank(DIN 1835-A/DIN6535-HA)-metric:12"
                     android:textSize="20sp"
                     android:enabled="false"/>
+
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="刀柄直径公差(mm)"
+                    android:textSize="23sp"
+                    android:gravity="left"
+                    />
+
+
 
                 <EditText
                     android:layout_width="0dp"
@@ -354,21 +363,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="材质类型(GRADE)"
+                    android:text="材质类型"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="基底(SUBSTRATE)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
-
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -378,6 +374,21 @@
                     android:text="1620"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="基底"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
+
 
                 <EditText
                     android:layout_width="0dp"
@@ -399,21 +410,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="涂层(COATING)"
+                    android:text="涂层"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="基本标准组(BSG)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
-
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -423,6 +421,20 @@
                     android:text="PVD TiAIN"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="基本标准组"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -443,21 +455,8 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="冷却液入口型式代码(CNSC)"
+                    android:text="冷却液入口型式代码"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="连接直径(DCON)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
-
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -467,13 +466,27 @@
                     android:text="0:without coolant"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="连接直径(mm)"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_connectionDiameter"
-                    android:text="12 mm"
+                    android:text="12"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
@@ -488,37 +501,38 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="功能长度(LF)"
+                    android:text="功能长度(mm)"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="容屑槽螺旋角(FHA)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
-
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_functionalLength"
-                    android:text="93 mm"
+                    android:text="93"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="容屑槽螺旋角(deg)"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_fluteHelixAngle"
-                    android:text="50 deg"
+                    android:text="45"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
@@ -532,37 +546,39 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="轴向前角(周刃前角)(GAMP)"
+                    android:text="轴向前角(deg)"
                     android:textSize="23sp"
                     android:gravity="left"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="径向前角(底刃前角)(GAMF)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_axialRakeAngle"
-                    android:text="6 deg"
+                    android:text="6"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="径向前角(deg)"
+                    android:textSize="23sp"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_radialRakeAngle"
-                    android:text="-18 deg"
+                    android:text="-18"
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>
@@ -575,38 +591,39 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="轴向后角(周刃后角)(GRMP)"
+                    android:text="轴向后角(deg)"
                     android:textSize="23sp"
                     android:gravity="left"/>
-                <TextView
+                <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="径向后角(底刃后角)(GRMF)"
-                    android:textSize="23sp"
-                    android:gravity="left"/>
+                    android:id="@+id/et_tool_axialRearAngle"
+                    android:text="6"
+                    android:textSize="20sp"
+                    android:gravity="left"
+                    android:enabled="false"/>
             </TableRow>
 
             <TableRow android:paddingBottom="10dp"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content">
 
-                <EditText
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/et_tool_axialRearAngle"
-                    android:text="6 deg"
-                    android:textSize="20sp"
-                    android:gravity="left"
-                    android:enabled="false"/>
+                    android:text="径向后角(deg)"
+                    android:textSize="23sp"
+                    android:gravity="left"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_radialRearAngle"
-                    android:text="6 deg"
+                    android:text="6"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
@@ -621,36 +638,36 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="切削刃角(主偏角)(KAPR)"
+                    android:text="切削刃角(deg)"
                     android:textSize="23sp"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="面接触直径(DCF)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_cuttingEdgeAngle"
-                    android:text="31.57 deg"
+                    android:text="31.57"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="面接触直径(mm)"
+                    android:textSize="23sp"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_faceContactDiameter"
-                    android:hint="方肩铣刀请输入面接触直径"
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>
@@ -663,36 +680,35 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="刀尖倒角(KCH)"
+                    android:text="刀尖倒角(mm)"
                     android:textSize="23sp"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="倒角宽度(CHW)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_tipChamfer"
-                    android:hint="方肩铣刀请输入刀尖倒角的角度"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="倒角宽度(mm)"
+                    android:textSize="23sp"/>
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_chamferWidth"
-                    android:hint="方肩铣刀请输入倒角的宽度"
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>
@@ -705,28 +721,30 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="中心切削能力(CCC)"
+                    android:text="中心切削能力"
                     android:textSize="23sp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="最大重新研磨次数(NORGMX)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_centerCuttingCapability"
-                    android:hint="刀具中心是否具有切削能力"
                     android:textSize="20sp"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="最大重新研磨次数"
+                    android:textSize="23sp"/>
+
+
 
                 <EditText
                     android:layout_width="0dp"
@@ -746,38 +764,40 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="最大转速(RPMX)"
+                    android:text="最大转速(r/min)"
                     android:textSize="23sp"
                     android:gravity="left"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="部件重量(WT)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_maxRotationalSpeed"
-                    android:text="80000 r/min"
+                    android:text="80000"
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="部件重量(kg)"
+                    android:textSize="23sp"/>
+
+
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_weight"
-                    android:text="0.16 kg"
+                    android:text="0.16"
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>
@@ -790,21 +810,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="寿命周期状态(LCS)"
+                    android:text="寿命周期状态"
                     android:textSize="23sp"
                     android:gravity="left"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="适合加工材料(MSM)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -815,6 +823,18 @@
                     android:textSize="20sp"
                     android:gravity="left"
                     android:enabled="false"/>
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="适合加工材料"
+                    android:textSize="23sp"/>
+
 
                 <EditText
                     android:layout_width="0dp"
@@ -834,21 +854,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="适用场合(AS)"
+                    android:text="适用场合"
                     android:textSize="23sp"
                     android:gravity="left"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="备注(REMARK)"
-                    android:textSize="23sp"/>
-            </TableRow>
-
-            <TableRow android:paddingBottom="10dp"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="0dp"
@@ -860,12 +868,24 @@
                     android:gravity="left"
                     android:enabled="false"/>
 
+            </TableRow>
+
+            <TableRow android:paddingBottom="10dp"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="备注"
+                    android:textSize="23sp"/>
+
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_tool_todo"
-                    android:text="备注"
+                    android:text=""
                     android:textSize="20sp"
                     android:enabled="false"/>
             </TableRow>

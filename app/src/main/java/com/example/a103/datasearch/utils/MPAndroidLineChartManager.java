@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -167,7 +168,7 @@ public class MPAndroidLineChartManager {
         //设置点击折线点时，显示其数值
         Description description=new Description();
         description.setText("仿真结果");
-        description.setTextSize(8.0f);
+        description.setTextSize(12.0f);
         description.setTextColor(Color.GREEN);
 
         lineChart.setDescription(description);
@@ -196,7 +197,7 @@ public class MPAndroidLineChartManager {
         //图例样式为方形
         legend.setForm(Legend.LegendForm.LINE);
         //图例字体大小
-        legend.setFormSize(6f);
+        legend.setFormSize(12f);
         //图例文字颜色灰色
         legend.setTextColor(Color.GRAY);
 
@@ -210,7 +211,7 @@ public class MPAndroidLineChartManager {
         //x轴字体的颜色
         xAxis.setTextColor(Color.GRAY);
         //x轴字体大小
-        xAxis.setTextSize(10f);
+        xAxis.setTextSize(12f);
         //网格线颜色
         xAxis.setGridColor(Color.GRAY);
         //显示网格线
@@ -218,15 +219,13 @@ public class MPAndroidLineChartManager {
         //x轴的图例
         xAxis.setDrawLabels(true);
 
-
-
         //y轴左边坐标标志
         YAxis yAxisLeft=lineChart.getAxisLeft();
         //y轴右边坐标标志
         YAxis yAxisRight=lineChart.getAxisRight();
         //y轴左边字体颜色,大小
         yAxisLeft.setTextColor(Color.GRAY);
-        yAxisLeft.setTextSize(10f);
+        yAxisLeft.setTextSize(12f);
         //y轴是否显示网格
         yAxisLeft.setLabelCount(5,true);
         yAxisLeft.setGridColor(Color.GRAY);

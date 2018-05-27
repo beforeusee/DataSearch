@@ -106,7 +106,7 @@
     <string name="machine_axis_cutting_speed">切削进给(mm/min):</string>
     <string name="mm_min">mm/min</string>
     <string name="degree_min">°/min</string>
-    <string name="machine_axis_max_acceleration">最大加速度(m/s²):</string>
+    <string name="machine_axis_max_acceleration">最大加速度(m(rad)/s²):</string>
     <string name="meter_seconds_square">m/s^2</string>
     <string name="machine_axis_power">伺服电机额定功率(Kw):</string>
     <string name="kw">Kw</string>

@@ -24,9 +24,9 @@
                 android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:text="切削条件详情"
-                android:textSize="25sp"/>
+                android:textSize="20sp"/>
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -337,9 +337,9 @@
                 android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/light_green"
+                android:background="@color/dark_white"
                 android:text="机床-刀具模态参数信息"
-                android:textSize="25sp"/>
+                android:textSize="20sp"/>
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -518,8 +518,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:text="切削参数详情"
-                android:background="@color/light_green"
-                android:textSize="25sp"/>
+                android:background="@color/dark_white"
+                android:textSize="20sp"/>
 
             <TableLayout
                 android:layout_width="match_parent"

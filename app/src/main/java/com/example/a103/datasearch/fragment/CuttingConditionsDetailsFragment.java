@@ -103,10 +103,10 @@ public class CuttingConditionsDetailsFragment extends Fragment {
             setCuttingConditionsDetails(cuttingConditionsId);
 
             if (mode.equals(Constant.EDIT_MODE)){
-                setCuttingConditionsDetailsViewEnabled(true);
+                setCuttingConditionsDetailsViewEnabled(false);
             }
             if (mode.equals(Constant.SHOW_MODE)){
-                setCuttingConditionsDetailsViewEnabled(false);
+                setCuttingConditionsDetailsViewEnabled(true);
             }
         }else {
             setCuttingConditionsDetailsViewEnabled(true);

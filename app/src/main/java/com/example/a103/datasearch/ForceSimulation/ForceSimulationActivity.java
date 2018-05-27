@@ -25,7 +25,9 @@ import com.example.a103.datasearch.R;
 import com.example.a103.datasearch.dao.DaoSession;
 import com.example.a103.datasearch.data.Material;
 import com.example.a103.datasearch.data.MaterialCategories;
+import com.example.a103.datasearch.forcesimulation.algorithm.ForceSimulationBallEnd;
 import com.example.a103.datasearch.forcesimulation.algorithm.ForceSimulationHelix;
+import com.example.a103.datasearch.forcesimulation.algorithm.ForceSimulationRMill;
 import com.example.a103.datasearch.forcesimulation.algorithm.SimuBase;
 import com.example.a103.datasearch.forcesimulation.basicdata.datacutcoeffient.DataCutCoefficient;
 import com.example.a103.datasearch.forcesimulation.basicdata.datacuttingpara.DataCuttingPara;
@@ -146,12 +148,11 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
     RadioButton rb_power;
     RadioButton rb_bend;
 
+    TextView tv_yAxisName;
     LineChart mLineChart;
     LineData mLineData;
     LineDataSet mLineDataSet;
     ArrayList<Entry>  mEntries;
-
-
 
     //初始化刀具
     DataTool mTool;
@@ -199,19 +200,19 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
     private boolean mCuttingParaNotNull;
 
     //存储切削力各过程量的变量
-    private static List<Float> mFxList =new ArrayList<>();
-    private static List<Float> mFyList =new ArrayList<>();
-    private static List<Float> mFzList =new ArrayList<>();
-    private static List<Float> mFxyList =new ArrayList<>();
-    private static List<Float> mFxyzList =new ArrayList<>();
-    private static List<Float> mFtList =new ArrayList<>();
-    private static List<Float> mFrList =new ArrayList<>();
-    private static List<Float> mFaList =new ArrayList<>();
-    private static List<Float> mTList =new ArrayList<>();
-    private static List<Float> mPList =new ArrayList<>();
-    private static List<Float> mToolBendList =new ArrayList<>();
+    private List<Float> mFxList =new ArrayList<>();
+    private List<Float> mFyList =new ArrayList<>();
+    private List<Float> mFzList =new ArrayList<>();
+    private List<Float> mFxyList =new ArrayList<>();
+    private List<Float> mFxyzList =new ArrayList<>();
+    private List<Float> mFtList =new ArrayList<>();
+    private List<Float> mFrList =new ArrayList<>();
+    private List<Float> mFaList =new ArrayList<>();
+    private List<Float> mTList =new ArrayList<>();
+    private List<Float> mPList =new ArrayList<>();
+    private List<Float> mToolBendList =new ArrayList<>();
 
-    private static DataSimulationMax mDataSimulationMax =new DataSimulationMax();
+    private  DataSimulationMax mDataSimulationMax=new DataSimulationMax();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -534,6 +535,7 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
         rb_power= (RadioButton) findViewById(R.id.rb_power);
         rb_bend= (RadioButton) findViewById(R.id.rb_bend);
 
+        tv_yAxisName= (TextView) findViewById(R.id.tv_yAxisName);
         mLineChart= (LineChart) findViewById(R.id.lineChart);
 
     }
@@ -651,10 +653,12 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
         List<Float> x=new ArrayList<>();
         LineData lineData;
         int count=(int)(2*PI*mSimulationPara.getPeriods()/mSimulationPara.getdPhi());
+
         for (int i=0;i<count;i++){
             //用角度表示
             x.add(1.0f*i);
         }
+
         MPAndroidLineChartManager.setLineName("功率名称");
 
         switch (rg_force_result_image.getCheckedRadioButtonId()){
@@ -662,21 +666,27 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
             case R.id.rb_fx_fy_fz:
                 // 初始化数据
                 lineData=MPAndroidLineChartManager.initTripleLineChart(this,mLineChart,x,mFxList,mFyList,mFzList,"Fx","Fy","Fz");
+                tv_yAxisName.setText("力(N)");
                 break;
             case R.id.rb_ft_fr_fa:
                 lineData=MPAndroidLineChartManager.initTripleLineChart(this,mLineChart,x,mFtList,mFrList,mFaList,"Ft","Fr","Fa");
+                tv_yAxisName.setText("力(N)");
                 break;
             case R.id.rb_fxy_fxyz:
                 lineData=MPAndroidLineChartManager.initDoubleLineChart(this,mLineChart,x,mFxyList,mFxyzList,"Fxy","Fxyz");
+                tv_yAxisName.setText("力(N)");
                 break;
             case R.id.rb_torque:
                 lineData=MPAndroidLineChartManager.initSingleLineChart(this,mLineChart,x,mTList,"扭矩");
+                tv_yAxisName.setText("扭矩(Nm)");
                 break;
             case R.id.rb_power:
                 lineData=MPAndroidLineChartManager.initSingleLineChart(this,mLineChart,x,mPList,"功率");
+                tv_yAxisName.setText("功率(Kw)");
                 break;
             case R.id.rb_bend:
                 lineData=MPAndroidLineChartManager.initSingleLineChart(this,mLineChart,x,mToolBendList,"夹持面弯矩");
+                tv_yAxisName.setText("弯矩(Nm)");
                 break;
             default:
                 lineData=MPAndroidLineChartManager.initTripleLineChart(this,mLineChart,x,mFxList,mFyList,mFzList,"Fx","Fy","Fz");
@@ -704,24 +714,111 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
      */
     private void runForceSimulation() {
         //运行仿真功能
-        ForceSimulationHelix.forceSimulationHelix(mDataToolHelix,mCuttingPara,mSimulationPara,mCoefficient);
-        //存储结果
-        mDataSimulationMax=ForceSimulationHelix.getDataSimulationMax();
+        if (mTool.getToolType().equals(TOOL_TYPE_HELIX)){
 
-        for (int i=0;i<ForceSimulationHelix.getFxList().size();i++) {
+            mFxList.clear();
+            mFyList.clear();
+            mFzList.clear();
+            mFxyList.clear();
+            mFxyzList.clear();
+            mFtList.clear();
+            mFrList.clear();
+            mFaList.clear();
+            mTList.clear();
+            mPList.clear();
+            mToolBendList.clear();
 
-            mFxList.add(ForceSimulationHelix.getFxList().get(i).floatValue());
-            mFyList.add(ForceSimulationHelix.getFyList().get(i).floatValue());
-            mFzList.add(ForceSimulationHelix.getFzList().get(i).floatValue());
-            mFxyList.add(ForceSimulationHelix.getFxyList().get(i).floatValue());
-            mFxyzList.add(ForceSimulationHelix.getFxyzList().get(i).floatValue());
-            mFtList.add(ForceSimulationHelix.getFtList().get(i).floatValue());
-            mFrList.add(ForceSimulationHelix.getFrList().get(i).floatValue());
-            mFaList.add(ForceSimulationHelix.getFaList().get(i).floatValue());
-            mTList.add(ForceSimulationHelix.getTList().get(i).floatValue());
-            mPList.add(ForceSimulationHelix.getPList().get(i).floatValue());
-            mToolBendList.add(ForceSimulationHelix.getToolBendList().get(i).floatValue());
+            ForceSimulationHelix.forceSimulationHelix(mDataToolHelix,mCuttingPara,mSimulationPara,mCoefficient);
+            //存储结果
+            mDataSimulationMax=ForceSimulationHelix.getDataSimulationMax();
+
+            for (int i=0;i<ForceSimulationHelix.getFxList().size();i++) {
+
+                mFxList.add(ForceSimulationHelix.getFxList().get(i).floatValue());
+                mFyList.add(ForceSimulationHelix.getFyList().get(i).floatValue());
+                mFzList.add(ForceSimulationHelix.getFzList().get(i).floatValue());
+                mFxyList.add(ForceSimulationHelix.getFxyList().get(i).floatValue());
+                mFxyzList.add(ForceSimulationHelix.getFxyzList().get(i).floatValue());
+                mFtList.add(ForceSimulationHelix.getFtList().get(i).floatValue());
+                mFrList.add(ForceSimulationHelix.getFrList().get(i).floatValue());
+                mFaList.add(ForceSimulationHelix.getFaList().get(i).floatValue());
+                mTList.add(ForceSimulationHelix.getTList().get(i).floatValue());
+                mPList.add(ForceSimulationHelix.getPList().get(i).floatValue());
+                mToolBendList.add(ForceSimulationHelix.getToolBendList().get(i).floatValue());
+            }
         }
+
+        if (mTool.getToolType().equals(TOOL_TYPE_R)){
+
+            mFxList.clear();
+            mFyList.clear();
+            mFzList.clear();
+            mFxyList.clear();
+            mFxyzList.clear();
+            mFtList.clear();
+            mFrList.clear();
+            mFaList.clear();
+            mTList.clear();
+            mPList.clear();
+            mToolBendList.clear();
+
+            ForceSimulationRMill.forceSimulationR(mDataToolR,mCuttingPara,mSimulationPara,mCoefficient);
+
+            //存储结果
+            mDataSimulationMax=ForceSimulationRMill.getDataSimulationMax();
+
+            for (int i=0;i<ForceSimulationRMill.getFxList().size();i++) {
+
+                mFxList.add(ForceSimulationRMill.getFxList().get(i).floatValue());
+                mFyList.add(ForceSimulationRMill.getFyList().get(i).floatValue());
+                mFzList.add(ForceSimulationRMill.getFzList().get(i).floatValue());
+                mFxyList.add(ForceSimulationRMill.getFxyList().get(i).floatValue());
+                mFxyzList.add(ForceSimulationRMill.getFxyzList().get(i).floatValue());
+                mFtList.add(ForceSimulationRMill.getFtList().get(i).floatValue());
+                mFrList.add(ForceSimulationRMill.getFrList().get(i).floatValue());
+                mFaList.add(ForceSimulationRMill.getFaList().get(i).floatValue());
+                mTList.add(ForceSimulationRMill.getTList().get(i).floatValue());
+                mPList.add(ForceSimulationRMill.getPList().get(i).floatValue());
+                mToolBendList.add(ForceSimulationRMill.getToolBendList().get(i).floatValue());
+            }
+        }
+
+        if (mTool.getToolType().equals(TOOL_TYPE_BALL_END)){
+
+            mFxList.clear();
+            mFyList.clear();
+            mFzList.clear();
+            mFxyList.clear();
+            mFxyzList.clear();
+            mFtList.clear();
+            mFrList.clear();
+            mFaList.clear();
+            mTList.clear();
+            mPList.clear();
+            mToolBendList.clear();
+
+            ForceSimulationBallEnd.forceSimulationBallEnd(mDataToolBallEnd,mCuttingPara,mSimulationPara,mCoefficient);
+
+            //存储结果
+            mDataSimulationMax=ForceSimulationBallEnd.getDataSimulationMax();
+
+            for (int i=0;i<ForceSimulationBallEnd.getFxList().size();i++) {
+
+                mFxList.add(ForceSimulationBallEnd.getFxList().get(i).floatValue());
+                mFyList.add(ForceSimulationBallEnd.getFyList().get(i).floatValue());
+                mFzList.add(ForceSimulationBallEnd.getFzList().get(i).floatValue());
+                mFxyList.add(ForceSimulationBallEnd.getFxyList().get(i).floatValue());
+                mFxyzList.add(ForceSimulationBallEnd.getFxyzList().get(i).floatValue());
+                mFtList.add(ForceSimulationBallEnd.getFtList().get(i).floatValue());
+                mFrList.add(ForceSimulationBallEnd.getFrList().get(i).floatValue());
+                mFaList.add(ForceSimulationBallEnd.getFaList().get(i).floatValue());
+                mTList.add(ForceSimulationBallEnd.getTList().get(i).floatValue());
+                mPList.add(ForceSimulationBallEnd.getPList().get(i).floatValue());
+                mToolBendList.add(ForceSimulationBallEnd.getToolBendList().get(i).floatValue());
+            }
+        }
+
+
     }
 
 
@@ -788,10 +885,6 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
         mTool.setLenGauge(Double.valueOf(et_tool_length_gauge.getText().toString().trim()));
         mTool.setToolTeethNum(Double.valueOf(et_tool_teeth_num.getText().toString().trim()));
 
-        //注意:此处一定要将角度转化为弧度，否则会出错
-        Double lagFactor=Math.tan(mTool.getHelix()*PI/180)/mTool.getRadius();
-        mTool.setLagFactor(lagFactor);
-
         //根据选择的刀具类型来创建具体的刀具对象
         if (mCurrentToolType.equals(TOOL_TYPE_HELIX)){
 
@@ -808,8 +901,11 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
         }
 
         if (mCurrentToolType.equals(TOOL_TYPE_R)){
-            mDataToolR= new DataToolR();
 
+            Double lagFactor=1/mTool.getRadius();
+            mTool.setLagFactor(lagFactor);
+
+            mDataToolR= new DataToolR();
             mDataToolR.setToolType(mTool.getToolType());
             mDataToolR.setToolMaterial(mTool.getToolMaterial());
             mDataToolR.setToolNum(mTool.getToolNum());
@@ -817,7 +913,7 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
             mDataToolR.setHelix(mTool.getHelix());
             mDataToolR.setLenFlute(mTool.getLenFlute());
             mDataToolR.setLenGauge(mTool.getLenGauge());
-            mDataToolR.setToolNum(mTool.getToolNum());
+            mDataToolR.setToolTeethNum(mTool.getToolTeethNum());
             mDataToolR.setLagFactor(mTool.getLagFactor());
             mDataToolR.setRoundRadius(Double.valueOf(et_tool_round_radius.getText().toString().trim()));
         }
@@ -832,7 +928,7 @@ public class ForceSimulationActivity extends AppCompatActivity implements View.O
             mDataToolBallEnd.setHelix(mTool.getHelix());
             mDataToolBallEnd.setLenFlute(mTool.getLenFlute());
             mDataToolBallEnd.setLenGauge(mTool.getLenGauge());
-            mDataToolBallEnd.setToolNum(mTool.getToolNum());
+            mDataToolBallEnd.setToolTeethNum(mTool.getToolTeethNum());
             mDataToolBallEnd.setLagFactor(mTool.getLagFactor());
         }
     }

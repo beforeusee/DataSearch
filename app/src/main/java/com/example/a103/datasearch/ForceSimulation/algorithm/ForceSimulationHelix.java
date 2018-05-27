@@ -15,6 +15,7 @@ import static com.example.a103.datasearch.utils.Constant.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import static java.lang.Math.tan;
 
 /**
  * Created by XiaoHu Zheng on 2018/3/26.
@@ -92,7 +93,7 @@ public class ForceSimulationHelix {
     }
 
 
-    private static HashMap<String, Double> angleForceHelix(DataToolHelix toolHelix,DataSimulationPara simulationPara,DataCuttingPara cuttingPara,DataCutCoefficient coefficient,int i){
+    private static HashMap<String, Double> angleForceHelix(DataToolHelix toolHelix,DataCuttingPara cuttingPara,DataSimulationPara simulationPara,DataCutCoefficient coefficient,int i){
 
         HashMap<String,Double> result=new HashMap<>();
         DecimalFormat decimalFormat=new DecimalFormat("0.000");
@@ -169,20 +170,32 @@ public class ForceSimulationHelix {
             for (int k=0;k<numAxial;k++){
 
                 //轴向位置
-                double zPos=k*simulationPara.getDz();
+                double zPos=(k+0.5)*simulationPara.getDz();
+
+                //螺旋角滞后因子,一定要把螺旋角转化为弧度
+                double lagFactor=tan(toolHelix.getHelix()*PI/180)/toolHelix.getRadius();
+                toolHelix.setLagFactor(lagFactor);
 
                 //接触角沿轴向变化
                 phi2=phi-zPos*toolHelix.getLagFactor();
 
                 phi2=SimuBase.mod(phi2,2*PI);
 
+                double h=fz*sin(phi2);
+                if (h<0){
+                    h=0;
+                }
                 //判断刀具是否参与切削
                 if (phi2>=simulationPara.getPhiIn()&&phi2<=simulationPara.getPhiOut()){
 
+                    /*chip.add(j,fz*sin(phi2));
+                    if (chip.get(j)<0){
+                        chip.set(j,0.0);
+                    }*/
                     //微元的力
-                    double dFt=simulationPara.getDz()*(coefficient.getKtc()*fz*sin(phi2)+coefficient.getKte());
-                    double dFr=simulationPara.getDz()*(coefficient.getKrc()*fz*sin(phi2)+coefficient.getKre());
-                    double dFa=-simulationPara.getDz()*(coefficient.getKac()*fz*sin(phi2)+coefficient.getKae());
+                    double dFt=simulationPara.getDz()*(coefficient.getKtc()*h+coefficient.getKte());
+                    double dFr=simulationPara.getDz()*(coefficient.getKrc()*h+coefficient.getKre());
+                    double dFa=-simulationPara.getDz()*(coefficient.getKac()*h+coefficient.getKae());
 
                     double dFx=-dFt*cos(phi2)-dFr*sin(phi2);
                     double dFy=dFt* sin(phi2)-dFr*cos(phi2);
@@ -251,9 +264,20 @@ public class ForceSimulationHelix {
 
         HashMap<String,Double> angleForce;
 
+        mFxList.clear();
+        mFyList.clear();
+        mFzList.clear();
+        mFxyList.clear();
+        mFxyzList.clear();
+        mFtList.clear();
+        mFrList.clear();
+        mFaList.clear();
+        mTList.clear();
+        mPList.clear();
+        mToolBendList.clear();
         for (int i=0;i<(int)(2*PI*simulationPara.getPeriods()/simulationPara.getdPhi());i++){
 
-            angleForce=angleForceHelix(dataToolHelix,simulationPara,cuttingPara,coefficient,i);
+            angleForce=angleForceHelix(dataToolHelix,cuttingPara,simulationPara,coefficient,i);
 
             mFxList.add(angleForce.get("Fx"));
             mFyList.add(angleForce.get("Fy"));
@@ -292,6 +316,4 @@ public class ForceSimulationHelix {
         mDataSimulationMax.setPower(PMax);
         mDataSimulationMax.setBend(toolBendMax);
     }
-
-
 }
